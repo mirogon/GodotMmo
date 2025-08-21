@@ -9,14 +9,28 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+public class PeerPlayer
+{
+    public UInt64 PublicId;
+    public Vector3 Position;
+
+    public PeerPlayer(ulong publicId, Vector3 position)
+    {
+        PublicId = publicId;
+        Position = position;
+    }
+}
 public class NetworkClient
 {
+    public static Action<List<PeerPlayer>> PlayerUpdate;
     public static ConcurrentQueue<Packet> PacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
     public static UInt64 SessionId;
 
     static bool _isRunning = true;
+
+    static Dictionary<UInt64, PeerPlayer> _otherPlayers = new();
 
     public static void StartClient()
     {
@@ -32,16 +46,20 @@ public class NetworkClient
         _serverPeer = _client.Connect("localhost", 9050, "SomeConnectionKey");
         listener.NetworkReceiveEvent += (fromPeer, dataReader, deliveryMethod, channel) =>
         {
-            byte packetTypeByte = dataReader.GetByte();
+            byte packetTypeByte = dataReader.PeekByte();
             EPacketType packetType = (EPacketType)packetTypeByte;
 
             switch (packetType)
             {
                 case EPacketType.SC_Register: Handle_SC_RegisterPacket(dataReader); break;
+                case EPacketType.SC_PlayerUpdate: Handle_SC_PlayerUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
         };
+
+        Thread.Sleep(100);
+        RegisterNetworkClient();
 
         while (_isRunning)
         {
@@ -55,6 +73,7 @@ public class NetworkClient
         }
         _client.Stop();
     }
+
 
     static void SendPacket(Packet packet, NetPeer peer)
     {
@@ -71,8 +90,34 @@ public class NetworkClient
         byte[] packetData = new byte[byteLen];
         packetReader.GetBytes(packetData, byteLen);
         SC_RegisterPacket receivedPacket = new(packetData);
-        SessionId = receivedPacket.SessionId;
+        SessionId = receivedPacket.Id;
         GD.Print("RegisterPacket received with SessionId: " + SessionId);
     }
 
+    static void Handle_SC_PlayerUpdate(NetPacketReader dataReader)
+    {
+        var byteLen = SC_PlayerUpdatePacket.ByteSize;
+        byte[] packetData = new byte[byteLen];
+        dataReader.GetBytes(packetData, byteLen);
+        SC_PlayerUpdatePacket receivedPacket = new(packetData);
+
+        PeerPlayer pp = new(receivedPacket.PublicId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z));
+        if (!_otherPlayers.ContainsKey(receivedPacket.PublicId))
+        {
+            _otherPlayers.Add(receivedPacket.PublicId, pp);
+        }
+        else
+        {
+            _otherPlayers[receivedPacket.PublicId] = pp;
+        }
+
+        GD.Print("Num OtherPlayers: " + _otherPlayers.Count);
+        GD.Print("Received PlayerUpdate packet Pos: " + "X:" + receivedPacket.X + " Y:" + receivedPacket.Y + " Z:" + receivedPacket.Z);
+        PlayerUpdate?.Invoke(_otherPlayers.Values.ToList());
+    }
+    static void RegisterNetworkClient() {
+        CS_RegisterPacket registerPacket = new();
+        NetworkClient.PacketsToSend.Enqueue(registerPacket);
+        GD.Print("Sent register packet");
+    }
 }

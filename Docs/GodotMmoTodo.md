@@ -1,9 +1,7 @@
 # WIP
-- Server list of clients (ID, IP, Name)
-- Two clients can connect at the same time
-- Replicate two client positions
 
 # Later
+- Server list of clients (ID, IP, Name)
 
 # DONE
 - Basic movement (copy from M2Like)
@@ -16,3 +14,6 @@
 - Log packet send sizes
 - Redo all packets custom myself without MessagePack
 - Try using Godot instead of Unity and see how it goes
+- Two clients can connect at the same time
+- Every game client has a public id
+- Replicate two client positions
