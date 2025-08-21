@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://crwro3rdi0lir"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_2bsnv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2bsnv"]
+albedo_color = Color(0.2028, 0.387833, 0.52, 1)
+
+[node name="PeerPlayer" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_2bsnv")
+surface_material_override/0 = SubResource("StandardMaterial3D_2bsnv")

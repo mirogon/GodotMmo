@@ -1,20 +1,22 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 public partial class Player : Node3D
 {
     public float MovementSpeed = 1.0f;
+
+    Stopwatch _posUpdateStopwatch = new();
+
     public override void _Ready()
     {
         base._Ready();
+        _posUpdateStopwatch.Start();
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if(Input.IsActionJustPressed("Enter")){
-            RegisterNetworkClient();
-        }
 
         Vector3 moveDir = Vector3.Zero;
         if (Input.IsPhysicalKeyPressed(Key.W))
@@ -36,12 +38,11 @@ public partial class Player : Node3D
         moveDir = moveDir.Normalized();
 
         Position += moveDir * MovementSpeed * (float)delta;
-    }
-
-    void RegisterNetworkClient() {
-        CS_RegisterPacket registerPacket = new();
-        NetworkClient.PacketsToSend.Enqueue(registerPacket);
-        GD.Print("Sent register packet");
+        if(_posUpdateStopwatch.ElapsedMilliseconds >= 1000)
+        {
+            SendPositionUpdate();
+            _posUpdateStopwatch.Restart();
+        }
     }
 
     void SendPositionUpdate()
