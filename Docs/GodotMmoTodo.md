@@ -17,3 +17,6 @@
 - Two clients can connect at the same time
 - Every game client has a public id
 - Replicate two client positions
+- Learn more about godot and write doc about it
+- Replicate the MMOCamera I wrote in Unity
+- Move dir is mesh forward

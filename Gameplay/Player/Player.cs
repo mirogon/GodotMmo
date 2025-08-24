@@ -4,9 +4,13 @@ using System.Diagnostics;
 
 public partial class Player : Node3D
 {
-    public float MovementSpeed = 1.0f;
+    public float MovementSpeed = 4.0f;
+
+    [Export] Node3D _playerMesh;
 
     Stopwatch _posUpdateStopwatch = new();
+
+    const float _positionUpdateIntervalMs = 100.0f;
 
     public override void _Ready()
     {
@@ -21,24 +25,24 @@ public partial class Player : Node3D
         Vector3 moveDir = Vector3.Zero;
         if (Input.IsPhysicalKeyPressed(Key.W))
         {
-            moveDir += Vector3.Forward;
+            moveDir += -_playerMesh.GlobalTransform.Basis.Z;
         }
         if (Input.IsPhysicalKeyPressed(Key.S))
         {
-            moveDir += Vector3.Back;
+            moveDir += _playerMesh.GlobalTransform.Basis.Z;
         }
         if (Input.IsPhysicalKeyPressed(Key.A))
         {
-            moveDir += Vector3.Left;
+            moveDir += -_playerMesh.GlobalTransform.Basis.X;
         }
         if (Input.IsPhysicalKeyPressed(Key.D))
         {
-            moveDir += Vector3.Right;
+            moveDir += _playerMesh.GlobalTransform.Basis.X;
         }
         moveDir = moveDir.Normalized();
 
         Position += moveDir * MovementSpeed * (float)delta;
-        if(_posUpdateStopwatch.ElapsedMilliseconds >= 1000)
+        if(_posUpdateStopwatch.ElapsedMilliseconds >= _positionUpdateIntervalMs)
         {
             SendPositionUpdate();
             _posUpdateStopwatch.Restart();
