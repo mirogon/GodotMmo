@@ -69,7 +69,7 @@ public class NetworkClient
             {
                 SendPacket(packetRaw, _serverPeer);
             }
-            Thread.Sleep(15);
+            Thread.Sleep(5);
         }
         _client.Stop();
     }

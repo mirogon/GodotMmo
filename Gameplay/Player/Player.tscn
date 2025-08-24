@@ -1,11 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://cytlqsasi6qxv"]
+[gd_scene load_steps=4 format=3 uid="uid://cytlqsasi6qxv"]
 
 [ext_resource type="Script" uid="uid://cra54traqw7if" path="res://Gameplay/Player/Player.cs" id="1_1rerk"]
+[ext_resource type="Script" uid="uid://kv4dkvv2qe55" path="res://Gameplay/Player/MMOCamera.cs" id="2_wonpf"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_wonpf"]
 
-[node name="Player" type="Node3D"]
+[node name="Player" type="Node3D" node_paths=PackedStringArray("_playerMesh")]
 script = ExtResource("1_1rerk")
+_playerMesh = NodePath("Mesh")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_wonpf")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot" node_paths=PackedStringArray("_playerMesh")]
+transform = Transform3D(1, 0, 0, 0, 0.968204, 0.25016, 0, -0.25016, 0.968204, 0, 1.63261, 2.6017)
+fov = 90.0
+script = ExtResource("2_wonpf")
+_playerMesh = NodePath("../../Mesh")

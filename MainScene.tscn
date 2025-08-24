@@ -1,17 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://dtm5s7mvcvv0k"]
+[gd_scene load_steps=6 format=3 uid="uid://dtm5s7mvcvv0k"]
 
 [ext_resource type="Script" uid="uid://byxm4n0jev0w6" path="res://GameManager.cs" id="1_x4av3"]
 [ext_resource type="PackedScene" uid="uid://crwro3rdi0lir" path="res://Gameplay/Player/PeerPlayer.tscn" id="2_rpqi1"]
 [ext_resource type="PackedScene" uid="uid://cytlqsasi6qxv" path="res://Gameplay/Player/Player.tscn" id="2_x4av3"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rpqi1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uxrcv"]
+albedo_color = Color(0.26, 0.26, 0.26, 1)
 
 [node name="GameManager" type="Node3D"]
 script = ExtResource("1_x4av3")
 PeerPlayerScene = ExtResource("2_rpqi1")
 
 [node name="Player" parent="." instance=ExtResource("2_x4av3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.840145, 0)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, -0.0789049, 3.69549, 4.34825)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_rpqi1")
+surface_material_override/0 = SubResource("StandardMaterial3D_uxrcv")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.22833, 3.63324)
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0163732, 3.72505, 0.86713)
+light_energy = 1.186
+omni_range = 16.2383
