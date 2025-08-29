@@ -51,7 +51,9 @@ public partial class Player : Node3D
 
     void SendPositionUpdate()
     {
-        CS_PositionUpdate posUpdate = new(NetworkClient.SessionId, Position.X, Position.Y, Position.Z);
+        var yDegrees = Mathf.RadToDeg(_playerMesh.Rotation.Y);
+        GD.Print("YROT: " + yDegrees);
+        CS_PositionUpdate posUpdate = new(NetworkClient.SessionId, Position.X, Position.Y, Position.Z, yDegrees);
         NetworkClient.PacketsToSend.Enqueue(posUpdate);
     }
 }

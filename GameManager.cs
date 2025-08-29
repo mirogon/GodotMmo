@@ -13,6 +13,7 @@ public partial class GameManager : Node
     {
         NetworkClient.StartClient();
         NetworkClient.PlayerUpdate += OnPlayerUpdate;
+
     }
     void OnPlayerUpdate(List<PeerPlayer> peers)
     {
@@ -29,6 +30,9 @@ public partial class GameManager : Node
         var n3d = instance as Node3D;
         _peerInstances.Add(n3d);
         n3d.Position = peers[0].Position;
+        var rot = n3d.Rotation;
+        rot.Y = Mathf.DegToRad(peers[0].YRotationEuler);
+        n3d.Rotation = rot;
         GD.Print("OnPlayerUpdate PeerPos: X:" + n3d.Position.X +  " Y:" + n3d.Position.Y + " Z:" + n3d.Position.Z);
     }
 }

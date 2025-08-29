@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dtm5s7mvcvv0k"]
 
-[ext_resource type="Script" uid="uid://byxm4n0jev0w6" path="res://GameManager.cs" id="1_x4av3"]
-[ext_resource type="PackedScene" uid="uid://crwro3rdi0lir" path="res://Gameplay/Player/PeerPlayer.tscn" id="2_rpqi1"]
-[ext_resource type="PackedScene" uid="uid://cytlqsasi6qxv" path="res://Gameplay/Player/Player.tscn" id="2_x4av3"]
+[ext_resource type="Script" uid="uid://byxm4n0jev0w6" path="res://GameManager.cs" id="1_nhkr4"]
+[ext_resource type="PackedScene" uid="uid://crwro3rdi0lir" path="res://Gameplay/Player/PeerPlayer.tscn" id="2_7rqgy"]
+[ext_resource type="PackedScene" uid="uid://cytlqsasi6qxv" path="res://Gameplay/Player/Player.tscn" id="3_qxria"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rpqi1"]
 
@@ -10,10 +10,10 @@
 albedo_color = Color(0.26, 0.26, 0.26, 1)
 
 [node name="GameManager" type="Node3D"]
-script = ExtResource("1_x4av3")
-PeerPlayerScene = ExtResource("2_rpqi1")
+script = ExtResource("1_nhkr4")
+PeerPlayerScene = ExtResource("2_7rqgy")
 
-[node name="Player" parent="." instance=ExtResource("2_x4av3")]
+[node name="Player" parent="." instance=ExtResource("3_qxria")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.840145, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

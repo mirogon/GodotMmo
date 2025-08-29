@@ -1,4 +1,8 @@
 # WIP
+- InfoWindow Scene
+- Show when signup was successful or failed
+- Godot Client Signup and Login
+- When login succeeds, it switches to the main scene
 
 # Later
 - Server list of clients (ID, IP, Name)
@@ -20,3 +24,11 @@
 - Learn more about godot and write doc about it
 - Replicate the MMOCamera I wrote in Unity
 - Move dir is mesh forward
+- Replicate rotation
+- Create Local MongoDB Server
+    - DB for Game
+    - DB for Account
+- Have a working HTTPS server that insomnia can interact with
+- Create HTTP Login Server
+    - You need a username, valid email, password, but dont need to confirm the email
+        - Instead, save the mac addr and maybe some other info to limit accs per mac addr to 5 or so

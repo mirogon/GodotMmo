@@ -1,0 +1,166 @@
+[gd_scene load_steps=3 format=3 uid="uid://2rou2x8bjul1"]
+
+[ext_resource type="Script" uid="uid://3kyw7fiu81tr" path="res://Scenes/RegisterLoginScreen.cs" id="1_wld3x"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5vktr"]
+font_size = 36
+
+[node name="RegisterLoginScene" type="Panel" node_paths=PackedStringArray("_signupEmailEdit", "_signupNameEdit", "_signupPasswordEdit", "_submitRegistrationButton", "_loginEmailEdit", "_loginPasswordEdit", "_loginButton")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wld3x")
+_signupEmailEdit = NodePath("RegisterPanel/EmailEdit")
+_signupNameEdit = NodePath("RegisterPanel/NameEdit")
+_signupPasswordEdit = NodePath("RegisterPanel/PwEdit")
+_submitRegistrationButton = NodePath("RegisterPanel/Submit")
+_loginEmailEdit = NodePath("LoginPanel/EmailEdit")
+_loginPasswordEdit = NodePath("LoginPanel/PwEdit")
+_loginButton = NodePath("LoginPanel/Login")
+
+[node name="RegisterPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(400, 255)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 28.0
+offset_right = 200.0
+offset_bottom = 283.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="RegisterPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_top = 12.0
+offset_right = 71.0
+offset_bottom = 62.0
+grow_horizontal = 2
+text = "Register"
+label_settings = SubResource("LabelSettings_5vktr")
+
+[node name="EmailEdit" type="LineEdit" parent="RegisterPanel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -34.0
+offset_top = 74.0
+offset_right = 34.5625
+offset_bottom = 105.0
+grow_horizontal = 2
+placeholder_text = "Email"
+
+[node name="NameEdit" type="LineEdit" parent="RegisterPanel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 112.0
+offset_right = 100.0
+offset_bottom = 143.0
+grow_horizontal = 2
+placeholder_text = "Name"
+
+[node name="PwEdit" type="LineEdit" parent="RegisterPanel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 151.0
+offset_right = 100.0
+offset_bottom = 182.0
+grow_horizontal = 2
+placeholder_text = "Password"
+secret = true
+
+[node name="Submit" type="Button" parent="RegisterPanel"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = 210.0
+offset_right = 1.0
+offset_bottom = 218.0
+grow_horizontal = 2
+text = "Submit"
+
+[node name="LoginPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(400, 255)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 305.0
+offset_right = 200.0
+offset_bottom = 560.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="LoginPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_top = 12.0
+offset_right = 71.0
+offset_bottom = 62.0
+grow_horizontal = 2
+text = "Login"
+label_settings = SubResource("LabelSettings_5vktr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EmailEdit" type="LineEdit" parent="LoginPanel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -34.0
+offset_top = 74.0
+offset_right = 34.5625
+offset_bottom = 105.0
+grow_horizontal = 2
+placeholder_text = "Email"
+
+[node name="PwEdit" type="LineEdit" parent="LoginPanel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 117.0
+offset_right = 100.0
+offset_bottom = 148.0
+grow_horizontal = 2
+placeholder_text = "Password"
+secret = true
+
+[node name="Login" type="Button" parent="LoginPanel"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = 210.0
+offset_right = 1.0
+offset_bottom = 218.0
+grow_horizontal = 2
+text = "Login"
