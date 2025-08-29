@@ -13,11 +13,13 @@ public class PeerPlayer
 {
     public UInt64 PublicId;
     public Vector3 Position;
+    public float YRotationEuler;
 
-    public PeerPlayer(ulong publicId, Vector3 position)
+    public PeerPlayer(ulong publicId, Vector3 position, float yRotationEuler)
     {
         PublicId = publicId;
         Position = position;
+        YRotationEuler = yRotationEuler;
     }
 }
 public class NetworkClient
@@ -101,7 +103,7 @@ public class NetworkClient
         dataReader.GetBytes(packetData, byteLen);
         SC_PlayerUpdatePacket receivedPacket = new(packetData);
 
-        PeerPlayer pp = new(receivedPacket.PublicId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z));
+        PeerPlayer pp = new(receivedPacket.PublicId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z), receivedPacket.YRotationEuler);
         if (!_otherPlayers.ContainsKey(receivedPacket.PublicId))
         {
             _otherPlayers.Add(receivedPacket.PublicId, pp);
