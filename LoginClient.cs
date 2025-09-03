@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 public class LoginClient
 {
+    public static Action<bool> LoginUpdate;
+
     static System.Net.Http.HttpClient _httpClient = new();
     public static async Task SignUp(string email, string name, string password)
     {
@@ -27,21 +29,42 @@ public class LoginClient
     }
     public static async Task Login(string email, string password)
     {
+        GD.Print("Trying to log in...");
         LoginRequest request = new (email, password);
-        string json = JsonSerializer.Serialize(request);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _httpClient.PostAsync("https://localhost:7285/login", content);
-        var responseStr = response.Content.ToString();
-        var reqResponse = JsonSerializer.Deserialize<RequestResponse>(responseStr);
+        try
+        {
+            string json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("https://localhost:7285/login", content);
 
-        if (reqResponse.Success)
-        {
-            GD.Print("Login succeeded: ");
+            var stream = response.Content.ReadAsStream();
+            var len = stream.Length;
+            byte[] responseContentBytes = new byte[len];
+            stream.Read(responseContentBytes);
+            string responseContentStr = Encoding.UTF8.GetString(responseContentBytes);
+
+
+            JsonSerializerOptions opt = new();
+            opt.PropertyNameCaseInsensitive = true;
+            var reqResponse = JsonSerializer.Deserialize<RequestResponse>(responseContentStr, opt);
+
+            if (reqResponse.Success)
+            {
+                GD.Print("Login succeeded: ");
+                LoginUpdate?.Invoke(true);
+            }
+            else
+            {
+                GD.Print("Login Failed: " + reqResponse.Message);
+                LoginUpdate?.Invoke(false);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            GD.Print("Login Failed: " + reqResponse.Message);
+            GD.Print("Login Failed: " + ex.Message);
+            LoginUpdate?.Invoke(false);
         }
+
         return;
     }
 

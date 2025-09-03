@@ -17,6 +17,17 @@ public partial class RegisterLoginScreen : Panel
         base._Ready();
         _submitRegistrationButton.Pressed += OnSubmitPressed;
         _loginButton.Pressed += OnLoginPressed;
+
+        LoginClient.LoginUpdate += OnLoginUpdate;
+    }
+
+    void OnLoginUpdate(bool result)
+    {
+        if (!result)
+        {
+            var newInfoWindow = GameManager.InfoWindowScreen.Instantiate();
+            AddChild(newInfoWindow);
+        }
     }
 
     void OnSubmitPressed()

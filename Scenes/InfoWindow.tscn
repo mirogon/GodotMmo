@@ -10,7 +10,7 @@ font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_daobj"]
 
-[node name="InfoWindow" type="Control"]
+[node name="InfoWindow" type="Control" node_paths=PackedStringArray("_okButton", "__descriptionLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,6 +18,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_daobj")
+_okButton = NodePath("Panel/OkButton")
+__descriptionLabel = NodePath("Panel/Description")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(400, 300)
