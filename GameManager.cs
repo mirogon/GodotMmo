@@ -7,6 +7,8 @@ public partial class GameManager : Node
     [Export]
     public PackedScene PeerPlayerScene;
 
+    public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Scenes/InfoWindow.tscn");
+
     List<Node3D> _peerInstances = new();
 
     public override void _Ready()

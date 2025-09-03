@@ -1,10 +1,11 @@
 # WIP
-- InfoWindow Scene
+- [Client] Client can register, can log in, when he logs in, the scene switches to the main scene
+    - LoginClient class has events with signup/login results that others can sub to
+
+# Later
 - Show when signup was successful or failed
 - Godot Client Signup and Login
 - When login succeeds, it switches to the main scene
-
-# Later
 - Server list of clients (ID, IP, Name)
 
 # DONE
@@ -32,3 +33,6 @@
 - Create HTTP Login Server
     - You need a username, valid email, password, but dont need to confirm the email
         - Instead, save the mac addr and maybe some other info to limit accs per mac addr to 5 or so
+- InfoWindow Scene
+- Find out how to debug the godot client code
+    - Attach to process manually
