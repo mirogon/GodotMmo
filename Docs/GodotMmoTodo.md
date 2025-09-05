@@ -1,4 +1,5 @@
 # WIP
+- [Client] Registering opens info window to show status
 - [Client] Client can register, can log in, when he logs in, the scene switches to the main scene
     - LoginClient class has events with signup/login results that others can sub to
 

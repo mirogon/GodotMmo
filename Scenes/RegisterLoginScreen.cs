@@ -19,15 +19,31 @@ public partial class RegisterLoginScreen : Panel
         _loginButton.Pressed += OnLoginPressed;
 
         LoginClient.LoginUpdate += OnLoginUpdate;
+        LoginClient.RegisterUpdate += OnRegisterUpdate;
     }
 
-    void OnLoginUpdate(bool result)
+    void OnLoginUpdate(bool result, string message)
     {
         if (!result)
         {
             var newInfoWindow = GameManager.InfoWindowScreen.Instantiate();
+            InfoWindow iw = newInfoWindow as InfoWindow;
+            iw.DescriptionLabel.Text = "Login failed: " + message;
             AddChild(newInfoWindow);
         }
+    }
+
+    void OnRegisterUpdate(bool result, string message)
+    {
+        GD.Print("Register update");
+        var newInfoWindow = GameManager.InfoWindowScreen.Instantiate();
+        InfoWindow iw = newInfoWindow as InfoWindow;
+        iw.DescriptionLabel.Text = "Registration failed: " + message;
+        if (result)
+        {
+            iw.DescriptionLabel.Text = "Registration successful!";
+        }
+        AddChild(newInfoWindow);
     }
 
     void OnSubmitPressed()

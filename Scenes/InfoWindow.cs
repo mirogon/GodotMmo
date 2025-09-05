@@ -3,18 +3,18 @@ using System;
 
 public partial class InfoWindow : Control
 {
-    [Export] Button _okButton;
-    [Export] Label __descriptionLabel;
+    [Export] public Button OkButton;
+    [Export] public Label DescriptionLabel;
     public override void _Ready()
     {
         base._Ready();
-        _okButton.Pressed += OnOkButtonPressed;
+        OkButton.Pressed += OnOkButtonPressed;
 
     }
 
     public void Init(string description)
     {
-        __descriptionLabel.Text = description;
+        DescriptionLabel.Text = description;
     }
 
     void OnOkButtonPressed()
