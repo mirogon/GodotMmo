@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://dybm0vonvlvh0"]
+
+[ext_resource type="Script" uid="uid://b8a3pg6syga23" path="res://Scenes/SelectCharacterScene.cs" id="1_8aex8"]
+[ext_resource type="PackedScene" uid="uid://dl7ls4o60oa2v" path="res://Scenes/CharacterSlot.tscn" id="2_16vk4"]
+
+[node name="SelectCharacterScene" type="Node3D" node_paths=PackedStringArray("CharacterSlotBase")]
+script = ExtResource("1_8aex8")
+CharacterSlotBase = NodePath("CharacterSlotsBase")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49316, 0)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CreateButton" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 30
+text = "Create"
+
+[node name="LeftArrowButton" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "<"
+
+[node name="RightArrowButton" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = ">"
+
+[node name="CharacterSlotsBase" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -1.5)
+
+[node name="CharacterSlot" parent="CharacterSlotsBase" instance=ExtResource("2_16vk4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6)
+
+[node name="CharacterSlot2" parent="CharacterSlotsBase" instance=ExtResource("2_16vk4")]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 0.6, 0, 0)
+
+[node name="CharacterSlot3" parent="CharacterSlotsBase" instance=ExtResource("2_16vk4")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.6)
+
+[node name="CharacterSlot4" parent="CharacterSlotsBase" instance=ExtResource("2_16vk4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.6, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.585043, 0.811003, 0, -0.811003, 0.585043, 0, 0, 0)
+light_color = Color(0.899258, 0.899258, 0.899258, 1)
