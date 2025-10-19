@@ -30,6 +30,8 @@ public partial class CreateNewCharacterScene : Node3D
         ECharacterClass chosenClass = (ECharacterClass)_currentCharSlotSelected;
         string name = _nameInput.Text;
 
+        NetworkClient.CreateNewCharacter(name, chosenClass);
+
         var selectCharSceneInstance = GD.Load<PackedScene>("res://Scenes/SelectCharacterScene.tscn").Instantiate();
         GetTree().Root.AddChild(selectCharSceneInstance);
         QueueFree();
