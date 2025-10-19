@@ -97,6 +97,12 @@ public class NetworkClient
         GD.Print("Sent register packet");
     }
 
+    public static void CreateNewCharacter(string charName, ECharacterClass charClass)
+    {
+        CS_CreateCharacterPacket createCharPacket = new(LoginClient.NewestSessionId, charName, charClass);
+        NetworkClient.PacketsToSend.Enqueue(createCharPacket);
+    }
+
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         var byteLen = SC_RegisterPacket.ByteSize;

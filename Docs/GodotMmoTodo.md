@@ -1,5 +1,5 @@
 # Current Microtask
-- [GameClient] Create character scene
+- [Client] Sends CreateCharacter packet to GameServer when clicking Create in the CreateNewCharacterScene
 
 # Current Macrotask
 - Create Character
