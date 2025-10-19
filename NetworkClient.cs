@@ -28,9 +28,10 @@ public class NetworkClient
     public static ConcurrentQueue<Packet> PacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
-    public static UInt64 SessionId;
 
+    public static bool SuccessfullyLoggedIn = false;
     static bool _isRunning = true;
+    static long _packetsSent = 0;
 
     static Dictionary<UInt64, PeerPlayer> _otherPlayers = new();
 
@@ -66,10 +67,14 @@ public class NetworkClient
         while (_isRunning)
         {
             _client.PollEvents();
+
+            if (!SuccessfullyLoggedIn && _packetsSent > 0) { continue; }
+
             Packet packetRaw;
             if(PacketsToSend.TryDequeue(out packetRaw))
             {
                 SendPacket(packetRaw, _serverPeer);
+                ++_packetsSent;
             }
             Thread.Sleep(5);
         }
@@ -86,14 +91,19 @@ public class NetworkClient
         GD.Print("Sending packet: " + packet.PacketType.ToString() + " Size:" + packetRaw.Length);
     }
 
+    static void RegisterNetworkClient() {
+        CS_RegisterPacket registerPacket = new(LoginClient.NewestSessionId);
+        NetworkClient.PacketsToSend.Enqueue(registerPacket);
+        GD.Print("Sent register packet");
+    }
+
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         var byteLen = SC_RegisterPacket.ByteSize;
         byte[] packetData = new byte[byteLen];
         packetReader.GetBytes(packetData, byteLen);
         SC_RegisterPacket receivedPacket = new(packetData);
-        SessionId = receivedPacket.Id;
-        GD.Print("RegisterPacket received with SessionId: " + SessionId);
+        SuccessfullyLoggedIn = receivedPacket.Success;
     }
 
     static void Handle_SC_PlayerUpdate(NetPacketReader dataReader)
@@ -103,23 +113,18 @@ public class NetworkClient
         dataReader.GetBytes(packetData, byteLen);
         SC_PlayerUpdatePacket receivedPacket = new(packetData);
 
-        PeerPlayer pp = new(receivedPacket.PublicId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z), receivedPacket.YRotationEuler);
-        if (!_otherPlayers.ContainsKey(receivedPacket.PublicId))
+        PeerPlayer pp = new(receivedPacket.SessionId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z), receivedPacket.YRotationEuler);
+        if (!_otherPlayers.ContainsKey(receivedPacket.SessionId))
         {
-            _otherPlayers.Add(receivedPacket.PublicId, pp);
+            _otherPlayers.Add(receivedPacket.SessionId, pp);
         }
         else
         {
-            _otherPlayers[receivedPacket.PublicId] = pp;
+            _otherPlayers[receivedPacket.SessionId] = pp;
         }
 
         GD.Print("Num OtherPlayers: " + _otherPlayers.Count);
         GD.Print("Received PlayerUpdate packet Pos: " + "X:" + receivedPacket.X + " Y:" + receivedPacket.Y + " Z:" + receivedPacket.Z);
         PlayerUpdate?.Invoke(_otherPlayers.Values.ToList());
-    }
-    static void RegisterNetworkClient() {
-        CS_RegisterPacket registerPacket = new();
-        NetworkClient.PacketsToSend.Enqueue(registerPacket);
-        GD.Print("Sent register packet");
     }
 }

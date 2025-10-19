@@ -14,6 +14,9 @@ public class LoginClient
     public static Action<bool, string> LoginUpdate;
 
     static System.Net.Http.HttpClient _httpClient = new();
+
+    public static UInt64 NewestSessionId;
+
     public static async Task SignUp(string email, string name, string password)
     {
         SignupRequest request = new SignupRequest(email, name, "", password);
@@ -46,11 +49,12 @@ public class LoginClient
             HttpResponseMessage response = await _httpClient.PostAsync("https://localhost:7285/login", content);
 
             var responseContentStr = GetResponseContentStringFromResponse(response);
-            var reqResponse = ResponseContentStringToRequestResponse(responseContentStr);
+            var reqResponse = ResponseContentStringToRequestType<LoginResponse>(responseContentStr);
 
             if (reqResponse.Success)
             {
-                GD.Print("Login succeeded: ");
+                GD.Print("Login succeeded, sessionId: " + reqResponse.SessionId);
+                NewestSessionId =  UInt64.Parse(reqResponse.SessionId);
                 LoginUpdate?.Invoke(true, "");
             }
             else
@@ -83,4 +87,11 @@ public class LoginClient
         opt.PropertyNameCaseInsensitive = true;
         return JsonSerializer.Deserialize<RequestResponse>(contentStr, opt);
     }
+    public static T ResponseContentStringToRequestType<T>(string contentStr)
+    {
+        JsonSerializerOptions opt = new();
+        opt.PropertyNameCaseInsensitive = true;
+        return JsonSerializer.Deserialize<T>(contentStr, opt);
+    }
+
 }

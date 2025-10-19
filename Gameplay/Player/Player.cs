@@ -42,7 +42,7 @@ public partial class Player : Node3D
         moveDir = moveDir.Normalized();
 
         Position += moveDir * MovementSpeed * (float)delta;
-        if(_posUpdateStopwatch.ElapsedMilliseconds >= _positionUpdateIntervalMs)
+        if(_posUpdateStopwatch.ElapsedMilliseconds >= _positionUpdateIntervalMs && NetworkClient.SuccessfullyLoggedIn)
         {
             SendPositionUpdate();
             _posUpdateStopwatch.Restart();
@@ -53,7 +53,7 @@ public partial class Player : Node3D
     {
         var yDegrees = Mathf.RadToDeg(_playerMesh.Rotation.Y);
         GD.Print("YROT: " + yDegrees);
-        CS_PositionUpdate posUpdate = new(NetworkClient.SessionId, Position.X, Position.Y, Position.Z, yDegrees);
+        CS_PositionUpdate posUpdate = new(LoginClient.NewestSessionId, Position.X, Position.Y, Position.Z, yDegrees);
         NetworkClient.PacketsToSend.Enqueue(posUpdate);
     }
 }
