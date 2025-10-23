@@ -29,8 +29,8 @@ public partial class LoginScene : Panel
         }
         else
         {
-            var mainSceneInstance = GameManager.GameScene.Instantiate();
-            GetTree().Root.AddChild(mainSceneInstance);
+            var selectCharScene = GameManager.SelectCharacterScene.Instantiate();
+            GetTree().Root.AddChild(selectCharScene);
             QueueFree();
         }
     }

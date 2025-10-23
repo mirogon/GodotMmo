@@ -23,6 +23,8 @@ public partial class SelectCharacterScene : Node3D
         _leftArrowButton.Pressed += _leftArrowButton_Pressed;
         _rightArrowButton.Pressed += _rightArrowButton_Pressed;
         _createCharButton.Pressed += _createCharButton_Pressed;
+
+        NetworkClient.StartClient();
     }
 
     private void _createCharButton_Pressed()

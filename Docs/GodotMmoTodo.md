@@ -1,11 +1,11 @@
-# Current Microtask
-- [Client] Sends CreateCharacter packet to GameServer when clicking Create in the CreateNewCharacterScene
+# Current Task
+- Create char at slot X
 
 # Current Macrotask
-- Create Character
+- Client has a list of account characters stored locally that he got from a packet from the server after login
 
 # TODO
-- Shared.cs in the GameServer project, that others also use for things like ECharacterClass enum, etc. that both need
+- Show received characters from server in select char scene
 - Download metin2 p server to check how the char creation screen works in the game
 - Create metin like char screen with 4 rotating bases (4 can be changed by changing a single number)
 - [GameServer] Keeps track of which player is successfully logged in with its session id, etc.
@@ -18,6 +18,7 @@
 - Godot Client Signup and Login
 - When login succeeds, it switches to the main scene
 - Server list of clients (ID, IP, Name)
+- Log every drop, trade, upgrade, etc. to reverse problems
 
 # DONE
 - Login: Client Sends Login HTTP message -> LoginServer sends success with session id -> Client
@@ -62,3 +63,11 @@
 - Create Empty Create Character Scene
 - Arrow to rotate char slot base and select character slot
 - GameServer handle CS_CreateCharacterPacket function
+- LoginScene loads SelectCharacterScene, not MainScene
+- [Client] Sends CreateCharacter packet to GameServer when clicking Create in the CreateNewCharacterScene
+- Fix name creation to not include spaces after the name
+- Shared.cs in the GameServer project, that others also use for things like ECharacterClass enum, etc. that both need
+- [Client] CS_RequestCharacters packet
+- Client sends CS_RequestCharacters on successful login
+- [GameServer] accepts CS_RequestCharacters
+- Create SC_CharactersStartPacket, SC_CharacterPacket, SC_CharactersEndPacket
