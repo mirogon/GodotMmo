@@ -9,6 +9,7 @@ public partial class GameManager : Node
 
     public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Scenes/InfoWindow.tscn");
     public static PackedScene GameScene = ResourceLoader.Load<PackedScene>("res://Scenes/MainScene.tscn");
+    public static PackedScene SelectCharacterScene = ResourceLoader.Load<PackedScene>("res://Scenes/SelectCharacterScene.tscn");
 
     List<Node3D> _peerInstances = new();
 

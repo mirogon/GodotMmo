@@ -25,10 +25,15 @@ public class PeerPlayer
 public class NetworkClient
 {
     public static Action<List<PeerPlayer>> PlayerUpdate;
+    public static Action<bool> LoginAttemptUpdate;
+
     public static ConcurrentQueue<Packet> PacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
 
+    public static List<Character> KnownCharacters = new();
+
+    static bool _startedClient = false;
     public static bool SuccessfullyLoggedIn = false;
     static bool _isRunning = true;
     static long _packetsSent = 0;
@@ -37,8 +42,10 @@ public class NetworkClient
 
     public static void StartClient()
     {
+        if (_startedClient) { return; }
         Thread t = new(new ThreadStart(_Start));
         t.Start();
+        _startedClient = true;
     }
     
     static void _Start()
@@ -56,6 +63,9 @@ public class NetworkClient
             {
                 case EPacketType.SC_Register: Handle_SC_RegisterPacket(dataReader); break;
                 case EPacketType.SC_PlayerUpdate: Handle_SC_PlayerUpdate(dataReader); break;
+                case EPacketType.SC_CharactersStart: Handle_SC_CharactersStartPacket(dataReader); break;
+                case EPacketType.SC_Character: Handle_SC_CharacterPacket(dataReader); break;
+                case EPacketType.SC_CharactersEnd: Handle_SC_CharactersEndPacket(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -97,9 +107,9 @@ public class NetworkClient
         GD.Print("Sent register packet");
     }
 
-    public static void CreateNewCharacter(string charName, ECharacterClass charClass)
+    public static void CreateNewCharacter(byte slot, string charName, ECharacterClass charClass)
     {
-        CS_CreateCharacterPacket createCharPacket = new(LoginClient.NewestSessionId, charName, charClass);
+        CS_CreateCharacterPacket createCharPacket = new(LoginClient.NewestSessionId, slot, charName, charClass);
         NetworkClient.PacketsToSend.Enqueue(createCharPacket);
     }
 
@@ -110,6 +120,42 @@ public class NetworkClient
         packetReader.GetBytes(packetData, byteLen);
         SC_RegisterPacket receivedPacket = new(packetData);
         SuccessfullyLoggedIn = receivedPacket.Success;
+
+        LoginAttemptUpdate?.Invoke(SuccessfullyLoggedIn);
+
+        if (SuccessfullyLoggedIn)
+        {
+            CS_RequestCharactersPacket reqCharsPacket = new(LoginClient.NewestSessionId);
+            NetworkClient.PacketsToSend.Enqueue(reqCharsPacket);
+        }
+    }
+
+    static void Handle_SC_CharactersStartPacket(NetPacketReader packetReader)
+    {
+        var byteLen = SC_CharactersStartPacket.ByteSize;
+        byte[] packetData = new byte[byteLen];
+        packetReader.GetBytes(packetData, byteLen);
+        KnownCharacters.Clear();
+    }
+
+    static void Handle_SC_CharacterPacket(NetPacketReader packetReader)
+    {
+        var byteLen = SC_CharacterPacket.ByteSize;
+        byte[] packetData = new byte[byteLen];
+        packetReader.GetBytes(packetData, byteLen);
+
+        SC_CharacterPacket charPacket = new(packetData);
+
+        KnownCharacters.Add(new Character(charPacket.Slot, charPacket.Name, charPacket.Class, charPacket.Level, charPacket.Exp));
+        GD.Print("New Characater received: " +  charPacket.Name);
+    }
+
+
+    static void Handle_SC_CharactersEndPacket(NetPacketReader packetReader)
+    {
+        var byteLen = SC_CharactersEndPacket.ByteSize;
+        byte[] packetData = new byte[byteLen];
+        packetReader.GetBytes(packetData, byteLen);
     }
 
     static void Handle_SC_PlayerUpdate(NetPacketReader dataReader)
