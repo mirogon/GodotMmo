@@ -38,6 +38,13 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = ">"
 
+[node name="CharacterNameLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Test"
+
 [node name="CharacterSlotsBase" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -1.5)
 
