@@ -1,11 +1,10 @@
 # Current Task
-- Create char at slot X
+- SelectCharScene Button says Play instead of Create when a char in this slot already exists
 
 # Current Macrotask
 - Client has a list of account characters stored locally that he got from a packet from the server after login
 
 # TODO
-- Show received characters from server in select char scene
 - Download metin2 p server to check how the char creation screen works in the game
 - Create metin like char screen with 4 rotating bases (4 can be changed by changing a single number)
 - [GameServer] Keeps track of which player is successfully logged in with its session id, etc.
@@ -71,3 +70,6 @@
 - Client sends CS_RequestCharacters on successful login
 - [GameServer] accepts CS_RequestCharacters
 - Create SC_CharactersStartPacket, SC_CharacterPacket, SC_CharactersEndPacket
+- Create char at slot X
+- Show received characters from server in select char scene
+- Make it so that switching the character slots is more visible (rotation is over time, not instant)

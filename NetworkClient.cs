@@ -26,12 +26,13 @@ public class NetworkClient
 {
     public static Action<List<PeerPlayer>> PlayerUpdate;
     public static Action<bool> LoginAttemptUpdate;
+    public static Action KnownCharactersUpdate;
 
     public static ConcurrentQueue<Packet> PacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
 
-    public static List<Character> KnownCharacters = new();
+    public static Dictionary<int, Character> KnownCharacters = new(); //Slot, Char
 
     static bool _startedClient = false;
     public static bool SuccessfullyLoggedIn = false;
@@ -146,7 +147,9 @@ public class NetworkClient
 
         SC_CharacterPacket charPacket = new(packetData);
 
-        KnownCharacters.Add(new Character(charPacket.Slot, charPacket.Name, charPacket.Class, charPacket.Level, charPacket.Exp));
+        GD.Print("CHAR FROM SERVER WITH SLOT: " + charPacket.Slot);
+
+        KnownCharacters.Add(charPacket.Slot, new Character(charPacket.Slot, charPacket.Name, charPacket.Class, charPacket.Level, charPacket.Exp));
         GD.Print("New Characater received: " +  charPacket.Name);
     }
 
@@ -156,6 +159,8 @@ public class NetworkClient
         var byteLen = SC_CharactersEndPacket.ByteSize;
         byte[] packetData = new byte[byteLen];
         packetReader.GetBytes(packetData, byteLen);
+        KnownCharactersUpdate?.Invoke();
+        GD.Print("Known Character Update Invoked");
     }
 
     static void Handle_SC_PlayerUpdate(NetPacketReader dataReader)
