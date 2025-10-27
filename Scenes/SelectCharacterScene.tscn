@@ -25,6 +25,13 @@ size_flags_vertical = 8
 theme_override_font_sizes/font_size = 30
 text = "Create"
 
+[node name="DeleteCharacterButton" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 30
+text = "Delete"
+
 [node name="LeftArrowButton" type="Button" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0

@@ -114,6 +114,12 @@ public class NetworkClient
         NetworkClient.PacketsToSend.Enqueue(createCharPacket);
     }
 
+    public static void DeleteCharacter(byte slot)
+    {
+        CS_DeleteCharacterPacket delPacket = new(LoginClient.NewestSessionId, slot);
+        NetworkClient.PacketsToSend.Enqueue(delPacket);
+    }
+
     public static void GetCharactersUpdate()
     {
         CS_RequestCharactersPacket reqCharsPacket = new(LoginClient.NewestSessionId);

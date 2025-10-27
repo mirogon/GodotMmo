@@ -8,6 +8,7 @@ public partial class SelectCharacterScene : Node3D
     [Export] public Node3D CharacterSlotBase = new();
     [Export] public Node3D[] CharacterSlots;
     Button _createCharButton;
+    Button _deleteCharButton;
     Button _leftArrowButton;
     Button _rightArrowButton;
 
@@ -25,13 +26,16 @@ public partial class SelectCharacterScene : Node3D
         _targetRotation = CharacterSlotBase.Quaternion;
 
         _createCharButton = GetNode<Button>("MarginContainer/CreateButton");
+        _deleteCharButton = GetNode<Button>("MarginContainer/DeleteCharacterButton");
         _leftArrowButton = GetNode<Button>("MarginContainer/LeftArrowButton");
         _rightArrowButton = GetNode<Button>("MarginContainer/RightArrowButton");
         _characterNameLabel = GetNode<Label>("MarginContainer/CharacterNameLabel");
 
         _leftArrowButton.Pressed += _leftArrowButton_Pressed;
         _rightArrowButton.Pressed += _rightArrowButton_Pressed;
+        
         _createCharButton.Pressed += _createCharButton_Pressed;
+        _deleteCharButton.Pressed += _deleteCharButton_Pressed;
 
         _characterNameLabel.Text = "";
         if(NetworkClient.KnownCharacters.ContainsKey(0))
@@ -77,6 +81,11 @@ public partial class SelectCharacterScene : Node3D
         GetTree().Root.AddChild(createNewCharScene);
         QueueFree();
     }
+    private void _deleteCharButton_Pressed()
+    {
+        NetworkClient.DeleteCharacter((byte)_currentCharSlotSelected);
+        NetworkClient.GetCharactersUpdate();
+    }
 
     private void _leftArrowButton_Pressed()
     {
@@ -118,6 +127,15 @@ public partial class SelectCharacterScene : Node3D
 
     void UpdateCharacterPreviews()
     {
+        foreach (var slot in CharacterSlots)
+        {
+            var allChildren = slot.GetChildren();
+            foreach (var child in allChildren)
+            {
+                if (child.Name.ToString().Contains("Base")) { continue; }
+                slot.RemoveChild(child);
+            }
+        }
         for(int i = 0; i < NetworkClient.KnownCharacters.Count; ++i)
         {
             var current = NetworkClient.KnownCharacters[i];
