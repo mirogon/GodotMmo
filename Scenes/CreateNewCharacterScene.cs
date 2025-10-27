@@ -9,11 +9,13 @@ public partial class CreateNewCharacterScene : Node3D
     Button _rightArrowButton;
     TextEdit _nameInput;
 
+
     int _currentCharSlotSelected = 0;
     const int MAX_SLOTS = 4;
     const float SLOT_ROTATION_TIME = 0.5f;
 
     Quaternion _targetRotation;
+    int _slotToCreateCharIn = 0;
 
     public override void _Ready()
     {
@@ -31,6 +33,11 @@ public partial class CreateNewCharacterScene : Node3D
         _createCharButton.Pressed += _createCharButton_Pressed;
     }
 
+    public void Initialize(int slotToCreateCharIn)
+    {
+        _slotToCreateCharIn = slotToCreateCharIn;
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -43,7 +50,7 @@ public partial class CreateNewCharacterScene : Node3D
         ECharacterClass chosenClass = (ECharacterClass)_currentCharSlotSelected;
         string name = _nameInput.Text;
 
-        NetworkClient.CreateNewCharacter((byte)_currentCharSlotSelected, name, chosenClass);
+        NetworkClient.CreateNewCharacter((byte)_slotToCreateCharIn, name, chosenClass);
 
         var selectCharSceneInstance = GD.Load<PackedScene>("res://Scenes/SelectCharacterScene.tscn").Instantiate();
         GetTree().Root.AddChild(selectCharSceneInstance);

@@ -16,7 +16,7 @@ public partial class LoginScene : Panel
         _createNewAccountButton.Pressed += OnCreateNewAccountPressed;
 
         LoginClient.LoginUpdate += OnLoginUpdate;
-        NetworkClient.KnownCharactersUpdate += OnKnownCharacterUpdate;
+        NetworkClient.KnownCharactersUpdate += OnKnownCharactersUpdate;
     }
 
     void OnLoginUpdate(bool result, string message)
@@ -33,7 +33,7 @@ public partial class LoginScene : Panel
             NetworkClient.StartClient();
         }
     }
-    void OnKnownCharacterUpdate()
+    void OnKnownCharactersUpdate()
     {
         CallDeferred("OnKnownCharactersUpdateMainThread");
     }
@@ -42,6 +42,9 @@ public partial class LoginScene : Panel
     {
         GD.Print("LoginScene Known Char Update");
         var selectCharScene = GameManager.SelectCharacterScene.Instantiate();
+
+        NetworkClient.KnownCharactersUpdate -= OnKnownCharactersUpdate;
+
         GetTree().Root.AddChild(selectCharScene);
         QueueFree();
     }

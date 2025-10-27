@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://clbu108um78v2"]
+
+[ext_resource type="Script" uid="uid://csxs1tej21ndg" path="res://Scenes/TestButton.cs" id="1_hsfas"]
+
+[sub_resource type="Theme" id="Theme_gbbbd"]
+
+[node name="TestButton" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_hsfas")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+theme = SubResource("Theme_gbbbd")
+theme_override_colors/icon_disabled_color = Color(0.301961, 0.121569, 0.266667, 1)
+theme_override_colors/icon_hover_color = Color(0.301961, 0.121569, 0.266667, 1)
+theme_override_colors/icon_pressed_color = Color(0.301961, 0.121569, 0.266667, 1)
+theme_override_colors/icon_focus_color = Color(0.301961, 0.121569, 0.266667, 1)
+theme_override_colors/icon_normal_color = Color(0.3004, 0.121082, 0.268139, 1)
+theme_override_colors/font_color = Color(0.733333, 1, 0, 1)
+text = "Test"

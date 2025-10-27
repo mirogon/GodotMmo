@@ -114,6 +114,12 @@ public class NetworkClient
         NetworkClient.PacketsToSend.Enqueue(createCharPacket);
     }
 
+    public static void GetCharactersUpdate()
+    {
+        CS_RequestCharactersPacket reqCharsPacket = new(LoginClient.NewestSessionId);
+        NetworkClient.PacketsToSend.Enqueue(reqCharsPacket);
+    }
+
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         var byteLen = SC_RegisterPacket.ByteSize;
@@ -126,8 +132,7 @@ public class NetworkClient
 
         if (SuccessfullyLoggedIn)
         {
-            CS_RequestCharactersPacket reqCharsPacket = new(LoginClient.NewestSessionId);
-            NetworkClient.PacketsToSend.Enqueue(reqCharsPacket);
+            GetCharactersUpdate();
         }
     }
 

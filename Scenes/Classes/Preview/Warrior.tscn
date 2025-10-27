@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctsbjm8h222kn"]
+
+[ext_resource type="PackedScene" uid="uid://bcb1tk0g0rkue" path="res://Assets/Character.glb" id="1_hpwkn"]
+
+[node name="Warrior" instance=ExtResource("1_hpwkn")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)

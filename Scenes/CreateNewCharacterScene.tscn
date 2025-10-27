@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://d3uk1oxcpcp8j"]
+[gd_scene load_steps=4 format=3 uid="uid://d3uk1oxcpcp8j"]
 
 [ext_resource type="Script" uid="uid://dodr8falecm3r" path="res://Scenes/CreateNewCharacterScene.cs" id="1_dk7ru"]
 [ext_resource type="PackedScene" uid="uid://dl7ls4o60oa2v" path="res://Scenes/CharacterSlot.tscn" id="2_5i7li"]
+[ext_resource type="PackedScene" uid="uid://ctsbjm8h222kn" path="res://Scenes/Classes/Preview/Warrior.tscn" id="3_5i7li"]
 
 [node name="CreateCharacterScene" type="Node3D" node_paths=PackedStringArray("ClassesSlotBase")]
 script = ExtResource("1_dk7ru")
@@ -49,16 +50,28 @@ placeholder_text = "Name"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -1.5)
 
 [node name="ClassSlot" parent="ClassesSlotBase" instance=ExtResource("2_5i7li")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0.6)
+
+[node name="Warrior" parent="ClassesSlotBase/ClassSlot" instance=ExtResource("3_5i7li")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0.0735699, 0)
 
 [node name="ClassSlot2" parent="ClassesSlotBase" instance=ExtResource("2_5i7li")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 0.6, 0, 0)
 
+[node name="Warrior" parent="ClassesSlotBase/ClassSlot2" instance=ExtResource("3_5i7li")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0.074, 0)
+
 [node name="ClassSlot3" parent="ClassesSlotBase" instance=ExtResource("2_5i7li")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6)
+
+[node name="Warrior" parent="ClassesSlotBase/ClassSlot3" instance=ExtResource("3_5i7li")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0.074, 0)
 
 [node name="ClassSlot4" parent="ClassesSlotBase" instance=ExtResource("2_5i7li")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.6, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.6, 0, 0)
+
+[node name="Warrior" parent="ClassesSlotBase/ClassSlot4" instance=ExtResource("3_5i7li")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0.074, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.585043, 0.811003, 0, -0.811003, 0.585043, 0, 0, 0)

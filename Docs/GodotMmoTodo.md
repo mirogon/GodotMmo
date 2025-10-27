@@ -1,5 +1,5 @@
 # Current Task
-- SelectCharScene Button says Play instead of Create when a char in this slot already exists
+- Create new character scene has and shows character models for each class on the base
 
 # Current Macrotask
 - Client has a list of account characters stored locally that he got from a packet from the server after login
@@ -73,3 +73,4 @@
 - Create char at slot X
 - Show received characters from server in select char scene
 - Make it so that switching the character slots is more visible (rotation is over time, not instant)
+- SelectCharScene Button says Play instead of Create when a char in this slot already exists

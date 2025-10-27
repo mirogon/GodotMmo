@@ -6,6 +6,7 @@ using System.Diagnostics;
 public partial class SelectCharacterScene : Node3D
 {
     [Export] public Node3D CharacterSlotBase = new();
+    [Export] public Node3D[] CharacterSlots;
     Button _createCharButton;
     Button _leftArrowButton;
     Button _rightArrowButton;
@@ -35,11 +36,32 @@ public partial class SelectCharacterScene : Node3D
         _characterNameLabel.Text = "";
         if(NetworkClient.KnownCharacters.ContainsKey(0))
         {
-            _characterNameLabel.Text = NetworkClient.KnownCharacters[0].Name;
-            _createCharButton.Text = "Play";
+            UpdateCharacterInfo();
+            UpdateCharacterPreviews();
         }
 
+        NetworkClient.GetCharactersUpdate();
+        NetworkClient.KnownCharactersUpdate += OnKnownCharactersUpdate;
     }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        NetworkClient.KnownCharactersUpdate -= OnKnownCharactersUpdate;
+        GD.Print("Select Char Scene Exit Tree");
+    }
+
+    private void OnKnownCharactersUpdate()
+    {
+        CallDeferred("OnKnownCharactersUpdateDeferred");
+    }
+
+    private void OnKnownCharactersUpdateDeferred()
+    {
+        UpdateCharacterInfo();
+        UpdateCharacterPreviews();
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -50,7 +72,8 @@ public partial class SelectCharacterScene : Node3D
     private void _createCharButton_Pressed()
     {
         if (NetworkClient.KnownCharacters.ContainsKey(_currentCharSlotSelected)) { return; }
-        var createNewCharScene = GD.Load<PackedScene>("res://Scenes/CreateNewCharacterScene.tscn").Instantiate();
+        var createNewCharScene = GD.Load<PackedScene>("res://Scenes/CreateNewCharacterScene.tscn").Instantiate() as CreateNewCharacterScene;
+        createNewCharScene.Initialize(_currentCharSlotSelected);
         GetTree().Root.AddChild(createNewCharScene);
         QueueFree();
     }
@@ -91,6 +114,20 @@ public partial class SelectCharacterScene : Node3D
         var character = NetworkClient.KnownCharacters[_currentCharSlotSelected];
         _characterNameLabel.Text = character.Name;
         _createCharButton.Text = "Play";
+    }
+
+    void UpdateCharacterPreviews()
+    {
+        for(int i = 0; i < NetworkClient.KnownCharacters.Count; ++i)
+        {
+            var current = NetworkClient.KnownCharacters[i];
+            ECharacterClass charClass = current.Class;
+            var previewScenePath = Classes.ClassToPreviewSceneDictionary[charClass];
+            var characterPreviewScene = GD.Load<PackedScene>(previewScenePath);
+            var characterPreviewSceneInstance = characterPreviewScene.Instantiate();
+            var charSlot = CharacterSlots[current.Slot];
+            charSlot.AddChild(characterPreviewSceneInstance);
+        }
     }
 
     void PrintCurrentSlot()
