@@ -29,7 +29,7 @@ public partial class RegisterScene : Node
     void OnRegisterUpdate(bool result, string message)
     {
         GD.Print("Register update");
-        var newInfoWindow = GameManager.InfoWindowScreen.Instantiate();
+        var newInfoWindow = MapManager.InfoWindowScreen.Instantiate();
         InfoWindow iw = newInfoWindow as InfoWindow;
         iw.DescriptionLabel.Text = "Registration failed: " + message;
         if (result)

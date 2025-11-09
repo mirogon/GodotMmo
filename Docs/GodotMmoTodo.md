@@ -1,9 +1,15 @@
 # Current Task
+- CS_ItemMovedPacket
 
 # Current Macrotask
-- Client has a list of account characters stored locally that he got from a packet from the server after login
+- On successful client item move, send CS_ItemMovedPacket
 
 # TODO
+- Character Inventory
+    - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
+    - 2D Ui Item Instances are part of the inventory
+- Walking Animation
+- Inventory System
 - Download metin2 p server to check how the char creation screen works in the game
 - Create metin like char screen with 4 rotating bases (4 can be changed by changing a single number)
 - [GameServer] Keeps track of which player is successfully logged in with its session id, etc.
@@ -75,3 +81,37 @@
 - SelectCharScene Button says Play instead of Create when a char in this slot already exists
 - Create new character scene has and shows character models for each class on the base
 - Delete character
+- Play button goes to Map 1 scene
+- Players see each other move around
+- Better C# Logging system (maybe copy c++ version)
+- InventorySystem integrate equipment system
+- Server can drop items on ground
+- SC_MapUpdatePacket
+- CS_SelectedCharacterPacket
+- Expand SC_CharacterPacket with more info/data
+- Server saves which char is logged in, sends item info of map
+- Client goes to the correct map scene and spawns player on correct position
+- [Client] See items on the ground
+- CS_PickUpItemPacket
+- Add ItemId to ItemMinimumInfo
+- Picked up items get removed from the map
+    - SC_MapItemsRemovedUpdate
+- Create 2 different types for items
+    - MongoInventoryItem
+    - MongoMapItem
+- Remove MapItemMinimumRequired
+- Remove ItemOnMap
+- change all packets that have position to include the Y pos
+- MongoInventoryItem to MongoMapItem and vice versa
+- use MongoDB UUID for every GUID instead of string
+- Fix picking up multiple items
+- SC_CharacterInventoryItemsPacket
+- Send the client the character inventory after selecting the char
+- Dictionary for ItemType to Godot Client Inventory Ui Item PackedScene
+- Client reacts to InventoryItemUpdate and shows items in inventory
+- Support more than 15 map items from server to client
+- Client has tile state of inventory
+- Recognize item in inv by mouse pos
+- Move Items by holding left click
+- Items snap back to tile if you let go
+- When letting go of an item, check if the slots you moved it to are free and then set the position

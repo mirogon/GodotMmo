@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://dtm5s7mvcvv0k"]
+
+[ext_resource type="Script" uid="uid://byxm4n0jev0w6" path="res://MapManager.cs" id="1_66ww1"]
+[ext_resource type="PackedScene" uid="uid://crwro3rdi0lir" path="res://Gameplay/Player/PeerPlayer.tscn" id="2_3atk3"]
+[ext_resource type="PackedScene" uid="uid://cytlqsasi6qxv" path="res://Gameplay/Player/Player.tscn" id="3_bp0wf"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rpqi1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uxrcv"]
+albedo_color = Color(0.26, 0.26, 0.26, 1)
+
+[node name="MapManager" type="Node3D" node_paths=PackedStringArray("Player")]
+script = ExtResource("1_66ww1")
+Player = NodePath("Player")
+PeerPlayerScene = ExtResource("2_3atk3")
+
+[node name="Player" parent="." instance=ExtResource("3_bp0wf")]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_rpqi1")
+surface_material_override/0 = SubResource("StandardMaterial3D_uxrcv")
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0163732, 3.72505, 0.86713)
+light_energy = 1.186
+omni_range = 16.2383
+
+[node name="Items" type="Node3D" parent="."]

@@ -6,16 +6,32 @@ public partial class Player : Node3D
 {
     public float MovementSpeed = 4.0f;
 
-    [Export] Node3D _playerMesh;
+    Node3D _playerMesh;
 
     Stopwatch _posUpdateStopwatch = new();
 
     const float _positionUpdateIntervalMs = 100.0f;
 
+    InventorySystem _inventorySystem;
+
     public override void _Ready()
     {
         base._Ready();
+        _playerMesh = GetNode<Node3D>("Model");
         _posUpdateStopwatch.Start();
+
+        _inventorySystem = GetNode("InventorySystem") as InventorySystem;
+        NetworkClient.KnownItemsUpdate += OnItemsUpdate;
+    }
+
+    void OnItemsUpdate()
+    {
+        CallDeferred("OnItemsUpdateDeferred");
+    }
+
+    void OnItemsUpdateDeferred()
+    {
+        _inventorySystem.HandleInventoryUpdate(NetworkClient.KnownInventoryItems);
     }
 
     public override void _Process(double delta)
@@ -47,13 +63,39 @@ public partial class Player : Node3D
             SendPositionUpdate();
             _posUpdateStopwatch.Restart();
         }
+
+        if (Input.IsActionJustPressed("PickUp"))
+        {
+            PickUpItem();
+        }
+    }
+
+    void PickUpItem()
+    {
+        MapManager currentMapManager = FindParent("MapManager") as MapManager;
+
+        var closestItem = currentMapManager.KnownItemsOnMap[0];
+        var closestItemPos = Utility.PositionToVector3(closestItem.PositionOnMap);
+        for(int i = 0; i < currentMapManager.KnownItemsOnMap.Count; ++i)
+        {
+            var current = currentMapManager.KnownItemsOnMap[i];
+            Vector3 itemPos = Utility.PositionToVector3(current.PositionOnMap);
+
+            if(GlobalPosition.DistanceTo(itemPos) < GlobalPosition.DistanceTo(closestItemPos))
+            {
+                closestItem = current;
+                closestItemPos = itemPos;
+            }
+
+        }
+        NetworkClient.PickUpItem(closestItem.Id);
     }
 
     void SendPositionUpdate()
     {
         var yDegrees = Mathf.RadToDeg(_playerMesh.Rotation.Y);
-        GD.Print("YROT: " + yDegrees);
+        //GD.Print("YROT: " + yDegrees);
         CS_PositionUpdate posUpdate = new(LoginClient.NewestSessionId, Position.X, Position.Y, Position.Z, yDegrees);
-        NetworkClient.PacketsToSend.Enqueue(posUpdate);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(posUpdate);
     }
 }

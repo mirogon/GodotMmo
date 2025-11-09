@@ -23,7 +23,7 @@ public partial class LoginScene : Panel
     {
         if (!result)
         {
-            var newInfoWindow = GameManager.InfoWindowScreen.Instantiate();
+            var newInfoWindow = MapManager.InfoWindowScreen.Instantiate();
             InfoWindow iw = newInfoWindow as InfoWindow;
             iw.DescriptionLabel.Text = "Login failed: " + message;
             AddChild(newInfoWindow);
@@ -41,7 +41,7 @@ public partial class LoginScene : Panel
     void OnKnownCharactersUpdateMainThread()
     {
         GD.Print("LoginScene Known Char Update");
-        var selectCharScene = GameManager.SelectCharacterScene.Instantiate();
+        var selectCharScene = MapManager.SelectCharacterScene.Instantiate();
 
         NetworkClient.KnownCharactersUpdate -= OnKnownCharactersUpdate;
 

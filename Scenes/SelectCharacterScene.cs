@@ -75,7 +75,21 @@ public partial class SelectCharacterScene : Node3D
 
     private void _createCharButton_Pressed()
     {
-        if (NetworkClient.KnownCharacters.ContainsKey(_currentCharSlotSelected)) { return; }
+        if (NetworkClient.KnownCharacters.ContainsKey(_currentCharSlotSelected)) {
+            CS_SelectedCharacterPacket selectedCharPacket = new(LoginClient.NewestSessionId, (byte)_currentCharSlotSelected);
+            NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(selectedCharPacket);
+
+            var char_ = NetworkClient.KnownCharacters[_currentCharSlotSelected];
+            MapType map = char_.CurrentlyOnMap;
+            Position pos = char_.PositionOnMap;
+
+            var mapScene = MapManager.MapScenes[map];
+            MapManager mapInstance = mapScene.Instantiate() as MapManager;
+            mapInstance.Initialize(pos);
+            GetTree().Root.AddChild(mapInstance);
+            QueueFree();
+            return; 
+        }
         var createNewCharScene = GD.Load<PackedScene>("res://Scenes/CreateNewCharacterScene.tscn").Instantiate() as CreateNewCharacterScene;
         createNewCharScene.Initialize(_currentCharSlotSelected);
         GetTree().Root.AddChild(createNewCharScene);

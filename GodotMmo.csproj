@@ -4,14 +4,15 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\CSharp\Libraries\M1Log\Logger.cs" Link="Logger.cs" />
     <Compile Include="..\..\..\CSharp\Projects\GodotMmoLoginServerAsp\LoginServerTypes.cs" Link="Networking\LoginServerTypes.cs" />
     <Compile Include="..\..\..\CSharp\Projects\GodotMmoServer\Shared.cs" Link="Scripts\Shared.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="LiteNetLib" Version="1.3.1" />
+    <PackageReference Include="MongoDB.Bson" Version="3.5.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Networking\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
 </Project>
