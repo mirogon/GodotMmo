@@ -149,6 +149,13 @@ public class NetworkClient
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(p);
     }
 
+    public static void ThrowAwayItem(Guid itemId)
+    {
+        CS_ThrowAwayItemPacket throwAwayPacket = new(LoginClient.NewestSessionId, itemId);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(throwAwayPacket);
+    }
+
+
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         var byteLen = SC_RegisterPacket.ByteSize;

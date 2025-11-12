@@ -1,8 +1,7 @@
 # Current Task
-- CS_ItemMovedPacket
 
 # Current Macrotask
-- On successful client item move, send CS_ItemMovedPacket
+- Throw item out of the inventory
 
 # TODO
 - Character Inventory
@@ -115,3 +114,7 @@
 - Move Items by holding left click
 - Items snap back to tile if you let go
 - When letting go of an item, check if the slots you moved it to are free and then set the position
+- CS_ItemMovedPacket
+- On successful client item move, send CS_ItemMovedPacket
+- CS_ThrowAwayItemPacket
+- Server removes item from inv, adds it to the map and sends the player the update

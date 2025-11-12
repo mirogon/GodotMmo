@@ -59,8 +59,13 @@ public partial class InventorySystem : Panel
                 var itemSize = ItemInfo.ItemTypeToTileSizeDict[item.ItemType];
                 var invItem = InventoryUiItems[_currentlyMoving];
 
-                var tilePos = Utility.LocalMousePosToTilePos(GetLocalMousePosition(), TILE_PIXEL_SIZE);
-                if(ItemCanFit(tilePos.x, tilePos.y, itemSize.X, itemSize.Y))
+                var tilePos = Utility.LocalMousePosToTilePos(localMousePos, TILE_PIXEL_SIZE);
+                if (!MouseIsInInventoryPanel(localMousePos))
+                {
+                    NetworkClient.ThrowAwayItem(_currentlyMoving);
+                    _currentlyMoving = Guid.Empty;
+                }
+                else if(ItemCanFit(tilePos.x, tilePos.y, itemSize.X, itemSize.Y))
                 {
                     invItem.Position = new Vector2(tilePos.x * TILE_PIXEL_SIZE, tilePos.y * TILE_PIXEL_SIZE);
 
@@ -68,7 +73,7 @@ public partial class InventorySystem : Panel
 
                     _currentlyMoving = Guid.Empty;
                 }
-                else
+                else if(MouseIsInInventoryPanel(localMousePos))
                 {
                     invItem.Position = new Vector2(Items[_currentlyMoving].TilePosTopLeftX * TILE_PIXEL_SIZE, Items[_currentlyMoving].TilePosTopLeftY * TILE_PIXEL_SIZE);
                     _currentlyMoving = Guid.Empty;
@@ -138,6 +143,19 @@ public partial class InventorySystem : Panel
                     return false;
                 }
             }
+        }
+        return true;
+    }
+
+    bool MouseIsInInventoryPanel(Vector2 localMousePos)
+    {
+        if(localMousePos.X < 0 || localMousePos.X > Size.X)
+        {
+            return false;
+        }
+        if(localMousePos.Y < 0 || localMousePos.Y > Size.Y)
+        {
+            return false;
         }
         return true;
     }
