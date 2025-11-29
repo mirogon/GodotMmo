@@ -5,8 +5,7 @@ using System.Diagnostics;
 
 public partial class SelectCharacterScene : Node3D
 {
-    [Export] public int TestNum;
-    [Export] public Node3D CharacterSlotBase = new();
+    public Node3D CharacterSlotsBase = new();
     public Node3D[] CharacterSlots = new Node3D[4];
     Button _createCharButton;
     Button _deleteCharButton;
@@ -24,12 +23,14 @@ public partial class SelectCharacterScene : Node3D
     {
         base._Ready();
 
+        CharacterSlotsBase = GetNode("CharacterSlotsBase") as Node3D;
+
         CharacterSlots[0] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot") as Node3D;
         CharacterSlots[1] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot2") as Node3D;
         CharacterSlots[2] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot3") as Node3D;
         CharacterSlots[3] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot4") as Node3D;
 
-        _targetRotation = CharacterSlotBase.Quaternion;
+        _targetRotation = CharacterSlotsBase.Quaternion;
 
         _createCharButton = GetNode<Button>("MarginContainer/CreateButton");
         _deleteCharButton = GetNode<Button>("MarginContainer/DeleteCharacterButton");
@@ -75,8 +76,8 @@ public partial class SelectCharacterScene : Node3D
     public override void _Process(double delta)
     {
         base._Process(delta);
-        Quaternion newRot = CharacterSlotBase.Quaternion.Slerp(_targetRotation, (float)delta * 10.0f);
-        CharacterSlotBase.Quaternion = newRot.Normalized();
+        Quaternion newRot = CharacterSlotsBase.Quaternion.Slerp(_targetRotation, (float)delta * 10.0f);
+        CharacterSlotsBase.Quaternion = newRot.Normalized();
     }
 
     private void _createCharButton_Pressed()

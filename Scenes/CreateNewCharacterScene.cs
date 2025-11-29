@@ -3,7 +3,7 @@ using System;
 
 public partial class CreateNewCharacterScene : Node3D
 {
-    [Export] public Node3D ClassesSlotBase = new();
+    public Node3D ClassesSlotBase;
     Button _createCharButton;
     Button _leftArrowButton;
     Button _rightArrowButton;
@@ -20,6 +20,8 @@ public partial class CreateNewCharacterScene : Node3D
     public override void _Ready()
     {
         base._Ready();
+
+        ClassesSlotBase = GetNode<Node3D>("ClassesSlotBase");
 
         _targetRotation = ClassesSlotBase.Quaternion;
 

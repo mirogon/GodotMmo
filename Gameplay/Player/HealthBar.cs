@@ -1,0 +1,19 @@
+using Godot;
+using System;
+
+public partial class HealthBar : ProgressBar
+{
+    HealthSystem _healthSystem;
+    public override void _Ready()
+    {
+        base._Ready();
+        _healthSystem = GetParent<HealthSystem>();
+        _healthSystem.HealthChange += OnHealthChange;
+    }
+
+    private void OnHealthChange(int health)
+    {
+        var healthPercentage = (float)((float)health / (float)_healthSystem.MaxHealth) * 100.0f;
+        Value = healthPercentage;
+    }
+}

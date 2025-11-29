@@ -10,8 +10,8 @@ public partial class MapManager : Node
         {MapType.Map2, ResourceLoader.Load<PackedScene>("res://Scenes/Maps/Map2.tscn")},
     };
 
-    [Export] public Player Player;
-    [Export] public PackedScene PeerPlayerScene;
+    public Player Player;
+    public PackedScene PeerPlayerScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Player/PeerPlayer.tscn");
 
     public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Scenes/InfoWindow.tscn");
     public static PackedScene SelectCharacterScene = ResourceLoader.Load<PackedScene>("res://Scenes/SelectCharacterScene.tscn");
@@ -24,6 +24,7 @@ public partial class MapManager : Node
 
     public override void _Ready()
     {
+        Player = GetNode<Player>("Player");
         NetworkClient.PlayerUpdate += OnPlayerUpdate;
         NetworkClient.NewItemsOnMapUpdate += OnItemsUpdate;
         NetworkClient.RemovedItemsOnMap += OnItemsRemovedUpdate;
@@ -33,6 +34,7 @@ public partial class MapManager : Node
 
     public void Initialize(int maxHealth, int currentHealth, bool isDead, Position playerPos)
     {
+        Player = GetNode<Player>("Player");
         Player.Initialize(maxHealth, currentHealth, isDead, playerPos);
     }
 
@@ -96,18 +98,24 @@ public partial class MapManager : Node
             }
         }
     }
-    void OnEnemiesUpdate(List<EnemyData> list)
+    void OnEnemiesUpdate()
     {
         GD.Print("ENEMY UPDATE");
+        CallDeferred("OnEnemiesUpdateDeferred");
+    }
+
+    void OnEnemiesUpdateDeferred()
+    {
         foreach(var e in _enemyInstances)
         {
             e.QueueFree();
         }
+
         _enemyInstances.Clear();
 
-        for(int i= 0; i < list.Count; ++i)
+
+        foreach(var c in NetworkClient.NewestEnemyUpdate)
         {
-            var c = list[i];
             if(c.EnemyType == EEnemyType.Unknown) { continue; }
 
             var enemyScenePath = Classes.EnemyTypeToEnemySceneDictionary[c.EnemyType];

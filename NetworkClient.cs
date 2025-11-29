@@ -33,7 +33,9 @@ public class NetworkClient
     public static Action<List<Guid>> RemovedItemsOnMap;
     public static Action KnownItemsUpdate;
     public static Action<(UInt64 publicId, int currentHealth, int maxHealth)> CharacterHealthUpdate;
-    public static Action<List<EnemyData>> EnemiesUpdate;
+
+    public static Action EnemiesUpdate;
+    public static ConcurrentBag<EnemyData> NewestEnemyUpdate = new();
 
     public static ConcurrentQueue<Packet> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
@@ -304,7 +306,8 @@ public class NetworkClient
     static void Handle_SC_EnemiesUpdate(NetPacketReader packetReader)
     {
         SC_EnemiesUpdatePacket enemiesUpdatePacket = SharedUtil.PacketBytesToPacket<SC_EnemiesUpdatePacket>(packetReader);
-        EnemiesUpdate?.Invoke(enemiesUpdatePacket.Enemies.ToList());
+        NewestEnemyUpdate = new(enemiesUpdatePacket.Enemies);
+        EnemiesUpdate?.Invoke();
     }
 
 }

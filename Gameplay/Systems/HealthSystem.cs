@@ -1,8 +1,9 @@
 using Godot;
 using System;
 
-public partial class HealthSystem : Control
+public partial class HealthSystem : Node 
 {
+    public Action<int> HealthChange;
     public int MaxHealth {
         get { return _maxHealth; }
         set {  _maxHealth = value; } 
@@ -12,8 +13,7 @@ public partial class HealthSystem : Control
         get { return _currentHealth; }
         set { 
             _currentHealth = value;
-            var healthPercentage = (float)((float)_currentHealth / (float)_maxHealth) * 100.0f;
-            _healthProgressBar.Value = healthPercentage;
+            HealthChange?.Invoke(CurrentHealth);
         }
     }
 
@@ -33,12 +33,9 @@ public partial class HealthSystem : Control
     int _currentHealth;
     bool _isDead = false;
 
-    ProgressBar _healthProgressBar;
-
     public override void _Ready()
     {
         base._Ready();
-        _healthProgressBar = GetNode<ProgressBar>("HealthBar");
     }
 
     public void UpdateHealth(int currentHealth, int maxHealth)

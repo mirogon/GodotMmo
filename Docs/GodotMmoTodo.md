@@ -1,11 +1,11 @@
 # Current Task
-- Fix: Cant assign values to exported vars in godot (just dont use exported vars I guess)
+- Make a OnEnemiesUpdateDeferred function that does everything on the godot thread
 
 # Current Macrotask
-- Client reacts to SC_EnemyUpdate
-- Server spawns enemy
+- Make enemies move every 10sec to a new location (10sec after they stopped again)
 
 # TODO
+- Player metin like attack
 - Character Inventory
     - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
     - 2D Ui Item Instances are part of the inventory
@@ -136,3 +136,6 @@
 - SC_EnemiesUpdate
 - Server has Maps with info about enemies, etc.
 - Server Sends enemies on map to client
+- Fix: Cant assign values to exported vars in godot (just dont use exported vars I guess)
+- Replace all [Export]'s with other solutions like hardcoded GetNode's, etc.
+- Server spawns enemy
