@@ -12,4 +12,9 @@ public partial class Classes : Node
         {ECharacterClass.Sura, "res://Scenes/Classes/Preview/Warrior.tscn"},
         {ECharacterClass.Shaman, "res://Scenes/Classes/Preview/Warrior.tscn"},
     };
+    public static Dictionary<EEnemyType, string> EnemyTypeToEnemySceneDictionary = new()
+    {
+        {EEnemyType.TestEnemy, "res://Gameplay/Enemies/TestEnemy.tscn"},
+    };
+
 }

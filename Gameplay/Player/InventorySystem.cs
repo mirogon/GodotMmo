@@ -32,12 +32,13 @@ public partial class InventorySystem : Panel
     public override void _Process(double delta)
     {
         var localMousePos = GetLocalMousePosition();
-        if (Input.IsActionJustPressed("MouseLeft"))
+        bool mouseIsInInv = MouseIsInInventoryPanel();
+        if (Input.IsActionJustPressed("MouseLeft") && mouseIsInInv)
         {
             var mouseTilePos = Utility.LocalMousePosToTilePos(localMousePos, TILE_PIXEL_SIZE);
             var tileIndex = Utility.GridXAndYPosToIndex(mouseTilePos.Item1, mouseTilePos.Item2, TILE_WIDTH);
 
-            if (tileIndex >= Tiles.Count) { return; }
+            if (tileIndex >= Tiles.Count || tileIndex < 0) { return; }
 
             var itemId = Tiles[tileIndex].OccupiedBy;
             if (!Items.ContainsKey(itemId)) { return; }
@@ -60,7 +61,7 @@ public partial class InventorySystem : Panel
                 var invItem = InventoryUiItems[_currentlyMoving];
 
                 var tilePos = Utility.LocalMousePosToTilePos(localMousePos, TILE_PIXEL_SIZE);
-                if (!MouseIsInInventoryPanel(localMousePos))
+                if (!mouseIsInInv)
                 {
                     NetworkClient.ThrowAwayItem(_currentlyMoving);
                     _currentlyMoving = Guid.Empty;
@@ -73,7 +74,7 @@ public partial class InventorySystem : Panel
 
                     _currentlyMoving = Guid.Empty;
                 }
-                else if(MouseIsInInventoryPanel(localMousePos))
+                else if(MouseIsInInventoryPanel())
                 {
                     invItem.Position = new Vector2(Items[_currentlyMoving].TilePosTopLeftX * TILE_PIXEL_SIZE, Items[_currentlyMoving].TilePosTopLeftY * TILE_PIXEL_SIZE);
                     _currentlyMoving = Guid.Empty;
@@ -147,8 +148,13 @@ public partial class InventorySystem : Panel
         return true;
     }
 
-    bool MouseIsInInventoryPanel(Vector2 localMousePos)
+    public bool MouseIsBlockedByUi()
     {
+        return MouseIsInInventoryPanel() || _currentlyMoving != Guid.Empty;
+    }
+    bool MouseIsInInventoryPanel()
+    {
+        var localMousePos = GetLocalMousePosition();
         if(localMousePos.X < 0 || localMousePos.X > Size.X)
         {
             return false;

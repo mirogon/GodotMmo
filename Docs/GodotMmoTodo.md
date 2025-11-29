@@ -1,14 +1,15 @@
 # Current Task
+- Fix: Cant assign values to exported vars in godot (just dont use exported vars I guess)
 
 # Current Macrotask
-- Throw item out of the inventory
+- Client reacts to SC_EnemyUpdate
+- Server spawns enemy
 
 # TODO
 - Character Inventory
     - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
     - 2D Ui Item Instances are part of the inventory
 - Walking Animation
-- Inventory System
 - Download metin2 p server to check how the char creation screen works in the game
 - Create metin like char screen with 4 rotating bases (4 can be changed by changing a single number)
 - [GameServer] Keeps track of which player is successfully logged in with its session id, etc.
@@ -118,3 +119,20 @@
 - On successful client item move, send CS_ItemMovedPacket
 - CS_ThrowAwayItemPacket
 - Server removes item from inv, adds it to the map and sends the player the update
+- Throw item out of the inventory
+- Prevent camera movement when clicking in inv
+- Send all players the new map items when an item is dropped
+- Add health info in SC_ selected char packet
+- Player scene simple health UI
+- ClientHealthSystem with newest knowledge of health status and UI
+- Rename SC_PlayerUpdatePacket to SC_CharacterUpdatePacket
+- Every logged in char has a PublicId, Dictionary to get Client (Or SessionId) from PublicId
+- Peer Character/Player update packets include a PublicId, not a SessionId. Every logged in character has its own PublicId
+- SC_CharacterHealthUpdatePacket
+- Add PublicId to SC_RegisterPacket
+- Client receives CharacterHealthUpdate
+- Health System
+- Client Enemy Scene
+- SC_EnemiesUpdate
+- Server has Maps with info about enemies, etc.
+- Server Sends enemies on map to client

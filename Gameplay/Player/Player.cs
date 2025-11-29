@@ -7,12 +7,10 @@ public partial class Player : Node3D
     public float MovementSpeed = 4.0f;
 
     Node3D _playerMesh;
-
     Stopwatch _posUpdateStopwatch = new();
-
     const float _positionUpdateIntervalMs = 100.0f;
-
     InventorySystem _inventorySystem;
+    HealthSystem _healthSystem;
 
     public override void _Ready()
     {
@@ -21,7 +19,22 @@ public partial class Player : Node3D
         _posUpdateStopwatch.Start();
 
         _inventorySystem = GetNode("InventorySystem") as InventorySystem;
+
+        _healthSystem = GetNode("HealthSystem") as HealthSystem;
+
         NetworkClient.KnownItemsUpdate += OnItemsUpdate;
+        NetworkClient.CharacterHealthUpdate += OnCharacterHealthUpdate;
+    }
+
+
+    public void Initialize(int maxHealth, int currentHealth, bool isDead, Position pos)
+    {
+        Position = new (pos.X, pos.Y, pos.Z);    
+    }
+
+    public bool MouseIsBlockedByUi()
+    {
+        return _inventorySystem.MouseIsBlockedByUi();
     }
 
     void OnItemsUpdate()
@@ -97,5 +110,9 @@ public partial class Player : Node3D
         //GD.Print("YROT: " + yDegrees);
         CS_PositionUpdate posUpdate = new(LoginClient.NewestSessionId, Position.X, Position.Y, Position.Z, yDegrees);
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(posUpdate);
+    }
+    void OnCharacterHealthUpdate((ulong publicId, int currentHealth, int maxHealth) updateInfo)
+    {
+        _healthSystem.UpdateHealth(updateInfo.currentHealth, updateInfo.maxHealth);
     }
 }

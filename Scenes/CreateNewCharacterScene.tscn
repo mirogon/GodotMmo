@@ -4,9 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://dl7ls4o60oa2v" path="res://Scenes/CharacterSlot.tscn" id="2_5i7li"]
 [ext_resource type="PackedScene" uid="uid://ctsbjm8h222kn" path="res://Scenes/Classes/Preview/Warrior.tscn" id="3_5i7li"]
 
-[node name="CreateCharacterScene" type="Node3D" node_paths=PackedStringArray("ClassesSlotBase")]
+[node name="CreateCharacterScene" type="Node3D"]
 script = ExtResource("1_dk7ru")
-ClassesSlotBase = NodePath("ClassesSlotBase")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49316, 0)

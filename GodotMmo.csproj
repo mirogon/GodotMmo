@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
+	<DefineConstants>CLIENT</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\CSharp\Libraries\M1Log\Logger.cs" Link="Logger.cs" />

@@ -10,7 +10,7 @@ public partial class MapManager : Node
         {MapType.Map2, ResourceLoader.Load<PackedScene>("res://Scenes/Maps/Map2.tscn")},
     };
 
-    [Export] public Node3D Player;
+    [Export] public Player Player;
     [Export] public PackedScene PeerPlayerScene;
 
     public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Scenes/InfoWindow.tscn");
@@ -20,17 +20,20 @@ public partial class MapManager : Node
 
     public List<MongoMapItem> KnownItemsOnMap = new();
 
+    List<Enemy> _enemyInstances = new();
+
     public override void _Ready()
     {
         NetworkClient.PlayerUpdate += OnPlayerUpdate;
         NetworkClient.NewItemsOnMapUpdate += OnItemsUpdate;
         NetworkClient.RemovedItemsOnMap += OnItemsRemovedUpdate;
+        NetworkClient.EnemiesUpdate += OnEnemiesUpdate;
     }
 
 
-    public void Initialize(Position playerPos)
+    public void Initialize(int maxHealth, int currentHealth, bool isDead, Position playerPos)
     {
-        Player.Position = new Vector3(playerPos.X, 0, playerPos.Z);
+        Player.Initialize(maxHealth, currentHealth, isDead, playerPos);
     }
 
     void OnPlayerUpdate(List<PeerPlayer> peers)
@@ -40,7 +43,6 @@ public partial class MapManager : Node
             pi.QueueFree();
         }
         _peerInstances.Clear();
-
 
         var instance = PeerPlayerScene.Instantiate();
         CallDeferred("add_child", instance);
@@ -94,4 +96,27 @@ public partial class MapManager : Node
             }
         }
     }
+    void OnEnemiesUpdate(List<EnemyData> list)
+    {
+        GD.Print("ENEMY UPDATE");
+        foreach(var e in _enemyInstances)
+        {
+            e.QueueFree();
+        }
+        _enemyInstances.Clear();
+
+        for(int i= 0; i < list.Count; ++i)
+        {
+            var c = list[i];
+            if(c.EnemyType == EEnemyType.Unknown) { continue; }
+
+            var enemyScenePath = Classes.EnemyTypeToEnemySceneDictionary[c.EnemyType];
+            var enemyScene = GD.Load<PackedScene>(enemyScenePath);
+            Enemy enemyInstance = enemyScene.Instantiate() as Enemy;
+            _enemyInstances.Add(enemyInstance);
+            GetNode("Enemies").CallDeferred("add_child", enemyInstance);
+            enemyInstance.Position = c.PositionOnMap.ToVector3();
+        }
+    }
+
 }

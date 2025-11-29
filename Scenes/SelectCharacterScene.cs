@@ -5,8 +5,9 @@ using System.Diagnostics;
 
 public partial class SelectCharacterScene : Node3D
 {
+    [Export] public int TestNum;
     [Export] public Node3D CharacterSlotBase = new();
-    [Export] public Node3D[] CharacterSlots;
+    public Node3D[] CharacterSlots = new Node3D[4];
     Button _createCharButton;
     Button _deleteCharButton;
     Button _leftArrowButton;
@@ -22,6 +23,11 @@ public partial class SelectCharacterScene : Node3D
     public override void _Ready()
     {
         base._Ready();
+
+        CharacterSlots[0] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot") as Node3D;
+        CharacterSlots[1] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot2") as Node3D;
+        CharacterSlots[2] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot3") as Node3D;
+        CharacterSlots[3] = GetNode("CharacterSlotsBase").GetNode("CharacterSlot4") as Node3D;
 
         _targetRotation = CharacterSlotBase.Quaternion;
 
@@ -85,7 +91,7 @@ public partial class SelectCharacterScene : Node3D
 
             var mapScene = MapManager.MapScenes[map];
             MapManager mapInstance = mapScene.Instantiate() as MapManager;
-            mapInstance.Initialize(pos);
+            mapInstance.Initialize(char_.MaxHealth, char_.CurrentHealth, char_.IsDead, pos);
             GetTree().Root.AddChild(mapInstance);
             QueueFree();
             return; 

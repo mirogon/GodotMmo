@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://clvi8sffjlg7q"]
+[gd_scene load_steps=2 format=3 uid="uid://clvi8sffjlg7q"]
 
 [ext_resource type="Script" uid="uid://b56jchg3vqqrp" path="res://Gameplay/Player/InventorySystem.cs" id="1_5f88h"]
-[ext_resource type="PackedScene" uid="uid://dtbixybqm47xd" path="res://Scenes/Items/InventoryTile.tscn" id="2_h2inr"]
 
 [node name="InventorySystem" type="Panel"]
 custom_minimum_size = Vector2(200, 320)
@@ -10,4 +9,4 @@ offset_top = 302.0
 offset_right = 1130.0
 offset_bottom = 622.0
 script = ExtResource("1_5f88h")
-InventoryTileScene = ExtResource("2_h2inr")
+InventoryTileScene = null

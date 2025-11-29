@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
+
 public class PeerPlayer
 {
     public UInt64 PublicId;
@@ -31,10 +32,14 @@ public class NetworkClient
     public static Action<List<MongoMapItem>> NewItemsOnMapUpdate;
     public static Action<List<Guid>> RemovedItemsOnMap;
     public static Action KnownItemsUpdate;
+    public static Action<(UInt64 publicId, int currentHealth, int maxHealth)> CharacterHealthUpdate;
+    public static Action<List<EnemyData>> EnemiesUpdate;
 
     public static ConcurrentQueue<Packet> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
+
+    public static UInt64 PublicId;
 
     public static Dictionary<int, Character> KnownCharacters = new(); //Slot, Char
     public static List<MongoInventoryItem> KnownInventoryItems = new();
@@ -44,6 +49,8 @@ public class NetworkClient
     static bool _isRunning = true;
     static long _packetsSent = 0;
 
+
+    //Public ID, PeerPlayer
     static Dictionary<UInt64, PeerPlayer> _otherPlayers = new();
 
     public static void StartClient()
@@ -68,7 +75,7 @@ public class NetworkClient
             switch (packetType)
             {
                 case EPacketType.SC_Register: Handle_SC_RegisterPacket(dataReader); break;
-                case EPacketType.SC_PlayerUpdate: Handle_SC_PlayerUpdate(dataReader); break;
+                case EPacketType.SC_CharacterUpdate: Handle_SC_CharacterUpdate(dataReader); break;
                 case EPacketType.SC_CharactersStart: Handle_SC_CharactersStartPacket(dataReader); break;
                 case EPacketType.SC_Character: Handle_SC_CharacterPacket(dataReader); break;
                 case EPacketType.SC_CharactersEnd: Handle_SC_CharactersEndPacket(dataReader); break;
@@ -77,6 +84,8 @@ public class NetworkClient
                 case EPacketType.SC_CharacterInventoryItemsUpdateStart: Handle_SC_InventoryItemsUpdateStart(dataReader); break;
                 case EPacketType.SC_CharacterInventoryItemsUpdate: Handle_SC_InventoryItemsUpdate(dataReader); break;
                 case EPacketType.SC_CharacterInventoryItemsUpdateEnd: Handle_SC_InventoryItemsUpdateEnd(dataReader); break;
+                case EPacketType.SC_CharacterHealthUpdate: Handle_SC_CharacterHealthUpdate(dataReader); break;
+                case EPacketType.SC_EnemiesUpdate: Handle_SC_EnemiesUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -158,11 +167,10 @@ public class NetworkClient
 
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
-        var byteLen = SC_RegisterPacket.ByteSize;
-        byte[] packetData = new byte[byteLen];
-        packetReader.GetBytes(packetData, byteLen);
-        SC_RegisterPacket receivedPacket = new(packetData);
+        SC_RegisterPacket receivedPacket = SharedUtil.PacketBytesToPacket<SC_RegisterPacket>(packetReader);
         SuccessfullyLoggedIn = receivedPacket.Success;
+
+        PublicId = receivedPacket.PublicId;
 
         LoginAttemptUpdate?.Invoke(SuccessfullyLoggedIn);
 
@@ -174,7 +182,7 @@ public class NetworkClient
 
     static void Handle_SC_CharactersStartPacket(NetPacketReader packetReader)
     {
-        var byteLen = SC_CharactersStartPacket.ByteSize;
+        var byteLen = new SC_CharactersStartPacket().ByteSize;
         byte[] packetData = new byte[byteLen];
         packetReader.GetBytes(packetData, byteLen);
         KnownCharacters.Clear();
@@ -182,22 +190,30 @@ public class NetworkClient
 
     static void Handle_SC_CharacterPacket(NetPacketReader packetReader)
     {
-        var byteLen = SC_CharacterPacket.ByteSize;
-        byte[] packetData = new byte[byteLen];
-        packetReader.GetBytes(packetData, byteLen);
-
-        SC_CharacterPacket charPacket = new(packetData);
+        SC_CharacterPacket charPacket = SharedUtil.PacketBytesToPacket<SC_CharacterPacket>(packetReader);
 
         GD.Print("CHAR FROM SERVER WITH SLOT: " + charPacket.Slot);
 
-        KnownCharacters.Add(charPacket.Slot, new Character(charPacket.Slot, charPacket.Name, charPacket.Class, charPacket.Level, charPacket.Exp, charPacket.CurrentlyOnMap, charPacket.PositionOnMap));
+        KnownCharacters.Add(charPacket.Slot, new Character(
+            charPacket.Slot, 
+            charPacket.Name, 
+            charPacket.Class, 
+            charPacket.Level, 
+            charPacket.Exp, 
+            charPacket.CurrentlyOnMap, 
+            charPacket.PositionOnMap,
+            charPacket.MaxHealth,
+            charPacket.CurrentHealth,
+            charPacket.IsDead
+            )
+        );
         GD.Print("New Characater received: " +  charPacket.Name);
     }
 
 
     static void Handle_SC_CharactersEndPacket(NetPacketReader packetReader)
     {
-        var byteLen = SC_CharactersEndPacket.ByteSize;
+        var byteLen = new SC_CharactersEndPacket().ByteSize;
         byte[] packetData = new byte[byteLen];
         packetReader.GetBytes(packetData, byteLen);
         KnownCharactersUpdate?.Invoke();
@@ -206,10 +222,7 @@ public class NetworkClient
 
     static void Handle_SC_MapItemsUpdate(NetPacketReader dataReader)
     {
-        var byteLen = SC_MapItemsUpdatePacket.ByteSize;
-        byte[] packetData = new byte[byteLen];
-        dataReader.GetBytes(packetData, byteLen);
-        SC_MapItemsUpdatePacket packet = new(packetData);
+        SC_MapItemsUpdatePacket packet = SharedUtil.PacketBytesToPacket<SC_MapItemsUpdatePacket>(dataReader);
        
         foreach(var item in packet.Items)
         {
@@ -221,10 +234,7 @@ public class NetworkClient
 
     static void Handle_SC_MapItemsRemovedUpdate(NetPacketReader dataReader)
     {
-        var byteLen = SC_MapItemsRemovedUpdatePacket.ByteSize;
-        byte[] packetData = new byte[byteLen];
-        dataReader.GetBytes(packetData, byteLen);
-        SC_MapItemsRemovedUpdatePacket packet = new(packetData);
+        SC_MapItemsRemovedUpdatePacket packet = SharedUtil.PacketBytesToPacket<SC_MapItemsRemovedUpdatePacket>(dataReader);
 
         List<Guid> itemsRemoved = new();
         for(int i= 0; i < packet.RemovedItems.Length; ++i)
@@ -236,21 +246,18 @@ public class NetworkClient
         RemovedItemsOnMap?.Invoke(itemsRemoved);
     }
 
-    static void Handle_SC_PlayerUpdate(NetPacketReader dataReader)
+    static void Handle_SC_CharacterUpdate(NetPacketReader dataReader)
     {
-        var byteLen = SC_PlayerUpdatePacket.ByteSize;
-        byte[] packetData = new byte[byteLen];
-        dataReader.GetBytes(packetData, byteLen);
-        SC_PlayerUpdatePacket receivedPacket = new(packetData);
+        SC_CharacterUpdatePacket receivedPacket = SharedUtil.PacketBytesToPacket<SC_CharacterUpdatePacket>(dataReader);
 
-        PeerPlayer pp = new(receivedPacket.SessionId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z), receivedPacket.YRotationEuler);
-        if (!_otherPlayers.ContainsKey(receivedPacket.SessionId))
+        PeerPlayer pp = new(receivedPacket.PublicId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z), receivedPacket.YRotationEuler);
+        if (!_otherPlayers.ContainsKey(receivedPacket.PublicId))
         {
-            _otherPlayers.Add(receivedPacket.SessionId, pp);
+            _otherPlayers.Add(receivedPacket.PublicId, pp);
         }
         else
         {
-            _otherPlayers[receivedPacket.SessionId] = pp;
+            _otherPlayers[receivedPacket.PublicId] = pp;
         }
 
         //GD.Print("Num OtherPlayers: " + _otherPlayers.Count);
@@ -267,10 +274,7 @@ public class NetworkClient
     static void Handle_SC_InventoryItemsUpdate(NetPacketReader dataReader)
     {
         GD.Print("InventoryUpdate");
-        var byteLen = SC_CharacterInventoryItemsUpdatePacket.ByteSize;
-        byte[] packetData = new byte[byteLen];
-        dataReader.GetBytes(packetData, byteLen);
-        SC_CharacterInventoryItemsUpdatePacket receivedPacket = new(packetData);
+        SC_CharacterInventoryItemsUpdatePacket receivedPacket = SharedUtil.PacketBytesToPacket<SC_CharacterInventoryItemsUpdatePacket>(dataReader);
 
         GD.Print("Received ItemUpdatePacket NumItems: " + receivedPacket.Items.Count());
         foreach(var item in receivedPacket.Items)
@@ -286,6 +290,21 @@ public class NetworkClient
         GD.Print("InventoryUpdateEnd");
         dataReader.GetByte();
         KnownItemsUpdate?.Invoke();
+    }
+
+    static void Handle_SC_CharacterHealthUpdate(NetPacketReader dataReader)
+    {
+        SC_CharacterHealthUpdatePacket receivedPacket = SharedUtil.PacketBytesToPacket<SC_CharacterHealthUpdatePacket>(dataReader);
+
+        if(receivedPacket.PublicId != PublicId) { return; }
+
+        CharacterHealthUpdate?.Invoke((receivedPacket.PublicId, receivedPacket.CurrentHealth, receivedPacket.MaxHealth));
+    }
+
+    static void Handle_SC_EnemiesUpdate(NetPacketReader packetReader)
+    {
+        SC_EnemiesUpdatePacket enemiesUpdatePacket = SharedUtil.PacketBytesToPacket<SC_EnemiesUpdatePacket>(packetReader);
+        EnemiesUpdate?.Invoke(enemiesUpdatePacket.Enemies.ToList());
     }
 
 }

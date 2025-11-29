@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://dlga8dlnxwspu"]
+
+[ext_resource type="Script" uid="uid://ddw747ri8b57x" path="res://Gameplay/Enemies/Enemy.cs" id="1_rbkqh"]
+[ext_resource type="Script" uid="uid://5puh3pl51fne" path="res://Gameplay/Systems/HealthSystem.cs" id="2_h6nu3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_h6nu3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o2m13"]
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="TestEnemy" type="Node3D"]
+script = ExtResource("1_rbkqh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_h6nu3")
+surface_material_override/0 = SubResource("StandardMaterial3D_o2m13")
+
+[node name="HealthSystem" type="Node" parent="."]
+script = ExtResource("2_h6nu3")

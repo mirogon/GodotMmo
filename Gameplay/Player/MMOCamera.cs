@@ -17,10 +17,13 @@ public partial class MMOCamera : Camera3D
     float _pitch = 0;
     float _yaw = 0;
 
+    Player _player;
+
     public override void _Ready()
     {
         base._Ready();
         _cameraPivot = GetParent<Node3D>();
+        _player = GetParent<Node>().GetParent<Player>();
     }
 
     public override void _Process(double delta)
@@ -36,7 +39,7 @@ public partial class MMOCamera : Camera3D
         if(@event is InputEventMouseMotion motion)
         {
 
-            if(!leftMouseDown && !rightMouseDown) { return; }
+            if(!leftMouseDown && !rightMouseDown || _player.MouseIsBlockedByUi()) { return; }
             var mouseX = motion.Relative.X;
             var mouseY = motion.Relative.Y;
             _pitch += -mouseY * _cameraSpeed;
