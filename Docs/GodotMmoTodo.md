@@ -1,10 +1,12 @@
 # Current Task
-- Make a OnEnemiesUpdateDeferred function that does everything on the godot thread
+- Own Types for static sized strings (16, 32, 64, etc.)
+- Send player new enemy pos (SC_EnemiesUpdatePacket)
 
 # Current Macrotask
-- Make enemies move every 10sec to a new location (10sec after they stopped again)
+- Enemies move in one random dir for a few sec every x sec (not more complicated)
 
 # TODO
+- Split up Shared.cs in multiple ones like: SharedPackets, Shared, etc.
 - Player metin like attack
 - Character Inventory
     - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
@@ -139,3 +141,5 @@
 - Fix: Cant assign values to exported vars in godot (just dont use exported vars I guess)
 - Replace all [Export]'s with other solutions like hardcoded GetNode's, etc.
 - Server spawns enemy
+- Make a OnEnemiesUpdateDeferred function that does everything on the godot thread
+- Enemy moves for a few seconds every few seconds
