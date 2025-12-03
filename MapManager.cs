@@ -20,7 +20,7 @@ public partial class MapManager : Node
 
     public List<MongoMapItem> KnownItemsOnMap = new();
 
-    List<Enemy> _enemyInstances = new();
+    Dictionary<Guid, Enemy> _enemyInstances = new();
 
     public override void _Ready()
     {
@@ -28,11 +28,12 @@ public partial class MapManager : Node
         NetworkClient.PlayerUpdate += OnPlayerUpdate;
         NetworkClient.NewItemsOnMapUpdate += OnItemsUpdate;
         NetworkClient.RemovedItemsOnMap += OnItemsRemovedUpdate;
-        NetworkClient.EnemiesUpdate += OnEnemiesUpdate;
+        NetworkClient.EnemiesOnMapUpdate += OnEnemiesOnMapUpdate;
+        NetworkClient.EnemyUpdate += OnEnemyUpdate;
     }
 
 
-    public void Initialize(int maxHealth, int currentHealth, bool isDead, Position playerPos)
+    public void Initialize(int maxHealth, int currentHealth, bool isDead, M1Vector3 playerPos)
     {
         Player = GetNode<Player>("Player");
         Player.Initialize(maxHealth, currentHealth, isDead, playerPos);
@@ -98,7 +99,7 @@ public partial class MapManager : Node
             }
         }
     }
-    void OnEnemiesUpdate()
+    void OnEnemiesOnMapUpdate()
     {
         GD.Print("ENEMY UPDATE");
         CallDeferred("OnEnemiesUpdateDeferred");
@@ -108,23 +109,35 @@ public partial class MapManager : Node
     {
         foreach(var e in _enemyInstances)
         {
-            e.QueueFree();
+            e.Value.QueueFree();
         }
 
         _enemyInstances.Clear();
 
 
-        foreach(var c in NetworkClient.NewestEnemyUpdate)
+        foreach(var c in NetworkClient.NewestEnemiesOnMapUpdate)
         {
             if(c.EnemyType == EEnemyType.Unknown) { continue; }
 
             var enemyScenePath = Classes.EnemyTypeToEnemySceneDictionary[c.EnemyType];
             var enemyScene = GD.Load<PackedScene>(enemyScenePath);
             Enemy enemyInstance = enemyScene.Instantiate() as Enemy;
-            _enemyInstances.Add(enemyInstance);
+            _enemyInstances.Add(c.Id, enemyInstance);
             GetNode("Enemies").CallDeferred("add_child", enemyInstance);
             enemyInstance.Position = c.PositionOnMap.ToVector3();
         }
     }
+    private void OnEnemyUpdate()
+    {
+        CallDeferred("OnEnemyUpdateDeferred");
+    }
+    void OnEnemyUpdateDeferred()
+    {
+        var newUpdate = NetworkClient.NewestEnemyUpdate;
 
+        if (!_enemyInstances.ContainsKey(newUpdate.Enemy.Id)) { return; }
+
+        var instance = _enemyInstances[newUpdate.Enemy.Id];
+        instance.MovementUpdate(newUpdate.Enemy.PositionOnMap.ToVector3(), newUpdate.MoveDir.ToVector3(), newUpdate.MoveSpeed, newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
+    }
 }

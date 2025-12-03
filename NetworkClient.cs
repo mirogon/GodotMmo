@@ -34,10 +34,13 @@ public class NetworkClient
     public static Action KnownItemsUpdate;
     public static Action<(UInt64 publicId, int currentHealth, int maxHealth)> CharacterHealthUpdate;
 
-    public static Action EnemiesUpdate;
-    public static ConcurrentBag<EnemyData> NewestEnemyUpdate = new();
+    public static Action EnemiesOnMapUpdate;
+    public static ConcurrentBag<EnemyData> NewestEnemiesOnMapUpdate = new();
 
-    public static ConcurrentQueue<Packet> ReliableUnorderedPacketsToSend = new();
+    public static Action EnemyUpdate;
+    public static SC_EnemyUpdatePacket NewestEnemyUpdate = new();
+
+    public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
 
@@ -71,7 +74,7 @@ public class NetworkClient
         _serverPeer = _client.Connect("localhost", 9050, "SomeConnectionKey");
         listener.NetworkReceiveEvent += (fromPeer, dataReader, deliveryMethod, channel) =>
         {
-            byte packetTypeByte = dataReader.PeekByte();
+            short packetTypeByte = dataReader.PeekShort();
             EPacketType packetType = (EPacketType)packetTypeByte;
 
             switch (packetType)
@@ -87,7 +90,8 @@ public class NetworkClient
                 case EPacketType.SC_CharacterInventoryItemsUpdate: Handle_SC_InventoryItemsUpdate(dataReader); break;
                 case EPacketType.SC_CharacterInventoryItemsUpdateEnd: Handle_SC_InventoryItemsUpdateEnd(dataReader); break;
                 case EPacketType.SC_CharacterHealthUpdate: Handle_SC_CharacterHealthUpdate(dataReader); break;
-                case EPacketType.SC_EnemiesUpdate: Handle_SC_EnemiesUpdate(dataReader); break;
+                case EPacketType.SC_EnemiesOnMap: Handle_SC_EnemiesOnMapPacket(dataReader); break;
+                case EPacketType.SC_EnemyUpdate: Handle_SC_EnemyUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -102,10 +106,10 @@ public class NetworkClient
 
             if (!SuccessfullyLoggedIn && _packetsSent > 0) { continue; }
 
-            Packet packetRaw;
+            (Packet packet, Type type) packetRaw;
             if(ReliableUnorderedPacketsToSend.TryDequeue(out packetRaw))
             {
-                SendPacketReliableUnordered(packetRaw, _serverPeer);
+                NetworkPacketUtil.SendPacketReliableUnordered(packetRaw.packet, packetRaw.type, _serverPeer);
                 ++_packetsSent;
             }
             Thread.Sleep(5);
@@ -114,56 +118,46 @@ public class NetworkClient
     }
 
 
-    static void SendPacketReliableUnordered(Packet packet, NetPeer peer)
-    {
-        NetDataWriter writer = new();
-        var packetRaw = packet.ToByteArray();
-        writer.Put(packetRaw);
-        peer.Send(writer, DeliveryMethod.ReliableUnordered);
-        if(packet.PacketType == EPacketType.CS_PositionUpdate) { return; }
-        GD.Print("Sending packet: " + packet.PacketType.ToString() + " Size:" + packetRaw.Length);
-    }
-
     static void RegisterNetworkClient() {
         CS_RegisterPacket registerPacket = new(LoginClient.NewestSessionId);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(registerPacket);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((registerPacket, typeof(CS_RegisterPacket)));
         GD.Print("Sent register packet");
     }
 
     public static void CreateNewCharacter(byte slot, string charName, ECharacterClass charClass)
     {
         CS_CreateCharacterPacket createCharPacket = new(LoginClient.NewestSessionId, slot, charName, charClass);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(createCharPacket);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((createCharPacket, typeof(CS_CreateCharacterPacket)));
     }
 
     public static void DeleteCharacter(byte slot)
     {
         CS_DeleteCharacterPacket delPacket = new(LoginClient.NewestSessionId, slot);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(delPacket);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((delPacket,typeof(CS_DeleteCharacterPacket)));
     }
 
     public static void GetCharactersUpdate()
     {
         CS_RequestCharactersPacket reqCharsPacket = new(LoginClient.NewestSessionId);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(reqCharsPacket);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((reqCharsPacket, typeof(CS_RequestCharactersPacket)));
     }
 
     public static void PickUpItem(Guid itemId)
     {
         CS_PickUpItemPacket packet = new(LoginClient.NewestSessionId, itemId);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(packet);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_PickUpItemPacket)));
     }
 
     public static void MoveItem(Guid itemId, int newTilePosX, int newTilePosY)
     {
         CS_ItemMovedPacket p = new(LoginClient.NewestSessionId, itemId, (byte)newTilePosX, (byte)newTilePosY);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(p);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((p, typeof(CS_ItemMovedPacket)));
     }
 
     public static void ThrowAwayItem(Guid itemId)
     {
         CS_ThrowAwayItemPacket throwAwayPacket = new(LoginClient.NewestSessionId, itemId);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(throwAwayPacket);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((throwAwayPacket, typeof(CS_ThrowAwayItemPacket)));
     }
 
 
@@ -198,7 +192,7 @@ public class NetworkClient
 
         KnownCharacters.Add(charPacket.Slot, new Character(
             charPacket.Slot, 
-            charPacket.Name, 
+            charPacket.Name.ToString(), 
             charPacket.Class, 
             charPacket.Level, 
             charPacket.Exp, 
@@ -303,11 +297,18 @@ public class NetworkClient
         CharacterHealthUpdate?.Invoke((receivedPacket.PublicId, receivedPacket.CurrentHealth, receivedPacket.MaxHealth));
     }
 
-    static void Handle_SC_EnemiesUpdate(NetPacketReader packetReader)
+    static void Handle_SC_EnemiesOnMapPacket(NetPacketReader packetReader)
     {
-        SC_EnemiesUpdatePacket enemiesUpdatePacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_EnemiesUpdatePacket>(packetReader);
-        NewestEnemyUpdate = new(enemiesUpdatePacket.Enemies);
-        EnemiesUpdate?.Invoke();
+        SC_EnemiesOnMapPacket enemiesUpdatePacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_EnemiesOnMapPacket>(packetReader);
+        NewestEnemiesOnMapUpdate = new(enemiesUpdatePacket.Enemies);
+        EnemiesOnMapUpdate?.Invoke();
+    }
+
+    static void Handle_SC_EnemyUpdate(NetPacketReader packetReader)
+    {
+        SC_EnemyUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_EnemyUpdatePacket>(packetReader);
+        NewestEnemyUpdate = packet;
+        EnemyUpdate?.Invoke();
     }
 
 }

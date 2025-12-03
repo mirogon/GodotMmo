@@ -27,7 +27,7 @@ public partial class Player : Node3D
     }
 
 
-    public void Initialize(int maxHealth, int currentHealth, bool isDead, Position pos)
+    public void Initialize(int maxHealth, int currentHealth, bool isDead, M1Vector3 pos)
     {
         Position = new (pos.X, pos.Y, pos.Z);    
     }
@@ -108,8 +108,8 @@ public partial class Player : Node3D
     {
         var yDegrees = Mathf.RadToDeg(_playerMesh.Rotation.Y);
         //GD.Print("YROT: " + yDegrees);
-        CS_PositionUpdate posUpdate = new(LoginClient.NewestSessionId, Position.X, Position.Y, Position.Z, yDegrees);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue(posUpdate);
+        CS_PositionUpdatePacket posUpdate = new(LoginClient.NewestSessionId, Position.X, Position.Y, Position.Z, yDegrees);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((posUpdate, typeof(CS_PositionUpdatePacket)));
     }
     void OnCharacterHealthUpdate((ulong publicId, int currentHealth, int maxHealth) updateInfo)
     {

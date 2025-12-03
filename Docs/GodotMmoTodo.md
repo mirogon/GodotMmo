@@ -1,11 +1,10 @@
 # Current Task
-- Own Types for static sized strings (16, 32, 64, etc.)
-- Send player new enemy pos (SC_EnemiesUpdatePacket)
 
 # Current Macrotask
-- Enemies move in one random dir for a few sec every x sec (not more complicated)
+- Movement smoothing logic
 
 # TODO
+- Send player new enemy pos (SC_EnemiesUpdatePacket)
 - Split up Shared.cs in multiple ones like: SharedPackets, Shared, etc.
 - Player metin like attack
 - Character Inventory
@@ -143,3 +142,11 @@
 - Server spawns enemy
 - Make a OnEnemiesUpdateDeferred function that does everything on the godot thread
 - Enemy moves for a few seconds every few seconds
+- Own Types for static sized strings (16, 32, 64, etc.)
+- Make every packet se- and deserializable with my own functions
+- Remove ToByteArray and FromByteArray from Packet interface and types
+- Define correct new Packet ByteSize's
+- Send enemy pos update
+- Handle enemy pos update
+- Enemies move in one random dir for a few sec every x sec (not more complicated)
+- Add moveDir, moveSpeed and stopepdMoving to SC_EnemyUpdate

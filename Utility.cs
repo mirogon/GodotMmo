@@ -13,7 +13,7 @@ public class Utility
         if (yNormalized < 0) yNormalized += 360f;
         return yNormalized;
     }
-    public static Vector3 PositionToVector3(Position pos)
+    public static Vector3 PositionToVector3(M1Vector3 pos)
     {
         return new Vector3(pos.X, 0, pos.Z);
     }
