@@ -132,6 +132,7 @@ public partial class Player : Node3D
     }
     void OnCharacterHealthUpdate((ulong publicId, int currentHealth, int maxHealth) updateInfo)
     {
-        _healthSystem.UpdateHealth(updateInfo.currentHealth, updateInfo.maxHealth);
+        _healthSystem.MaxHealth = updateInfo.maxHealth;
+        _healthSystem.CurrentHealth = updateInfo.currentHealth;
     }
 }

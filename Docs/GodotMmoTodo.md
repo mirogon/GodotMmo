@@ -1,8 +1,7 @@
 # Current Task
-- Make own SC_MonsterPositionUpdate packet and SC_MonsterHealthUpdate packet seperately
 
 # Current Macrotask
-- Player can attack enemy (Simple one button click no animatio to attack close enemies)
+- Improve peer player movement
 
 # TODO
 - Send player new enemy pos (SC_EnemiesUpdatePacket)
@@ -154,3 +153,6 @@
 - Movement smoothing logic
 - CS_AttackPacket
 - Server handles AttackPacket
+- Make own SC_MonsterPositionUpdate packet and SC_MonsterHealthUpdate packet seperately
+- Player can attack enemy (Simple one button click no animatio to attack close enemies)
+- Enemy can die

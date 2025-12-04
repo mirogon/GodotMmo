@@ -3,17 +3,23 @@ using System;
 
 public partial class HealthSystem : Node 
 {
-    public Action<int> HealthChange;
-    public int MaxHealth {
-        get { return _maxHealth; }
-        set {  _maxHealth = value; } 
-    }
+    public Action<int> HealthChanged;
+    public Action Died;
+    public int MaxHealth;
     public int CurrentHealth
     {
         get { return _currentHealth; }
-        set { 
+        set
+        {
             _currentHealth = value;
-            HealthChange?.Invoke(CurrentHealth);
+            if(_currentHealth <= 0)
+            {
+                _currentHealth = 0;
+                _isDead = true;
+                Died?.Invoke();
+                return;
+            }
+            HealthChanged?.Invoke(CurrentHealth);
         }
     }
 
@@ -36,11 +42,5 @@ public partial class HealthSystem : Node
     public override void _Ready()
     {
         base._Ready();
-    }
-
-    public void UpdateHealth(int currentHealth, int maxHealth)
-    {
-        MaxHealth = maxHealth;
-        CurrentHealth = currentHealth;
     }
 }

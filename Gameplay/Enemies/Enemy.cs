@@ -21,7 +21,7 @@ public class EnemyMovementSnapshot
 
 public partial class Enemy : Node3D
 {
-    HealthSystem _healthSystem;
+    public HealthSystem HealthSystem;
 
     List<EnemyMovementSnapshot> _snapshots = new();
     int renderTimeDelayMs = 150;
@@ -32,8 +32,15 @@ public partial class Enemy : Node3D
     public override void _Ready()
     {
         base._Ready();
-        _healthSystem = GetNode("HealthSystem") as HealthSystem;
+        HealthSystem = GetNode("HealthSystem") as HealthSystem;
+        HealthSystem.Died += OnDied;
     }
+
+    void OnDied()
+    {
+        QueueFree();
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);

@@ -40,6 +40,9 @@ public class NetworkClient
     public static Action MonsterPositionUpdate;
     public static SC_MonsterPositionUpdatePacket NewerstMonsterPosUpdate = new();
 
+    public static Action MonstersHealthUpdate;
+    public static ConcurrentQueue<SC_MonstersHealthUpdate> MonstersHealthUpdateQueue = new();
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -92,6 +95,7 @@ public class NetworkClient
                 case EPacketType.SC_CharacterHealthUpdate: Handle_SC_CharacterHealthUpdate(dataReader); break;
                 case EPacketType.SC_EnemiesOnMap: Handle_SC_EnemiesOnMapPacket(dataReader); break;
                 case EPacketType.SC_MonsterPositionUpdate: Handle_SC_MonsterPositionUpdate(dataReader); break;
+                case EPacketType.SC_MonstersHealthUpdate: HandleSC_MonstersHealthUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -315,5 +319,12 @@ public class NetworkClient
         NewerstMonsterPosUpdate = packet;
         MonsterPositionUpdate?.Invoke();
     }
+    static void HandleSC_MonstersHealthUpdate(NetPacketReader dataReader)
+    {
+        SC_MonstersHealthUpdate packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_MonstersHealthUpdate>(dataReader);
+        MonstersHealthUpdateQueue.Enqueue(packet);
+        MonstersHealthUpdate?.Invoke();
+    }
+
 
 }

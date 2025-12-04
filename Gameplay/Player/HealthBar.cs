@@ -8,7 +8,7 @@ public partial class HealthBar : ProgressBar
     {
         base._Ready();
         _healthSystem = GetParent<HealthSystem>();
-        _healthSystem.HealthChange += OnHealthChange;
+        _healthSystem.HealthChanged += OnHealthChange;
     }
 
     private void OnHealthChange(int health)

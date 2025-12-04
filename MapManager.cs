@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class MapManager : Node
 {
@@ -30,7 +31,9 @@ public partial class MapManager : Node
         NetworkClient.RemovedItemsOnMap += OnItemsRemovedUpdate;
         NetworkClient.EnemiesOnMapUpdate += OnEnemiesOnMapUpdate;
         NetworkClient.MonsterPositionUpdate += OnMonsterPositionUpdate;
+        NetworkClient.MonstersHealthUpdate += OnMonstersHealthUpdate;
     }
+
 
     public void Initialize(int maxHealth, int currentHealth, bool isDead, M1Vector3 playerPos)
     {
@@ -139,4 +142,20 @@ public partial class MapManager : Node
         var instance = EnemyInstances[newUpdate.Id];
         instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
     }
+    void OnMonstersHealthUpdate()
+    {
+        SC_MonstersHealthUpdate update;
+        NetworkClient.MonstersHealthUpdateQueue.TryDequeue(out update);
+
+        for(int i = 0; i < update.HealthUpdates.Length; ++i)
+        {
+            var c = update.HealthUpdates[i];
+            if (!EnemyInstances.ContainsKey(c.Id)) { continue; }
+
+            var enemy = EnemyInstances[c.Id];
+            enemy.HealthSystem.CurrentHealth = c.CurrentHealth;
+        }
+    }
+
 }
+
