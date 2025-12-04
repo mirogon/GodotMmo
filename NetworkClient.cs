@@ -37,8 +37,8 @@ public class NetworkClient
     public static Action EnemiesOnMapUpdate;
     public static ConcurrentBag<EnemyData> NewestEnemiesOnMapUpdate = new();
 
-    public static Action EnemyUpdate;
-    public static SC_EnemyUpdatePacket NewestEnemyUpdate = new();
+    public static Action MonsterPositionUpdate;
+    public static SC_MonsterPositionUpdatePacket NewerstMonsterPosUpdate = new();
 
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
@@ -91,7 +91,7 @@ public class NetworkClient
                 case EPacketType.SC_CharacterInventoryItemsUpdateEnd: Handle_SC_InventoryItemsUpdateEnd(dataReader); break;
                 case EPacketType.SC_CharacterHealthUpdate: Handle_SC_CharacterHealthUpdate(dataReader); break;
                 case EPacketType.SC_EnemiesOnMap: Handle_SC_EnemiesOnMapPacket(dataReader); break;
-                case EPacketType.SC_EnemyUpdate: Handle_SC_EnemyUpdate(dataReader); break;
+                case EPacketType.SC_MonsterPositionUpdate: Handle_SC_MonsterPositionUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -160,6 +160,11 @@ public class NetworkClient
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((throwAwayPacket, typeof(CS_ThrowAwayItemPacket)));
     }
 
+    public static void WeaponAttackMonsters(List<Guid> monsters)
+    {
+        CS_CharacterMonsterAttackPacket packet = new(LoginClient.NewestSessionId, CharacterAttackType.WeaponAttack, monsters);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CharacterMonsterAttackPacket)));
+    }
 
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
@@ -304,11 +309,11 @@ public class NetworkClient
         EnemiesOnMapUpdate?.Invoke();
     }
 
-    static void Handle_SC_EnemyUpdate(NetPacketReader packetReader)
+    static void Handle_SC_MonsterPositionUpdate(NetPacketReader packetReader)
     {
-        SC_EnemyUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_EnemyUpdatePacket>(packetReader);
-        NewestEnemyUpdate = packet;
-        EnemyUpdate?.Invoke();
+        SC_MonsterPositionUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_MonsterPositionUpdatePacket>(packetReader);
+        NewerstMonsterPosUpdate = packet;
+        MonsterPositionUpdate?.Invoke();
     }
 
 }

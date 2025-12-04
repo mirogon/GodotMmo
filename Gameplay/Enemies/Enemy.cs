@@ -6,16 +6,14 @@ using System.Collections.Generic;
 public class EnemyMovementSnapshot
 {
     public Vector3 Position;
-    public Vector3 MoveDir;
-    public float MoveSpeed;
+    public Vector3 Velocity;
     public long ServerTimeUtcUnixMs;
     public bool IsMoving;
 
-    public EnemyMovementSnapshot(Vector3 position, Vector3 moveDir, float moveSpeed, long serverTime, bool isMoving)
+    public EnemyMovementSnapshot(Vector3 position, Vector3 velocity, long serverTime, bool isMoving)
     {
         Position = position;
-        MoveDir = moveDir;
-        MoveSpeed = moveSpeed;
+        Velocity = velocity;
         ServerTimeUtcUnixMs = serverTime;
         IsMoving = isMoving;
     }
@@ -39,9 +37,12 @@ public partial class Enemy : Node3D
     public override void _Process(double delta)
     {
         base._Process(delta);
-
         SimpleMovement(delta);
         return;
+    }
+
+    void NotSoSimpleMovement(double delta)
+    {
         if(_snapshots.Count < 2) { return; }
 
         renderTime += (long)(delta * 1000);
@@ -58,8 +59,8 @@ public partial class Enemy : Node3D
         if(afterRenderSnapshot == beforeRenderSnapshot) {
             var timeDiffMs = renderTime - afterRenderSnapshot.ServerTimeUtcUnixMs;
             var timeDiffSec = (float)(timeDiffMs) / 1000f;
-            var pos = afterRenderSnapshot.Position + afterRenderSnapshot.MoveDir * afterRenderSnapshot.MoveSpeed * timeDiffSec;
-            afterRenderSnapshot = new EnemyMovementSnapshot(pos, afterRenderSnapshot.MoveDir, afterRenderSnapshot.MoveSpeed, afterRenderSnapshot.ServerTimeUtcUnixMs + timeDiffMs , afterRenderSnapshot.IsMoving);
+            var pos = afterRenderSnapshot.Position + afterRenderSnapshot.Velocity * timeDiffSec;
+            afterRenderSnapshot = new EnemyMovementSnapshot(pos, afterRenderSnapshot.Velocity, afterRenderSnapshot.ServerTimeUtcUnixMs + timeDiffMs , afterRenderSnapshot.IsMoving);
             usedPredSnapshots++;
         }
         else
@@ -75,7 +76,7 @@ public partial class Enemy : Node3D
 
         if(alpha > 1.0)
         {
-            renderPos = afterRenderSnapshot.Position + afterRenderSnapshot.MoveDir * afterRenderSnapshot.MoveSpeed * (float)((renderTime - afterRenderSnapshot.ServerTimeUtcUnixMs)/1000f);
+            renderPos = afterRenderSnapshot.Position + afterRenderSnapshot.Velocity * (float)((renderTime - afterRenderSnapshot.ServerTimeUtcUnixMs)/1000f);
         }
         //GD.Print("alpa: ", alpha);
 
@@ -108,9 +109,9 @@ public partial class Enemy : Node3D
     }
 
 
-    public void MovementUpdate(Vector3 serverPos, Vector3 moveDir, float moveSpeed, bool isMoving, long serverTime)
+    public void MovementUpdate(Vector3 serverPos, Vector3 velocity, bool isMoving, long serverTime)
     {
-        EnemyMovementSnapshot snapshot = new(serverPos, moveDir, moveSpeed, serverTime, isMoving);
+        EnemyMovementSnapshot snapshot = new(serverPos, velocity, serverTime, isMoving);
         _snapshots.Add(snapshot);
 
         if(_snapshots.Count > 10)
@@ -131,10 +132,12 @@ public partial class Enemy : Node3D
     void SimpleMovement(double delta)
     {
         if(_snapshots.Count < 1) { return; }
-        GlobalPosition = GlobalPosition.Lerp(_targetPos, (float)delta * (_snapshots[0].MoveSpeed * 0.95f));
-        if(GlobalPosition.DistanceTo(_targetPos) < 0.01f)
+
+        if(GlobalPosition.DistanceTo(_targetPos) < 0.05f)
         {
-            //GlobalPosition = _targetPos;
+            return;
         }
+
+        GlobalPosition = GlobalPosition.Lerp(_targetPos, (float)delta * (_snapshots[0].Velocity.Length() * 0.95f));
     }
 }

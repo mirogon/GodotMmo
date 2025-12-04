@@ -1,7 +1,8 @@
 # Current Task
+- Make own SC_MonsterPositionUpdate packet and SC_MonsterHealthUpdate packet seperately
 
 # Current Macrotask
-- Movement smoothing logic
+- Player can attack enemy (Simple one button click no animatio to attack close enemies)
 
 # TODO
 - Send player new enemy pos (SC_EnemiesUpdatePacket)
@@ -150,3 +151,6 @@
 - Handle enemy pos update
 - Enemies move in one random dir for a few sec every x sec (not more complicated)
 - Add moveDir, moveSpeed and stopepdMoving to SC_EnemyUpdate
+- Movement smoothing logic
+- CS_AttackPacket
+- Server handles AttackPacket

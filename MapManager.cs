@@ -20,7 +20,7 @@ public partial class MapManager : Node
 
     public List<MongoMapItem> KnownItemsOnMap = new();
 
-    Dictionary<Guid, Enemy> _enemyInstances = new();
+    public Dictionary<Guid, Enemy> EnemyInstances = new();
 
     public override void _Ready()
     {
@@ -29,9 +29,8 @@ public partial class MapManager : Node
         NetworkClient.NewItemsOnMapUpdate += OnItemsUpdate;
         NetworkClient.RemovedItemsOnMap += OnItemsRemovedUpdate;
         NetworkClient.EnemiesOnMapUpdate += OnEnemiesOnMapUpdate;
-        NetworkClient.EnemyUpdate += OnEnemyUpdate;
+        NetworkClient.MonsterPositionUpdate += OnMonsterPositionUpdate;
     }
-
 
     public void Initialize(int maxHealth, int currentHealth, bool isDead, M1Vector3 playerPos)
     {
@@ -107,12 +106,12 @@ public partial class MapManager : Node
 
     void OnEnemiesUpdateDeferred()
     {
-        foreach(var e in _enemyInstances)
+        foreach(var e in EnemyInstances)
         {
             e.Value.QueueFree();
         }
 
-        _enemyInstances.Clear();
+        EnemyInstances.Clear();
 
 
         foreach(var c in NetworkClient.NewestEnemiesOnMapUpdate)
@@ -122,22 +121,22 @@ public partial class MapManager : Node
             var enemyScenePath = Classes.EnemyTypeToEnemySceneDictionary[c.EnemyType];
             var enemyScene = GD.Load<PackedScene>(enemyScenePath);
             Enemy enemyInstance = enemyScene.Instantiate() as Enemy;
-            _enemyInstances.Add(c.Id, enemyInstance);
+            EnemyInstances.Add(c.Id, enemyInstance);
             GetNode("Enemies").CallDeferred("add_child", enemyInstance);
             enemyInstance.Position = c.PositionOnMap.ToVector3();
         }
     }
-    private void OnEnemyUpdate()
+    private void OnMonsterPositionUpdate()
     {
-        CallDeferred("OnEnemyUpdateDeferred");
+        CallDeferred("OnMonsterPositionUpdateDeferred");
     }
-    void OnEnemyUpdateDeferred()
+    void OnMonsterPositionUpdateDeferred()
     {
-        var newUpdate = NetworkClient.NewestEnemyUpdate;
+        var newUpdate = NetworkClient.NewerstMonsterPosUpdate;
 
-        if (!_enemyInstances.ContainsKey(newUpdate.Enemy.Id)) { return; }
+        if (!EnemyInstances.ContainsKey(newUpdate.Id)) { return; }
 
-        var instance = _enemyInstances[newUpdate.Enemy.Id];
-        instance.MovementUpdate(newUpdate.Enemy.PositionOnMap.ToVector3(), newUpdate.MoveDir.ToVector3(), newUpdate.MoveSpeed, newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
+        var instance = EnemyInstances[newUpdate.Id];
+        instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
     }
 }

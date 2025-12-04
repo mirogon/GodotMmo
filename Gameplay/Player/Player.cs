@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 public partial class Player : Node3D
@@ -81,6 +82,24 @@ public partial class Player : Node3D
         {
             PickUpItem();
         }
+
+        if (Input.IsActionJustPressed("WeaponAttack"))
+        {
+            WeaponAttack();
+        }
+    }
+    void WeaponAttack()
+    {
+        var map = GetParent<MapManager>();
+
+        List<Guid> toAttack = new();
+        foreach(var enemy in map.EnemyInstances)
+        {
+            var enemyValue = enemy.Value;
+            toAttack.Add(enemy.Key);
+        }
+
+        NetworkClient.WeaponAttackMonsters(toAttack);
     }
 
     void PickUpItem()
