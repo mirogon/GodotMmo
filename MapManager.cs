@@ -17,7 +17,7 @@ public partial class MapManager : Node
     public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Scenes/InfoWindow.tscn");
     public static PackedScene SelectCharacterScene = ResourceLoader.Load<PackedScene>("res://Scenes/SelectCharacterScene.tscn");
 
-    List<Node3D> _peerInstances = new();
+    Dictionary<UInt64, PeerPlayer3D> _peerInstances = new();
 
     public List<MongoMapItem> KnownItemsOnMap = new();
 
@@ -26,7 +26,7 @@ public partial class MapManager : Node
     public override void _Ready()
     {
         Player = GetNode<Player>("Player");
-        NetworkClient.PlayerUpdate += OnPlayerUpdate;
+        NetworkClient.PeerPlayerPositionUpdate += OnPeerPlayerPositionUpdate;
         NetworkClient.NewItemsOnMapUpdate += OnItemsUpdate;
         NetworkClient.RemovedItemsOnMap += OnItemsRemovedUpdate;
         NetworkClient.EnemiesOnMapUpdate += OnEnemiesOnMapUpdate;
@@ -41,24 +41,41 @@ public partial class MapManager : Node
         Player.Initialize(maxHealth, currentHealth, isDead, playerPos);
     }
 
-    void OnPlayerUpdate(List<PeerPlayer> peers)
+    void OnPeerPlayerPositionUpdate()
     {
-        foreach(var pi in _peerInstances)
-        {
-            pi.QueueFree();
-        }
-        _peerInstances.Clear();
+        CallDeferred("OnPeerPlayerPositionUpdateDeferred");
+    }
 
-        var instance = PeerPlayerScene.Instantiate();
-        CallDeferred("add_child", instance);
-        //GetParent().AddChild(instance);
-        var n3d = instance as Node3D;
-        _peerInstances.Add(n3d);
-        n3d.Position = peers[0].Position;
-        var rot = n3d.Rotation;
-        rot.Y = Mathf.DegToRad(peers[0].YRotationEuler);
-        n3d.Rotation = rot;
-        GD.Print("OnPlayerUpdate PeerPos: X:" + n3d.Position.X +  " Y:" + n3d.Position.Y + " Z:" + n3d.Position.Z);
+    void OnPeerPlayerPositionUpdateDeferred()
+    {
+        if (PeerPlayerScene == null)
+        {
+            PeerPlayerScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Player/PeerPlayer.tscn");
+        }
+
+        SC_PeerPlayerPositionUpdatePacket update = new();
+        if(!NetworkClient.PeerPlayerPositionUpdateQueue.TryDequeue(out update)) { return; }
+
+        if (!_peerInstances.ContainsKey(update.PublicId))
+        {
+            GD.Print("PeerPlayerScene: ", PeerPlayerScene);
+            var instance = PeerPlayerScene.Instantiate() as PeerPlayer3D;
+            AddChild(instance);
+            var ppInstance = instance as PeerPlayer3D;
+            _peerInstances.Add(update.PublicId, ppInstance);
+            ppInstance.Position = update.Position.ToVector3();
+            var rot = ppInstance.Rotation;
+            rot.Y = Mathf.DegToRad(update.YRotationEuler);
+            ppInstance.Rotation = rot;
+            return;
+        }
+
+        var currentInstance = _peerInstances[update.PublicId];
+        currentInstance.OnMovementUpdate(update.Position.ToVector3(), update.MoveDir.ToVector3(), update.MoveSpeed, update.IsMoving, update.ServerTimeUtcUnixMs);
+        var r = currentInstance.Rotation;
+        r.Y = Mathf.DegToRad(update.YRotationEuler);
+        currentInstance.Rotation = r;
+
     }
     void OnItemsUpdate(List<MongoMapItem> list)
     {
@@ -140,7 +157,7 @@ public partial class MapManager : Node
         if (!EnemyInstances.ContainsKey(newUpdate.Id)) { return; }
 
         var instance = EnemyInstances[newUpdate.Id];
-        instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
+        instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
     }
     void OnMonstersHealthUpdate()
     {

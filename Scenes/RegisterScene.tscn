@@ -8,13 +8,18 @@ bg_color = Color(0.16, 0.16, 0.16, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_5vktr"]
 font_size = 36
 
-[node name="RegisterScene" type="Panel"]
+[node name="RegisterScene" type="Panel" node_paths=PackedStringArray("_signupEmailEdit", "_signupNameEdit", "_signupPasswordEdit", "_submitRegistrationButton", "_closeButton")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6tlpd")
+_signupEmailEdit = NodePath("RegisterPanel/EmailEdit")
+_signupNameEdit = NodePath("RegisterPanel/NameEdit")
+_signupPasswordEdit = NodePath("RegisterPanel/PwEdit")
+_submitRegistrationButton = NodePath("RegisterPanel/Submit")
+_closeButton = NodePath("RegisterPanel/Close")
 
 [node name="RegisterPanel" type="Panel" parent="."]
 custom_minimum_size = Vector2(400, 255)

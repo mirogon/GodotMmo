@@ -16,6 +16,8 @@ public class PeerPlayer
     public UInt64 PublicId;
     public Vector3 Position;
     public float YRotationEuler;
+    public Vector3 Velocity;
+    public bool IsMoving;
 
     public PeerPlayer(ulong publicId, Vector3 position, float yRotationEuler)
     {
@@ -26,7 +28,9 @@ public class PeerPlayer
 }
 public class NetworkClient
 {
-    public static Action<List<PeerPlayer>> PlayerUpdate;
+    public static Action PeerPlayerPositionUpdate;
+    public static ConcurrentQueue<SC_PeerPlayerPositionUpdatePacket> PeerPlayerPositionUpdateQueue = new();
+
     public static Action<bool> LoginAttemptUpdate;
     public static Action KnownCharactersUpdate;
     public static Action<List<MongoMapItem>> NewItemsOnMapUpdate;
@@ -58,9 +62,6 @@ public class NetworkClient
     static long _packetsSent = 0;
 
 
-    //Public ID, PeerPlayer
-    static Dictionary<UInt64, PeerPlayer> _otherPlayers = new();
-
     public static void StartClient()
     {
         if (_startedClient) { return; }
@@ -83,7 +84,7 @@ public class NetworkClient
             switch (packetType)
             {
                 case EPacketType.SC_Register: Handle_SC_RegisterPacket(dataReader); break;
-                case EPacketType.SC_CharacterUpdate: Handle_SC_CharacterUpdate(dataReader); break;
+                case EPacketType.SC_PeerPlayerPositionUpdate: Handle_SC_PeerPlayerPositionUpdate(dataReader); break;
                 case EPacketType.SC_CharactersStart: Handle_SC_CharactersStartPacket(dataReader); break;
                 case EPacketType.SC_Character: Handle_SC_CharacterPacket(dataReader); break;
                 case EPacketType.SC_CharactersEnd: Handle_SC_CharactersEndPacket(dataReader); break;
@@ -251,23 +252,12 @@ public class NetworkClient
         RemovedItemsOnMap?.Invoke(itemsRemoved);
     }
 
-    static void Handle_SC_CharacterUpdate(NetPacketReader dataReader)
+    static void Handle_SC_PeerPlayerPositionUpdate(NetPacketReader dataReader)
     {
-        SC_CharacterUpdatePacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterUpdatePacket>(dataReader);
+        SC_PeerPlayerPositionUpdatePacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_PeerPlayerPositionUpdatePacket>(dataReader);
 
-        PeerPlayer pp = new(receivedPacket.PublicId, new Vector3(receivedPacket.X, receivedPacket.Y, receivedPacket.Z), receivedPacket.YRotationEuler);
-        if (!_otherPlayers.ContainsKey(receivedPacket.PublicId))
-        {
-            _otherPlayers.Add(receivedPacket.PublicId, pp);
-        }
-        else
-        {
-            _otherPlayers[receivedPacket.PublicId] = pp;
-        }
-
-        //GD.Print("Num OtherPlayers: " + _otherPlayers.Count);
-        //GD.Print("Received PlayerUpdate packet Pos: " + "X:" + receivedPacket.X + " Y:" + receivedPacket.Y + " Z:" + receivedPacket.Z);
-        PlayerUpdate?.Invoke(_otherPlayers.Values.ToList());
+        PeerPlayerPositionUpdateQueue.Enqueue(receivedPacket);
+        PeerPlayerPositionUpdate?.Invoke();
     }
     static void Handle_SC_InventoryItemsUpdateStart(NetPacketReader dataReader)
     {

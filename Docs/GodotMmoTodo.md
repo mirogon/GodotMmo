@@ -1,7 +1,7 @@
 # Current Task
 
 # Current Macrotask
-- Improve peer player movement
+- First character model
 
 # TODO
 - Send player new enemy pos (SC_EnemiesUpdatePacket)
@@ -156,3 +156,6 @@
 - Make own SC_MonsterPositionUpdate packet and SC_MonsterHealthUpdate packet seperately
 - Player can attack enemy (Simple one button click no animatio to attack close enemies)
 - Enemy can die
+- Server has all logged in MongoCharacter in RAM
+- MongoCharacter has movemenetSpeed
+- Improve peer player movement
