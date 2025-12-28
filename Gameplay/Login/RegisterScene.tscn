@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ci3kyns6tbdse"]
 
-[ext_resource type="Script" uid="uid://bb0fatb1v56yr" path="res://Scenes/RegisterScene.cs" id="1_6tlpd"]
+[ext_resource type="Script" uid="uid://bb0fatb1v56yr" path="res://Gameplay/Login/RegisterScene.cs" id="1_6tlpd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tlpd"]
 bg_color = Color(0.16, 0.16, 0.16, 1)

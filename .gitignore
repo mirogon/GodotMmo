@@ -3,5 +3,6 @@
 /android/
 .vs/
 Build/
+Assets/Character/
 
 *.exe

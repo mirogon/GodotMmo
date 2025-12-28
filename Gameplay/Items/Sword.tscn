@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c57s4gqeyy3nu"]
 
-[ext_resource type="Script" uid="uid://bfnunfswq0hbf" path="res://Scenes/Items/ItemInstance.cs" id="1_6l4sq"]
+[ext_resource type="Script" uid="uid://bfnunfswq0hbf" path="res://Gameplay/Items/ItemInstance.cs" id="1_6l4sq"]
 
 [sub_resource type="TextMesh" id="TextMesh_kr8x0"]
 text = "Sword"

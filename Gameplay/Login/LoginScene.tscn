@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://2rou2x8bjul1"]
 
-[ext_resource type="Script" uid="uid://b7dxupo7g7c4x" path="res://Scenes/LoginScene.cs" id="1_wld3x"]
-[ext_resource type="PackedScene" uid="uid://ci3kyns6tbdse" path="res://Scenes/RegisterScene.tscn" id="2_jbn7o"]
+[ext_resource type="Script" uid="uid://b7dxupo7g7c4x" path="res://Gameplay/Login/LoginScene.cs" id="1_wld3x"]
+[ext_resource type="PackedScene" uid="uid://ci3kyns6tbdse" path="res://Gameplay/Login/RegisterScene.tscn" id="2_jbn7o"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5vktr"]
 font_size = 36

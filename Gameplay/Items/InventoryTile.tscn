@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dtbixybqm47xd"]
 
-[ext_resource type="Script" uid="uid://c10oey8fjlonc" path="res://Scenes/Items/InventoryTile.cs" id="1_2yhwg"]
+[ext_resource type="Script" uid="uid://c10oey8fjlonc" path="res://Gameplay/Items/InventoryTile.cs" id="1_2yhwg"]
 [ext_resource type="Texture2D" uid="uid://dmyhv8w5hiykj" path="res://icon.svg" id="1_hp8us"]
 
 [node name="InventoryTile" type="Control"]

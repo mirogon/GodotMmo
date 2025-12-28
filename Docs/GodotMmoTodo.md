@@ -1,7 +1,8 @@
 # Current Task
+- Fix LoadScene's
 
 # Current Macrotask
-- First character model
+- Check if anything even works anymore
 
 # TODO
 - Send player new enemy pos (SC_EnemiesUpdatePacket)
@@ -159,3 +160,24 @@
 - Server has all logged in MongoCharacter in RAM
 - MongoCharacter has movemenetSpeed
 - Improve peer player movement
+- Improve PeerPlayer Rotation
+- Import all downloaded materials/textures into the substance shelf
+- Finish some version of the robe
+- Character Idle Animation
+Model Clothes
+- Model First Clothes based on: https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F77%2F9e%2F1b%2F779e1b9686615a8489015536e182960a.jpg&f=1&nofb=1&ipt=62d8bb9597fff2304982cfc8e1e4f6e894121f7141dbc07b4c2ff32d74de5eba
+- Plan in which order to do things to create a char
+1. Create Human Model
+2. Create UV for the Human Model
+3. Test if the UV works in Substance Painter
+4. Create Rig for the human model (UpperArm, LowerArm, Hand, No Fingers, Head, Torso, UpperLeg, LowerLeg, Foot)
+5. Create defaul clothes for the human model that are attached to the bones of the rig
+    - Clothes have to be rigged to the same skeleton for this to work
+- Import all mixamo walk anims into blender to be able to compare, find the one I like the most
+- Character Walk Animation
+- Organize all files into a folder structure in godot
+- Start writing BlenderGodot.md guide
+- Set up all textures and materials fot the first character
+- Use Character1Model scene for selecting character
+- Player Model Scene
+- Use new character model scene as the model scene of the player

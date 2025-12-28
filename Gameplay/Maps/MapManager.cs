@@ -7,15 +7,15 @@ public partial class MapManager : Node
 {
     public static Dictionary<MapType, PackedScene> MapScenes = new Dictionary<MapType, PackedScene>
     {
-        {MapType.Map1, ResourceLoader.Load<PackedScene>("res://Scenes/Maps/Map1.tscn")},
-        {MapType.Map2, ResourceLoader.Load<PackedScene>("res://Scenes/Maps/Map2.tscn")},
+        {MapType.Map1, ResourceLoader.Load<PackedScene>("res://Gameplay/Maps/Map1.tscn")},
+        {MapType.Map2, ResourceLoader.Load<PackedScene>("res://Gameplay/Maps/Map2.tscn")},
     };
 
     public Player Player;
     public PackedScene PeerPlayerScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Player/PeerPlayer.tscn");
 
-    public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Scenes/InfoWindow.tscn");
-    public static PackedScene SelectCharacterScene = ResourceLoader.Load<PackedScene>("res://Scenes/SelectCharacterScene.tscn");
+    public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Gameplay/InfoWindow.tscn");
+    public static PackedScene SelectCharacterScene = ResourceLoader.Load<PackedScene>("res://Gameplay/CharacterScreen/SelectCharacterScene.tscn");
 
     Dictionary<UInt64, PeerPlayer3D> _peerInstances = new();
 
@@ -71,7 +71,7 @@ public partial class MapManager : Node
         }
 
         var currentInstance = _peerInstances[update.PublicId];
-        currentInstance.OnMovementUpdate(update.Position.ToVector3(), update.MoveDir.ToVector3(), update.MoveSpeed, update.IsMoving, update.ServerTimeUtcUnixMs);
+        currentInstance.OnMovementUpdate(update.Position.ToVector3(), update.MoveDir.ToVector3(), update.MoveSpeed,  update.YRotationEuler, update.IsMoving, update.ServerTimeUtcUnixMs);
         var r = currentInstance.Rotation;
         r.Y = Mathf.DegToRad(update.YRotationEuler);
         currentInstance.Rotation = r;
@@ -157,7 +157,7 @@ public partial class MapManager : Node
         if (!EnemyInstances.ContainsKey(newUpdate.Id)) { return; }
 
         var instance = EnemyInstances[newUpdate.Id];
-        instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
+        instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), 0, newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
     }
     void OnMonstersHealthUpdate()
     {

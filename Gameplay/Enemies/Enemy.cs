@@ -8,14 +8,16 @@ public class ServerMovementSnapshot
     public Vector3 Position;
     public Vector3 MoveDir;
     public float MoveSpeed;
+    public float YRotationEuler;
     public long ServerTimeUtcUnixMs;
     public bool IsMoving;
 
-    public ServerMovementSnapshot(Vector3 position, Vector3 moveDir, float moveSpeed, long serverTime, bool isMoving)
+    public ServerMovementSnapshot(Vector3 position, Vector3 moveDir, float moveSpeed, float yRotationEuler, long serverTime, bool isMoving)
     {
         Position = position;
         MoveDir = moveDir;
         MoveSpeed = moveSpeed;
+        YRotationEuler = yRotationEuler;
         ServerTimeUtcUnixMs = serverTime;
         IsMoving = isMoving;
     }
@@ -69,7 +71,7 @@ public partial class Enemy : Node3D
             var timeDiffMs = renderTime - afterRenderSnapshot.ServerTimeUtcUnixMs;
             var timeDiffSec = (float)(timeDiffMs) / 1000f;
             var pos = afterRenderSnapshot.Position + afterRenderSnapshot.MoveDir * afterRenderSnapshot.MoveSpeed * timeDiffSec;
-            afterRenderSnapshot = new ServerMovementSnapshot(pos, afterRenderSnapshot.MoveDir, afterRenderSnapshot.MoveSpeed, afterRenderSnapshot.ServerTimeUtcUnixMs + timeDiffMs , afterRenderSnapshot.IsMoving);
+            afterRenderSnapshot = new ServerMovementSnapshot(pos, afterRenderSnapshot.MoveDir, afterRenderSnapshot.MoveSpeed, afterRenderSnapshot.YRotationEuler, afterRenderSnapshot.ServerTimeUtcUnixMs + timeDiffMs , afterRenderSnapshot.IsMoving);
             usedPredSnapshots++;
         }
         else
@@ -118,9 +120,9 @@ public partial class Enemy : Node3D
     }
 
 
-    public void MovementUpdate(Vector3 serverPos, Vector3 moveDir, float moveSpeed, bool isMoving, long serverTime)
+    public void MovementUpdate(Vector3 serverPos, Vector3 moveDir, float moveSpeed, float yRot, bool isMoving, long serverTime)
     {
-        ServerMovementSnapshot snapshot = new(serverPos, moveDir, moveSpeed, serverTime, isMoving);
+        ServerMovementSnapshot snapshot = new(serverPos, moveDir, moveSpeed, yRot, serverTime, isMoving);
         _snapshots.Add(snapshot);
 
         if(_snapshots.Count > 10)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dtm5s7mvcvv0k"]
 
-[ext_resource type="Script" uid="uid://byxm4n0jev0w6" path="res://MapManager.cs" id="1_66ww1"]
+[ext_resource type="Script" uid="uid://byxm4n0jev0w6" path="res://Gameplay/Maps/MapManager.cs" id="1_66ww1"]
 [ext_resource type="PackedScene" uid="uid://cytlqsasi6qxv" path="res://Gameplay/Player/Player.tscn" id="3_bp0wf"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rpqi1"]
@@ -10,7 +10,6 @@ albedo_color = Color(0.26, 0.26, 0.26, 1)
 
 [node name="MapManager" type="Node3D"]
 script = ExtResource("1_66ww1")
-PeerPlayerScene = null
 
 [node name="Player" parent="." instance=ExtResource("3_bp0wf")]
 

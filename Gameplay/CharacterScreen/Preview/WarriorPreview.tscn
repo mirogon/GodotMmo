@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://blfftfaoxq680"]
+
+[ext_resource type="PackedScene" uid="uid://bcb1tk0g0rkue" path="res://Assets/Character/Warrior/Models/Character.glb" id="1_hpwkn"]
+[ext_resource type="PackedScene" uid="uid://cm78jqhvv2h7f" path="res://Gameplay/Character/Character1Model.tscn" id="2_y8qlk"]
+
+[node name="WarriorPreview" instance=ExtResource("1_hpwkn")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
+
+[node name="Character1Model" parent="." index="0" instance=ExtResource("2_y8qlk")]

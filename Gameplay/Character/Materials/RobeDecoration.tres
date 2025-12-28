@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://dfm7puj5q0nii"]
+
+[ext_resource type="Texture2D" uid="uid://b2ibvbm2gxon4" path="res://Assets/Character/Warrior/Textures/WarriorClothes_RobeDecoration_BaseColor.png" id="1_pva3j"]
+[ext_resource type="Texture2D" uid="uid://dp2e7lra4jayc" path="res://Assets/Character/Warrior/Textures/WarriorClothes_RobeDecoration_Height.png" id="2_s7xhi"]
+[ext_resource type="Texture2D" uid="uid://cs5wbu6ay6yfp" path="res://Assets/Character/Warrior/Textures/WarriorClothes_RobeDecoration_Normal.png" id="3_2d1yb"]
+[ext_resource type="Texture2D" uid="uid://ddj6sgnegukfu" path="res://Assets/Character/Warrior/Textures/WarriorClothes_RobeDecoration_Roughness.png" id="4_n2mx0"]
+
+[resource]
+albedo_texture = ExtResource("1_pva3j")
+roughness_texture = ExtResource("4_n2mx0")
+roughness_texture_channel = 3
+normal_enabled = true
+normal_scale = 0.3
+normal_texture = ExtResource("3_2d1yb")
+heightmap_enabled = true
+heightmap_scale = 1.0
+heightmap_texture = ExtResource("2_s7xhi")
