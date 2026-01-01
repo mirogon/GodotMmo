@@ -9,11 +9,11 @@ public class ItemManager
 {
     public static Dictionary<ItemType, PackedScene> ItemMeshScenes = new Dictionary<ItemType, PackedScene>()
     {
-        {ItemType.Sword, ResourceLoader.Load<PackedScene>("Scenes/Items/Sword.tscn") }
+        {ItemType.Sword, ResourceLoader.Load<PackedScene>("Gameplay/Items/Sword.tscn") }
     };
 
     public static Dictionary<ItemType, PackedScene> ItemTypeToInventoryItemScene = new Dictionary<ItemType, PackedScene>()
     {
-        {ItemType.Sword, ResourceLoader.Load<PackedScene>("Scenes/Items/InventorySword.tscn")}
+        {ItemType.Sword, ResourceLoader.Load<PackedScene>("Gameplay/Items/InventorySword.tscn")}
     };
 }

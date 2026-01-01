@@ -11,7 +11,7 @@ public partial class MMOCamera : Camera3D
     [Export] float _minCameraXRotation = -30.0f;
     [Export] float _maxCameraXRotation = 80.0f;
 
-    [Export] Node3D _playerMesh;
+    Node3D _playerMesh;
     Node3D _cameraPivot;
 
     float _pitch = 0;
@@ -24,6 +24,7 @@ public partial class MMOCamera : Camera3D
         base._Ready();
         _cameraPivot = GetParent<Node3D>();
         _player = GetParent<Node>().GetParent<Player>();
+        _playerMesh = GetParent<Node>().GetParent<Node>().GetNode("Model") as Node3D;
     }
 
     public override void _Process(double delta)

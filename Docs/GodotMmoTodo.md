@@ -1,8 +1,7 @@
 # Current Task
-- Fix LoadScene's
+
 
 # Current Macrotask
-- Check if anything even works anymore
 
 # TODO
 - Send player new enemy pos (SC_EnemiesUpdatePacket)
@@ -181,3 +180,7 @@ Model Clothes
 - Use Character1Model scene for selecting character
 - Player Model Scene
 - Use new character model scene as the model scene of the player
+- Fix LoadScene's
+- Check if anything even works anymore
+- Make Walk animaiton work when walking
+- Learn about Godot AnimationTree

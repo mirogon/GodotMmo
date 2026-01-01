@@ -7,7 +7,7 @@ public partial class InventorySystem : Panel
     public static int TILE_WIDTH = 5;
     public static int TILE_HEIGHT = 8;
     public static int TILE_PIXEL_SIZE = 40;
-    public PackedScene InventoryTileScene = ResourceLoader.Load<PackedScene>("res://Scenes/Items/InventoryTile.tscn");
+    public PackedScene InventoryTileScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Items/InventoryTile.tscn");
 
     public Dictionary<Guid, MongoInventoryItem> Items = new();
     public List<MongoItemContainerTile> Tiles = new();

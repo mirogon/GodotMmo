@@ -13,6 +13,8 @@ public partial class Player : Node3D
     InventorySystem _inventorySystem;
     HealthSystem _healthSystem;
 
+    CharacterModel _model;
+
     public override void _Ready()
     {
         base._Ready();
@@ -22,6 +24,8 @@ public partial class Player : Node3D
         _inventorySystem = GetNode("InventorySystem") as InventorySystem;
 
         _healthSystem = GetNode("HealthSystem") as HealthSystem;
+
+        _model = GetNode<CharacterModel>("Model");
 
         NetworkClient.KnownItemsUpdate += OnItemsUpdate;
         NetworkClient.CharacterHealthUpdate += OnCharacterHealthUpdate;
@@ -70,6 +74,15 @@ public partial class Player : Node3D
             moveDir += _playerMesh.GlobalTransform.Basis.X;
         }
         moveDir = moveDir.Normalized();
+
+        if(moveDir.Length() > 0.05f)
+        {
+            _model.PlayAnimation(CharacterAnimationType.Walk);
+        }
+        else
+        {
+            _model.PlayAnimation(CharacterAnimationType.Idle);
+        }
 
         Position += moveDir * MovementSpeed * (float)delta;
         if(_posUpdateStopwatch.ElapsedMilliseconds >= _positionUpdateIntervalMs && NetworkClient.SuccessfullyLoggedIn)

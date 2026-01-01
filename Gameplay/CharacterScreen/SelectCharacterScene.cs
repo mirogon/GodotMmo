@@ -97,7 +97,7 @@ public partial class SelectCharacterScene : Node3D
             QueueFree();
             return; 
         }
-        var createNewCharScene = GD.Load<PackedScene>("res://Scenes/CreateNewCharacterScene.tscn").Instantiate() as CreateNewCharacterScene;
+        var createNewCharScene = GD.Load<PackedScene>("res://Gameplay/CharacterScreen/CreateNewCharacterScene.tscn").Instantiate() as CreateNewCharacterScene;
         createNewCharScene.Initialize(_currentCharSlotSelected);
         GetTree().Root.AddChild(createNewCharScene);
         QueueFree();
