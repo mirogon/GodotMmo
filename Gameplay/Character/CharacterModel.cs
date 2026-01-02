@@ -9,6 +9,7 @@ public enum CharacterAnimationType
 }
 public partial class CharacterModel : Node3D
 {
+    public CharacterAnimationType CurrentAnimation { get; private set; }
     AnimationTree _animationTree;
     public override void _Ready()
     {
@@ -18,6 +19,7 @@ public partial class CharacterModel : Node3D
 
     public void PlayAnimation(CharacterAnimationType animType)
     {
+        CurrentAnimation = animType;
         if (animType == CharacterAnimationType.Idle)
         {
             _animationTree.Set("parameters/IdleWalkSpace/blend_position", -1.0f);

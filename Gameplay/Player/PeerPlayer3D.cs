@@ -10,6 +10,12 @@ public partial class PeerPlayer3D : Node3D
     long _renderTime = 0;
     long _renderTimeDelayMs = 150;
 
+    CharacterModel _characterModel;
+    public override void _Ready()
+    {
+        base._Ready();
+        _characterModel = GetNode<CharacterModel>("CharacterModel");
+    }
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -17,11 +23,22 @@ public partial class PeerPlayer3D : Node3D
     }
     void SimpleMovement(double delta)
     {
-        if(_snapshots.Count < 1) { return; }
+        float dist = GlobalPosition.DistanceTo(_targetPos);
+        if(_snapshots.Count < 1 || dist <= 0.05) { 
+            if(_characterModel.CurrentAnimation != CharacterAnimationType.Idle)
+            {
+                _characterModel.PlayAnimation(CharacterAnimationType.Idle);
+            }
+            return; 
+        }
 
-        if (GlobalPosition.DistanceTo(_targetPos) > 0.05f)
+        if (dist > 0.05f)
         {
             GlobalPosition = GlobalPosition.Lerp(_targetPos, (float)delta * (_snapshots[_snapshots.Count - 1].MoveSpeed));
+            if(_characterModel.CurrentAnimation != CharacterAnimationType.Walk)
+            {
+                _characterModel.PlayAnimation(CharacterAnimationType.Walk);
+            }
         }
 
         if(Mathf.Abs(_targetYRotEuler - RotationDegrees.Y) > 5)

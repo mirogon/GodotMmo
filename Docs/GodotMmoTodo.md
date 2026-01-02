@@ -1,11 +1,10 @@
 # Current Task
-
+- First character attack animation (Hit with sword)
 
 # Current Macrotask
 
 # TODO
-- Send player new enemy pos (SC_EnemiesUpdatePacket)
-- Split up Shared.cs in multiple ones like: SharedPackets, Shared, etc.
+- First Sword model (Level 1 Sword)
 - Player metin like attack
 - Character Inventory
     - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
@@ -184,3 +183,9 @@ Model Clothes
 - Check if anything even works anymore
 - Make Walk animaiton work when walking
 - Learn about Godot AnimationTree
+- PeerPlayer character model
+- PeerPlayer Walk and Idle animation
+- Remove 2nd/old char model from char screen
+- Character Model Weapon Bone
+    - Copy Transform in blender, but not attached to the hand bone
+- Split up Shared.cs in multiple ones like: SharedPackets, Shared, etc.

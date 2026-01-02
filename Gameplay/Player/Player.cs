@@ -75,11 +75,11 @@ public partial class Player : Node3D
         }
         moveDir = moveDir.Normalized();
 
-        if(moveDir.Length() > 0.05f)
+        if(moveDir.Length() > 0.05f && _model.CurrentAnimation != CharacterAnimationType.Walk)
         {
             _model.PlayAnimation(CharacterAnimationType.Walk);
         }
-        else
+        else if(moveDir.Length() <= 0.05f && _model.CurrentAnimation != CharacterAnimationType.Idle)
         {
             _model.PlayAnimation(CharacterAnimationType.Idle);
         }
