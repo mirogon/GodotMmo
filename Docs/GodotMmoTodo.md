@@ -1,8 +1,6 @@
 # Current Task
-- First Weapon model (Katana)
 
 # Current Macrotask
-
 
 # TODO
 - First Sword model (Level 1 Sword)
@@ -192,3 +190,5 @@ Model Clothes
 - Split up Shared.cs in multiple ones like: SharedPackets, Shared, etc.
 - First character attack animation (Hit with sword)
 - Use attack animation when attacking with space
+- First Weapon model (Katana)
+- Attach weapon to WeaponBone with code

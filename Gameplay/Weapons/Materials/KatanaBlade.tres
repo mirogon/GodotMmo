@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://7tx22bjy42qh"]
+
+[ext_resource type="Texture2D" uid="uid://cxidsja34qc0k" path="res://Assets/Weapons/Katana/Textures/Blade_Base_Color.png" id="1_i0llx"]
+[ext_resource type="Texture2D" uid="uid://buoadmtpxsr6t" path="res://Assets/Weapons/Katana/Textures/Blade_Metallic.png" id="2_ce4tm"]
+[ext_resource type="Texture2D" uid="uid://djyqili2dqwb6" path="res://Assets/Weapons/Katana/Textures/Blade_Normal_OpenGL.png" id="3_i0llx"]
+[ext_resource type="Texture2D" uid="uid://cbkbqewfdgwpm" path="res://Assets/Weapons/Katana/Textures/Blade_Roughness.png" id="4_gg623"]
+
+[resource]
+albedo_texture = ExtResource("1_i0llx")
+metallic = 1.0
+metallic_texture = ExtResource("2_ce4tm")
+roughness_texture = ExtResource("4_gg623")
+normal_enabled = true
+normal_texture = ExtResource("3_i0llx")

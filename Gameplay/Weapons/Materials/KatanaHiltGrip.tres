@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://yromcivjtw8o"]
+
+[ext_resource type="Texture2D" uid="uid://dliswvfse63ag" path="res://Assets/Weapons/Katana/Textures/HiltGrip_Base_Color.png" id="1_dplsb"]
+[ext_resource type="Texture2D" uid="uid://bje1hp1juwpxl" path="res://Assets/Weapons/Katana/Textures/HiltGrip_Metallic.png" id="2_8ekyc"]
+[ext_resource type="Texture2D" uid="uid://dnvr75676iwpg" path="res://Assets/Weapons/Katana/Textures/HiltGrip_Normal_OpenGL.png" id="3_5q4qx"]
+[ext_resource type="Texture2D" uid="uid://g0ang5vcs5w3" path="res://Assets/Weapons/Katana/Textures/HiltGrip_Roughness.png" id="4_13524"]
+
+[resource]
+albedo_texture = ExtResource("1_dplsb")
+metallic = 1.0
+metallic_texture = ExtResource("2_8ekyc")
+roughness_texture = ExtResource("4_13524")
+normal_enabled = true
+normal_texture = ExtResource("3_5q4qx")

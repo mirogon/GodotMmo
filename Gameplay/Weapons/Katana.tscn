@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://qwedl7iqk2ha"]
+
+[ext_resource type="PackedScene" uid="uid://cvw5nxexwqr8x" path="res://Assets/Weapons/Katana/Model/katana_scaled.tscn" id="1_vw873"]
+
+[node name="Katana" type="Node3D"]
+
+[node name="KatanaScaled" parent="." instance=ExtResource("1_vw873")]

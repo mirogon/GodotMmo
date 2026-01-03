@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://b71ms5edvfxvd"]
+
+[ext_resource type="Texture2D" uid="uid://detwcu0p0lmlr" path="res://Assets/Weapons/Katana/Textures/HiltSeperator_Base_Color.png" id="1_3l5ov"]
+[ext_resource type="Texture2D" uid="uid://dgc1kn8c3iurm" path="res://Assets/Weapons/Katana/Textures/HiltSeperator_Metallic.png" id="2_o3qon"]
+[ext_resource type="Texture2D" uid="uid://yu1tk7uw88ad" path="res://Assets/Weapons/Katana/Textures/HiltSeperator_Normal_OpenGL.png" id="3_bhyot"]
+[ext_resource type="Texture2D" uid="uid://1mhiu3x1bw77" path="res://Assets/Weapons/Katana/Textures/HiltSeperator_Roughness.png" id="4_ayxvb"]
+
+[resource]
+albedo_texture = ExtResource("1_3l5ov")
+metallic = 1.0
+metallic_texture = ExtResource("2_o3qon")
+roughness_texture = ExtResource("4_ayxvb")
+normal_enabled = true
+normal_texture = ExtResource("3_bhyot")
