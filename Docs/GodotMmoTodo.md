@@ -1,7 +1,8 @@
 # Current Task
-- First character attack animation (Hit with sword)
+- First Weapon model (Katana)
 
 # Current Macrotask
+
 
 # TODO
 - First Sword model (Level 1 Sword)
@@ -189,3 +190,5 @@ Model Clothes
 - Character Model Weapon Bone
     - Copy Transform in blender, but not attached to the hand bone
 - Split up Shared.cs in multiple ones like: SharedPackets, Shared, etc.
+- First character attack animation (Hit with sword)
+- Use attack animation when attacking with space

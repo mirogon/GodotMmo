@@ -113,6 +113,7 @@ public partial class Player : Node3D
         }
 
         NetworkClient.WeaponAttackMonsters(toAttack);
+        _model.PlayAnimation(CharacterAnimationType.Attack1);
     }
 
     void PickUpItem()

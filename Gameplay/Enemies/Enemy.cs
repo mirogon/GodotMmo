@@ -42,7 +42,9 @@ public partial class Enemy : Node3D
 
     void OnDied()
     {
+        if ( this == null || IsQueuedForDeletion()) { return; }
         QueueFree();
+        HealthSystem.Died -= OnDied;
     }
 
     public override void _Process(double delta)
