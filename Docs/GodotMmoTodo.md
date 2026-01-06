@@ -192,3 +192,11 @@ Model Clothes
 - Use attack animation when attacking with space
 - First Weapon model (Katana)
 - Attach weapon to WeaponBone with code
+- Sync animation with attack
+- SC_EquippedItemsUpdatePacket
+- Sword Item in Godot with model, etc.
+- Different scenes for each item for item on ground, item equipped, item in inv
+- Dictionaries to get Item Scenes (Eq, Inv, Ground) from item type
+- Sword new ground and inv scenes work
+- Fix: MongoInventory.EqippedItems works with mongodb, probably have to use a seperate  List<MongoInventoryItem> EquippedItems etc.
+- Pick up sword from ground, equip sword from inv

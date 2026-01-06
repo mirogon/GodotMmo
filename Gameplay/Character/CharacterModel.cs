@@ -19,12 +19,12 @@ public partial class CharacterModel : Node3D
         _animationTree = GetNode<AnimationTree>("AnimationTree");
         _weaponAttachment = FindChild("WeaponAttachment") as Node3D;
 
-        TestAttachKatana();
+        //TestAttachKatana();
     }
 
     void TestAttachKatana()
     {
-        var katanaScene = ResourceLoader.Load<PackedScene>("Gameplay/Weapons/Katana.tscn");
+        var katanaScene = ResourceLoader.Load<PackedScene>("Gameplay/Items/Weapons/Sword_Eq.tscn");
         var katanaInstance = katanaScene.Instantiate() as Node3D;
         AttachToWeaponAttachment(katanaInstance);
     }

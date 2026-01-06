@@ -47,6 +47,8 @@ public class NetworkClient
     public static Action MonstersHealthUpdate;
     public static ConcurrentQueue<SC_MonstersHealthUpdate> MonstersHealthUpdateQueue = new();
 
+    public static Action EquippedItemsUpdate;
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -55,6 +57,7 @@ public class NetworkClient
 
     public static Dictionary<int, Character> KnownCharacters = new(); //Slot, Char
     public static List<MongoInventoryItem> KnownInventoryItems = new();
+    public static Dictionary<EquipmentSlot, MongoInventoryItem> KnownEquippedItems = new();
 
     static bool _startedClient = false;
     public static bool SuccessfullyLoggedIn = false;
@@ -97,6 +100,7 @@ public class NetworkClient
                 case EPacketType.SC_EnemiesOnMap: Handle_SC_EnemiesOnMapPacket(dataReader); break;
                 case EPacketType.SC_MonsterPositionUpdate: Handle_SC_MonsterPositionUpdate(dataReader); break;
                 case EPacketType.SC_MonstersHealthUpdate: HandleSC_MonstersHealthUpdate(dataReader); break;
+                case EPacketType.SC_EquippedItemsUpdate: Handle_SC_EquippedItemsUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -171,6 +175,11 @@ public class NetworkClient
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CharacterMonsterAttackPacket)));
     }
 
+    public static void EquipItem(Guid itemId)
+    {
+        CS_EquipItemPacket packet = new(LoginClient.NewestSessionId, itemId);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_EquipItemPacket)));
+    }
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         SC_RegisterPacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_RegisterPacket>(packetReader);
@@ -316,5 +325,16 @@ public class NetworkClient
         MonstersHealthUpdate?.Invoke();
     }
 
-
+    static void Handle_SC_EquippedItemsUpdate(NetPacketReader dataReader)
+    {
+        Dictionary<EquipmentSlot, MongoInventoryItem> ei = new();
+        SC_EquippedItemsUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_EquippedItemsUpdatePacket>(dataReader);
+        for(int i = 0; i < packet.EquippedItems.Length; ++i)
+        {
+            var c = packet.EquippedItems[i];
+            ei.Add(c.Slot, c.Item);
+        }
+        KnownEquippedItems = ei;
+        EquippedItemsUpdate?.Invoke();
+    }
 }

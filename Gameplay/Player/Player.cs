@@ -15,6 +15,8 @@ public partial class Player : Node3D
 
     CharacterModel _model;
 
+    AnimationEvent _attackAnimationEvent;
+
     public override void _Ready()
     {
         base._Ready();
@@ -29,6 +31,10 @@ public partial class Player : Node3D
 
         NetworkClient.KnownItemsUpdate += OnItemsUpdate;
         NetworkClient.CharacterHealthUpdate += OnCharacterHealthUpdate;
+        NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
+
+        _attackAnimationEvent = new AnimationEvent(0.8f);
+        _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
     }
 
 
@@ -55,6 +61,8 @@ public partial class Player : Node3D
     public override void _Process(double delta)
     {
         base._Process(delta);
+
+        _attackAnimationEvent.ManualProcess(delta);
 
         Vector3 moveDir = Vector3.Zero;
         if (Input.IsPhysicalKeyPressed(Key.W))
@@ -100,11 +108,21 @@ public partial class Player : Node3D
         {
             WeaponAttack();
         }
+
+        if (Input.IsActionJustPressed("EquipDebug"))
+        {
+            TestEquipItem();
+        }
     }
     void WeaponAttack()
     {
-        var map = GetParent<MapManager>();
+        _model.PlayAnimation(CharacterAnimationType.Attack1);
+        _attackAnimationEvent.Restart();
+    }
 
+    private void OnAttackAnimationEvent()
+    {
+        var map = GetParent<MapManager>();
         List<Guid> toAttack = new();
         foreach(var enemy in map.EnemyInstances)
         {
@@ -113,7 +131,6 @@ public partial class Player : Node3D
         }
 
         NetworkClient.WeaponAttackMonsters(toAttack);
-        _model.PlayAnimation(CharacterAnimationType.Attack1);
     }
 
     void PickUpItem()
@@ -137,6 +154,17 @@ public partial class Player : Node3D
         NetworkClient.PickUpItem(closestItem.Id);
     }
 
+    void TestEquipItem()
+    {
+        foreach(var i in _inventorySystem.Items)
+        {
+            if(i.Value.ItemType == ItemType.Sword)
+            {
+                NetworkClient.EquipItem(i.Value.Id);
+            }
+        }
+    }
+
     void SendPositionUpdate()
     {
         var yDegrees = Mathf.RadToDeg(_playerMesh.Rotation.Y);
@@ -148,5 +176,24 @@ public partial class Player : Node3D
     {
         _healthSystem.MaxHealth = updateInfo.maxHealth;
         _healthSystem.CurrentHealth = updateInfo.currentHealth;
+    }
+
+    void OnEquippedItemsUpdate()
+    {
+        CallDeferred("OnEquippedItemsUpdateDeferred");
+
+    }
+
+    void OnEquippedItemsUpdateDeferred()
+    {
+        _inventorySystem.HandleEquipmentSystemUpdate(NetworkClient.KnownEquippedItems);
+
+        if(NetworkClient.KnownEquippedItems[EquipmentSlot.Weapon].Id != Guid.Empty)
+        {
+            var scenePath = ItemInfo.ItemTypeToScenePath(NetworkClient.KnownEquippedItems[EquipmentSlot.Weapon].ItemType, ItemInfo.SceneType.EquipmentScene);
+            var scene = ResourceLoader.Load<PackedScene>(scenePath);
+            var sceneInstance = scene.Instantiate() as Node3D;
+            _model.AttachToWeaponAttachment(sceneInstance);
+        }
     }
 }

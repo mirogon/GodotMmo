@@ -14,6 +14,10 @@ public partial class InventorySystem : Panel
 
     Dictionary<Guid, Control> InventoryUiItems = new();
 
+    public Dictionary<EquipmentSlot, MongoInventoryItem> EquippedItems = new();
+
+    public Action<EquipmentSlot, Node3D> AttachEquipment;
+
     //Moving
     Guid _currentlyMoving = Guid.Empty;
     public override void _Ready()
@@ -27,6 +31,12 @@ public partial class InventorySystem : Panel
                 AddChild(tileInstance);
                 tileInstance.Position = new Vector2(x * TILE_PIXEL_SIZE, y * TILE_PIXEL_SIZE);
             }
+        }
+
+        var values = Enum.GetValues(typeof(EquipmentSlot));
+        foreach(var v in values)
+        {
+            EquippedItems.Add((EquipmentSlot)v, new MongoInventoryItem());
         }
     }
     public override void _Process(double delta)
@@ -104,7 +114,7 @@ public partial class InventorySystem : Panel
             Items.Add(current.Id, current);
             OccupyTiles(current);
 
-            var invScene = ItemManager.ItemTypeToInventoryItemScene[current.ItemType];
+            var invScene = ResourceLoader.Load<PackedScene>(ItemInfo.ItemTypeToScenePath(current.ItemType, ItemInfo.SceneType.InventoryScene));
             var sceneInstance = invScene.Instantiate() as Control;
             AddChild(sceneInstance);
             sceneInstance.Position = new Vector2(current.TilePosTopLeftX * TILE_PIXEL_SIZE, current.TilePosTopLeftY * TILE_PIXEL_SIZE);
@@ -164,5 +174,10 @@ public partial class InventorySystem : Panel
             return false;
         }
         return true;
+    }
+
+    public void HandleEquipmentSystemUpdate(Dictionary<EquipmentSlot, MongoInventoryItem> update)
+    {
+        EquippedItems = update;
     }
 }

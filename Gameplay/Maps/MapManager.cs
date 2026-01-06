@@ -84,8 +84,8 @@ public partial class MapManager : Node
         {
             var current = list[i];
             if(current.ItemType == ItemType.Unknown) { continue; }
-            var itemScene = ItemManager.ItemMeshScenes[current.ItemType];
-            ItemInstance itemInstance = itemScene.Instantiate() as ItemInstance;
+            var itemScene = ResourceLoader.Load<PackedScene>(ItemInfo.ItemTypeToScenePath(current.ItemType, ItemInfo.SceneType.GroundScene));
+            ItemOnGround itemInstance = itemScene.Instantiate() as ItemOnGround;
             if(itemInstance == null) { continue; }
             itemInstance.ItemId = current.Id;
             itemInstance.Position = new Vector3(current.PositionOnMap.X, 0, current.PositionOnMap.Z);
@@ -111,7 +111,7 @@ public partial class MapManager : Node
 
         for (int i = 0; i < itemInstances.Count; i++)
         {
-            ItemInstance current = (ItemInstance)itemInstances[i];
+            ItemOnGround current = (ItemOnGround)itemInstances[i];
             if (list.Contains(current.ItemId))
             {
                 current.QueueFree();
