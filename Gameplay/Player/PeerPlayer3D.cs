@@ -68,4 +68,15 @@ public partial class PeerPlayer3D : Node3D
         _targetPos = serverPos;
         _targetYRotEuler = yRotationEuler;
     }
+
+    public void EquipItem(EquipmentSlot slot, ItemType type)
+    {
+        if(slot == EquipmentSlot.Weapon)
+        {
+            var scenePath = ItemInfo.ItemTypeToScenePath(type, ItemInfo.SceneType.EquipmentScene);
+            var scene = ResourceLoader.Load<PackedScene>(scenePath);
+            var sceneInstance = scene.Instantiate() as Node3D;
+            _characterModel.AttachToWeaponAttachment(sceneInstance);
+        }
+    }
 }

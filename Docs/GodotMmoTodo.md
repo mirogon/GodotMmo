@@ -3,7 +3,6 @@
 # Current Macrotask
 
 # TODO
-- First Sword model (Level 1 Sword)
 - Player metin like attack
 - Character Inventory
     - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
@@ -200,3 +199,4 @@ Model Clothes
 - Sword new ground and inv scenes work
 - Fix: MongoInventory.EqippedItems works with mongodb, probably have to use a seperate  List<MongoInventoryItem> EquippedItems etc.
 - Pick up sword from ground, equip sword from inv
+- All clients get equipment change info

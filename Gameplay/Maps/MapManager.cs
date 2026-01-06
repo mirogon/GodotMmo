@@ -32,6 +32,8 @@ public partial class MapManager : Node
         NetworkClient.EnemiesOnMapUpdate += OnEnemiesOnMapUpdate;
         NetworkClient.MonsterPositionUpdate += OnMonsterPositionUpdate;
         NetworkClient.MonstersHealthUpdate += OnMonstersHealthUpdate;
+
+        NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
     }
 
 
@@ -172,6 +174,28 @@ public partial class MapManager : Node
             var enemy = EnemyInstances[c.Id];
             enemy.HealthSystem.CurrentHealth = c.CurrentHealth;
         }
+    }
+
+    void OnEquippedItemsUpdate(ulong publicId)
+    {
+        CallDeferred("OnEquippedItemsUpdateDeferred", publicId);
+    }
+
+    void OnEquippedItemsUpdateDeferred(ulong publicId)
+    {
+        if (!_peerInstances.ContainsKey(publicId))
+        {
+            GD.Print("Peer instance with public id not found: " +  publicId);
+            return;
+        }
+
+        var peerInstance = _peerInstances[publicId];
+
+        var update = NetworkClient.KnownEquippedItems[publicId];
+        var weapon = update[EquipmentSlot.Weapon];
+
+        peerInstance.EquipItem(EquipmentSlot.Weapon, weapon.ItemType);
+
     }
 
 }

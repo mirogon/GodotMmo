@@ -47,7 +47,7 @@ public class NetworkClient
     public static Action MonstersHealthUpdate;
     public static ConcurrentQueue<SC_MonstersHealthUpdate> MonstersHealthUpdateQueue = new();
 
-    public static Action EquippedItemsUpdate;
+    public static Action<UInt64> EquippedItemsUpdate;
 
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
@@ -57,7 +57,8 @@ public class NetworkClient
 
     public static Dictionary<int, Character> KnownCharacters = new(); //Slot, Char
     public static List<MongoInventoryItem> KnownInventoryItems = new();
-    public static Dictionary<EquipmentSlot, MongoInventoryItem> KnownEquippedItems = new();
+
+    public static Dictionary<UInt64, Dictionary<EquipmentSlot, MongoInventoryItem>> KnownEquippedItems = new();
 
     static bool _startedClient = false;
     public static bool SuccessfullyLoggedIn = false;
@@ -334,7 +335,15 @@ public class NetworkClient
             var c = packet.EquippedItems[i];
             ei.Add(c.Slot, c.Item);
         }
-        KnownEquippedItems = ei;
-        EquippedItemsUpdate?.Invoke();
+
+        if (KnownEquippedItems.ContainsKey(packet.PublicId))
+        {
+            KnownEquippedItems[packet.PublicId] = ei;
+        }
+        else { 
+            KnownEquippedItems.Add(packet.PublicId, ei);
+        }
+
+        EquippedItemsUpdate?.Invoke(packet.PublicId);
     }
 }

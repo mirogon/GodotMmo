@@ -178,19 +178,23 @@ public partial class Player : Node3D
         _healthSystem.CurrentHealth = updateInfo.currentHealth;
     }
 
-    void OnEquippedItemsUpdate()
+    void OnEquippedItemsUpdate(UInt64 publicId)
     {
-        CallDeferred("OnEquippedItemsUpdateDeferred");
+        if(publicId != NetworkClient.PublicId) {
+            return;
+        }
 
+        CallDeferred("OnEquippedItemsUpdateDeferred");
     }
 
     void OnEquippedItemsUpdateDeferred()
     {
-        _inventorySystem.HandleEquipmentSystemUpdate(NetworkClient.KnownEquippedItems);
+        var knownEquippedItems = NetworkClient.KnownEquippedItems[NetworkClient.PublicId];
+        _inventorySystem.HandleEquipmentSystemUpdate(knownEquippedItems);
 
-        if(NetworkClient.KnownEquippedItems[EquipmentSlot.Weapon].Id != Guid.Empty)
+        if(knownEquippedItems[EquipmentSlot.Weapon].Id != Guid.Empty)
         {
-            var scenePath = ItemInfo.ItemTypeToScenePath(NetworkClient.KnownEquippedItems[EquipmentSlot.Weapon].ItemType, ItemInfo.SceneType.EquipmentScene);
+            var scenePath = ItemInfo.ItemTypeToScenePath(knownEquippedItems[EquipmentSlot.Weapon].ItemType, ItemInfo.SceneType.EquipmentScene);
             var scene = ResourceLoader.Load<PackedScene>(scenePath);
             var sceneInstance = scene.Instantiate() as Node3D;
             _model.AttachToWeaponAttachment(sceneInstance);
