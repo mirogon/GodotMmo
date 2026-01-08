@@ -1,8 +1,12 @@
 # Current Task
+- Replicate peer player animations
+    1. Change CS_MonsterAttackPacket to CS_AttackPacket, let the server determine which monsters get attacked, etc.
+    2. Server calculates which monster will get attacked, etc. and sends monster health update
+    3. Server sends attack animation update to all players except the attacker
 
 # Current Macrotask
 
-# TODO
+# Later
 - Player metin like attack
 - Character Inventory
     - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
@@ -200,3 +204,4 @@ Model Clothes
 - Fix: MongoInventory.EqippedItems works with mongodb, probably have to use a seperate  List<MongoInventoryItem> EquippedItems etc.
 - Pick up sword from ground, equip sword from inv
 - All clients get equipment change info
+- SC_CharacterAnimationUpdatePacket 

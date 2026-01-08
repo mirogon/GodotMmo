@@ -195,7 +195,6 @@ public partial class MapManager : Node
         var weapon = update[EquipmentSlot.Weapon];
 
         peerInstance.EquipItem(EquipmentSlot.Weapon, weapon.ItemType);
-
     }
 
 }
