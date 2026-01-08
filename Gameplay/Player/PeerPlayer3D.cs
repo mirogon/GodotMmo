@@ -79,4 +79,9 @@ public partial class PeerPlayer3D : Node3D
             _characterModel.AttachToWeaponAttachment(sceneInstance);
         }
     }
+
+    public void PlayAnimation(CharacterAnimationType animType)
+    {
+        _characterModel.PlayAnimation(animType);
+    }
 }

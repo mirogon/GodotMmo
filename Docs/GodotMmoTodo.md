@@ -1,8 +1,6 @@
 # Current Task
-- Replicate peer player animations
-    1. Change CS_MonsterAttackPacket to CS_AttackPacket, let the server determine which monsters get attacked, etc.
-    2. Server calculates which monster will get attacked, etc. and sends monster health update
-    3. Server sends attack animation update to all players except the attacker
+- Attack anim is delayed on peer, because right now I send the anim update when the attack dmg is applied
+    Make new CS_AnimationUpdate packet, so its instant (and for other anims)
 
 # Current Macrotask
 
@@ -205,3 +203,10 @@ Model Clothes
 - Pick up sword from ground, equip sword from inv
 - All clients get equipment change info
 - SC_CharacterAnimationUpdatePacket 
+- Replicate peer player animations
+    1. Change CS_MonsterAttackPacket to CS_AttackPacket, let the server determine which monsters get attacked, etc. ✔
+    2. Server calculates which monster will get attacked, etc. and sends monster health update ✔
+    3. Server sends attack animation update to all players except the attacker ✔
+    4. Check if the normal monster attacking still works ✔
+    5. Client handles SC_CharacterAnimationUpdatePacket to play peer character animation ✔
+- Remove Sending PeerPlayerPosUpdate log from server

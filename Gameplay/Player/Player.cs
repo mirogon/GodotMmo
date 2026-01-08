@@ -116,21 +116,14 @@ public partial class Player : Node3D
     }
     void WeaponAttack()
     {
-        _model.PlayAnimation(CharacterAnimationType.Attack1);
+        _model.PlayAnimation(CharacterAnimationType.WeaponAttack);
         _attackAnimationEvent.Restart();
     }
 
     private void OnAttackAnimationEvent()
     {
         var map = GetParent<MapManager>();
-        List<Guid> toAttack = new();
-        foreach(var enemy in map.EnemyInstances)
-        {
-            var enemyValue = enemy.Value;
-            toAttack.Add(enemy.Key);
-        }
-
-        NetworkClient.WeaponAttackMonsters(toAttack);
+        NetworkClient.WeaponAttack();
     }
 
     void PickUpItem()

@@ -49,6 +49,8 @@ public class NetworkClient
 
     public static Action<UInt64> EquippedItemsUpdate;
 
+    public static Action<ulong, short> CharacterAnimationUpdate; //PublicId, CharacterAnimationType
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -102,6 +104,7 @@ public class NetworkClient
                 case EPacketType.SC_MonsterPositionUpdate: Handle_SC_MonsterPositionUpdate(dataReader); break;
                 case EPacketType.SC_MonstersHealthUpdate: HandleSC_MonstersHealthUpdate(dataReader); break;
                 case EPacketType.SC_EquippedItemsUpdate: Handle_SC_EquippedItemsUpdate(dataReader); break;
+                case EPacketType.SC_CharacterAnimationUpdate: Handle_SC_CharacterAnimationUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -170,10 +173,10 @@ public class NetworkClient
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((throwAwayPacket, typeof(CS_ThrowAwayItemPacket)));
     }
 
-    public static void WeaponAttackMonsters(List<Guid> monsters)
+    public static void WeaponAttack()
     {
-        CS_CharacterMonsterAttackPacket packet = new(LoginClient.NewestSessionId, CharacterAttackType.WeaponAttack, monsters);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CharacterMonsterAttackPacket)));
+        CS_CharacterAttackPacket packet = new(LoginClient.NewestSessionId, CharacterAttackType.WeaponAttack);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CharacterAttackPacket)));
     }
 
     public static void EquipItem(Guid itemId)
@@ -345,5 +348,13 @@ public class NetworkClient
         }
 
         EquippedItemsUpdate?.Invoke(packet.PublicId);
+    }
+    static void Handle_SC_CharacterAnimationUpdate(NetPacketReader dataReader)
+    {
+        SC_CharacterAnimationUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterAnimationUpdatePacket>(dataReader);
+        if(packet.AnimationState == AnimationState.Start)
+        {
+            CharacterAnimationUpdate?.Invoke(packet.PublicId, (short)packet.AnimationType);
+        }
     }
 }

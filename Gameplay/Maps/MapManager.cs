@@ -32,8 +32,8 @@ public partial class MapManager : Node
         NetworkClient.EnemiesOnMapUpdate += OnEnemiesOnMapUpdate;
         NetworkClient.MonsterPositionUpdate += OnMonsterPositionUpdate;
         NetworkClient.MonstersHealthUpdate += OnMonstersHealthUpdate;
-
         NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
+        NetworkClient.CharacterAnimationUpdate += OnCharacterAnimationUpdate;
     }
 
 
@@ -195,6 +195,19 @@ public partial class MapManager : Node
         var weapon = update[EquipmentSlot.Weapon];
 
         peerInstance.EquipItem(EquipmentSlot.Weapon, weapon.ItemType);
+    }
+
+    void OnCharacterAnimationUpdate(ulong publicId, short animationType)
+    {
+        CallDeferred("OnCharacterAnimationUpdateDeferred", publicId, animationType);
+    }
+
+    void OnCharacterAnimationUpdateDeferred(ulong publicId, short animationType)
+    {
+        if (!_peerInstances.ContainsKey(publicId)) { return; }
+        var peer = _peerInstances[publicId];
+
+        peer.PlayAnimation((CharacterAnimationType)animationType);
     }
 
 }
