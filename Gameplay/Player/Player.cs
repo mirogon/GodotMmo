@@ -117,6 +117,7 @@ public partial class Player : Node3D
     void WeaponAttack()
     {
         _model.PlayAnimation(CharacterAnimationType.WeaponAttack);
+        NetworkClient.SendCharacterAnimationStart(CharacterAnimationType.WeaponAttack);
         _attackAnimationEvent.Restart();
     }
 

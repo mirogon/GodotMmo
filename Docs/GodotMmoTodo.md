@@ -1,6 +1,4 @@
 # Current Task
-- Attack anim is delayed on peer, because right now I send the anim update when the attack dmg is applied
-    Make new CS_AnimationUpdate packet, so its instant (and for other anims)
 
 # Current Macrotask
 
@@ -210,3 +208,9 @@ Model Clothes
     4. Check if the normal monster attacking still works ✔
     5. Client handles SC_CharacterAnimationUpdatePacket to play peer character animation ✔
 - Remove Sending PeerPlayerPosUpdate log from server
+- Attack anim is delayed on peer, because right now I send the anim update when the attack dmg is applied
+    Make new CS_AnimationUpdate packet, so its instant (and for other anims)
+
+- Client sends CS_CharacterAnimationUpdatePacket to server on attack start
+- Server handles CS_CharacterAnimationUpdatePacket
+    - Test it

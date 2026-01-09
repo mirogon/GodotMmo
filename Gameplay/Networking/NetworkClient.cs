@@ -184,6 +184,13 @@ public class NetworkClient
         CS_EquipItemPacket packet = new(LoginClient.NewestSessionId, itemId);
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_EquipItemPacket)));
     }
+
+    public static void SendCharacterAnimationStart(CharacterAnimationType type)
+    {
+        CS_CharacterAnimationUpdatePacket packet = new(LoginClient.NewestSessionId, type, AnimationState.Start);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CharacterAnimationUpdatePacket)));
+    }
+
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         SC_RegisterPacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_RegisterPacket>(packetReader);
