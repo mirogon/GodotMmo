@@ -179,10 +179,10 @@ public class NetworkClient
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CharacterAttackPacket)));
     }
 
-    public static void EquipItem(Guid itemId)
+    public static void EquipOrUnequipItem(Guid itemId, bool equip)
     {
-        CS_EquipItemPacket packet = new(LoginClient.NewestSessionId, itemId);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_EquipItemPacket)));
+        CS_EquipmentChangePacket packet = new(LoginClient.NewestSessionId, itemId, equip);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_EquipmentChangePacket)));
     }
 
     public static void SendCharacterAnimationStart(CharacterAnimationType type)

@@ -194,6 +194,7 @@ public partial class MapManager : Node
         var update = NetworkClient.KnownEquippedItems[publicId];
         var weapon = update[EquipmentSlot.Weapon];
 
+        peerInstance.UnequipItem(EquipmentSlot.Weapon);
         peerInstance.EquipItem(EquipmentSlot.Weapon, weapon.ItemType);
     }
 

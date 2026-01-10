@@ -22,6 +22,11 @@ public partial class CharacterModel : Node3D
         AttachToWeaponAttachment(katanaInstance);
     }
 
+    public void UnattachWeapon()
+    {
+        if(_weaponAttachment.GetChildCount() <= 0) { return; }
+        _weaponAttachment.GetChild(0).QueueFree();
+    }
     public void AttachToWeaponAttachment(Node3D obj)
     {
         obj.Position = Vector3.Zero;

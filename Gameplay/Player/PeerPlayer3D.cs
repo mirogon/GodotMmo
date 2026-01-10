@@ -80,6 +80,14 @@ public partial class PeerPlayer3D : Node3D
         }
     }
 
+    public void UnequipItem(EquipmentSlot slot)
+    {
+        if(slot == EquipmentSlot.Weapon)
+        {
+            _characterModel.UnattachWeapon();
+        }
+    }
+
     public void PlayAnimation(CharacterAnimationType animType)
     {
         _characterModel.PlayAnimation(animType);

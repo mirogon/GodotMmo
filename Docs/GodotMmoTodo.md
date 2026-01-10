@@ -214,3 +214,12 @@ Model Clothes
 - Client sends CS_CharacterAnimationUpdatePacket to server on attack start
 - Server handles CS_CharacterAnimationUpdatePacket
     - Test it
+
+- Server sends inv and eq update after the player registers
+- Call item and eq update on client after login
+- Rename CS_EquipItemPacket to CS_EquipmentChangePacket and add a bool indicating equip or unequip
+- Deleting a character deletes its inventory
+- One button to equip and unequip weapon, client correctly sets equip or unequip bool for EquipItem
+- Server handles equip and unequip, not just equip
+- Client handles unequip change
+- Unequip weapon

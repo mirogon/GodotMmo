@@ -35,6 +35,9 @@ public partial class Player : Node3D
 
         _attackAnimationEvent = new AnimationEvent(0.8f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
+
+        OnItemsUpdateDeferred();
+        OnEquippedItemsUpdateDeferred();
     }
 
 
@@ -55,6 +58,7 @@ public partial class Player : Node3D
 
     void OnItemsUpdateDeferred()
     {
+        if(NetworkClient.KnownInventoryItems.Count <= 0) { return; }
         _inventorySystem.HandleInventoryUpdate(NetworkClient.KnownInventoryItems);
     }
 
@@ -150,11 +154,20 @@ public partial class Player : Node3D
 
     void TestEquipItem()
     {
+        var equippedWeapon = _inventorySystem.EquippedItems[EquipmentSlot.Weapon];
+        if (equippedWeapon.Id != Guid.Empty)
+        {
+            NetworkClient.EquipOrUnequipItem(equippedWeapon.Id, false);
+            GD.Print("UNEQUIP WEAPON");
+            return;
+        }
+
         foreach(var i in _inventorySystem.Items)
         {
             if(i.Value.ItemType == ItemType.Sword)
             {
-                NetworkClient.EquipItem(i.Value.Id);
+                NetworkClient.EquipOrUnequipItem(i.Value.Id, true);
+                GD.Print("EQUIP WEAPON");
             }
         }
     }
@@ -183,8 +196,12 @@ public partial class Player : Node3D
 
     void OnEquippedItemsUpdateDeferred()
     {
+        if (!NetworkClient.KnownEquippedItems.ContainsKey(NetworkClient.PublicId)) { return; }
+
         var knownEquippedItems = NetworkClient.KnownEquippedItems[NetworkClient.PublicId];
         _inventorySystem.HandleEquipmentSystemUpdate(knownEquippedItems);
+
+        _model.UnattachWeapon();
 
         if(knownEquippedItems[EquipmentSlot.Weapon].Id != Guid.Empty)
         {
