@@ -1,6 +1,7 @@
 # Current Task
 
 # Current Macrotask
+- Server logs out/disconnects character when not connected anymore
 
 # Later
 - Player metin like attack
@@ -223,3 +224,13 @@ Model Clothes
 - Server handles equip and unequip, not just equip
 - Client handles unequip change
 - Unequip weapon
+- Test if peer weapon unequip works
+- UI for current level in the client
+- SC_CharacterExpUpdatePacket
+- Char gets exp on kill, Server sends SC_CharacterExpUpdatePacket 
+- Client handles SC_CharacterExpUpdatePacket
+- Function to calculate exp needed for each lvl
+- Server actually calculates new lvl from exp, etc.
+- Client also shows EXP in its ui
+- Client uses exp and level from SC_CharacterPacket
+- Character has experience and a level

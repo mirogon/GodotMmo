@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cytlqsasi6qxv"]
+[gd_scene load_steps=9 format=3 uid="uid://cytlqsasi6qxv"]
 
 [ext_resource type="Script" uid="uid://cra54traqw7if" path="res://Gameplay/Player/Player.cs" id="1_1rerk"]
 [ext_resource type="Script" uid="uid://kv4dkvv2qe55" path="res://Gameplay/Player/MMOCamera.cs" id="2_wonpf"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://clvi8sffjlg7q" path="res://Gameplay/Player/InventorySystem.tscn" id="4_ofpx2"]
 [ext_resource type="Script" uid="uid://5puh3pl51fne" path="res://Gameplay/Scripts/HealthSystem.cs" id="5_4s7gy"]
 [ext_resource type="Script" uid="uid://dbl2rgtcnf6jt" path="res://Gameplay/Player/HealthBar.cs" id="6_4nq36"]
+[ext_resource type="Script" uid="uid://bqixko6k8jpk7" path="res://Gameplay/Player/PlayerUi.cs" id="7_546x7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4s7gy"]
 bg_color = Color(0.884314, 3.34509e-06, 3.85046e-07, 1)
@@ -50,3 +51,35 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_4s7gy")
 value = 100.0
 show_percentage = false
 script = ExtResource("6_4nq36")
+
+[node name="Ui" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_546x7")
+
+[node name="LevelLabel" type="Label" parent="Ui"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 40.0
+grow_vertical = 0
+size_flags_vertical = 0
+text = "Level: 1"
+
+[node name="ExpLabel" type="Label" parent="Ui"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 74.0
+offset_top = -23.0
+offset_right = 128.0
+grow_vertical = 0
+size_flags_vertical = 0
+text = "Exp: "

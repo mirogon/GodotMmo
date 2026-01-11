@@ -37,10 +37,10 @@ public partial class MapManager : Node
     }
 
 
-    public void Initialize(int maxHealth, int currentHealth, bool isDead, M1Vector3 playerPos)
+    public void Initialize(Character c)
     {
         Player = GetNode<Player>("Player");
-        Player.Initialize(maxHealth, currentHealth, isDead, playerPos);
+        Player.Initialize(c);
     }
 
     void OnPeerPlayerPositionUpdate()

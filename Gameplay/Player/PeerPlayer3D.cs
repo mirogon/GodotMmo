@@ -71,6 +71,7 @@ public partial class PeerPlayer3D : Node3D
 
     public void EquipItem(EquipmentSlot slot, ItemType type)
     {
+        if(slot == EquipmentSlot.Unknown || type == ItemType.Unknown) { return; }
         if(slot == EquipmentSlot.Weapon)
         {
             var scenePath = ItemInfo.ItemTypeToScenePath(type, ItemInfo.SceneType.EquipmentScene);

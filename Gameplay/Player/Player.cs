@@ -14,13 +14,22 @@ public partial class Player : Node3D
     HealthSystem _healthSystem;
 
     CharacterModel _model;
+    PlayerUi _ui;
 
     AnimationEvent _attackAnimationEvent;
+
+    Character _initializedChar;
+    int _currentLevel = 1;
+    long _currentExp = 0;
 
     public override void _Ready()
     {
         base._Ready();
         _playerMesh = GetNode<Node3D>("Model");
+
+        _ui = GetNode<PlayerUi>("Ui");
+        _ui.SetLevelAndExp(1, 0);
+
         _posUpdateStopwatch.Start();
 
         _inventorySystem = GetNode("InventorySystem") as InventorySystem;
@@ -32,18 +41,20 @@ public partial class Player : Node3D
         NetworkClient.KnownItemsUpdate += OnItemsUpdate;
         NetworkClient.CharacterHealthUpdate += OnCharacterHealthUpdate;
         NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
+        NetworkClient.CharacterExpUpdate += OnExpUpdate;
 
         _attackAnimationEvent = new AnimationEvent(0.8f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
 
         OnItemsUpdateDeferred();
         OnEquippedItemsUpdateDeferred();
+        OnExpUpdateDeferred(_initializedChar.Level, _initializedChar.Exp);
     }
 
-
-    public void Initialize(int maxHealth, int currentHealth, bool isDead, M1Vector3 pos)
+    public void Initialize(Character c)
     {
-        Position = new (pos.X, pos.Y, pos.Z);    
+        Position = new (c.PositionOnMap.X, c.PositionOnMap.Y, c.PositionOnMap.Z);
+        _initializedChar = c;
     }
 
     public bool MouseIsBlockedByUi()
@@ -210,5 +221,18 @@ public partial class Player : Node3D
             var sceneInstance = scene.Instantiate() as Node3D;
             _model.AttachToWeaponAttachment(sceneInstance);
         }
+    }
+
+    void OnExpUpdate()
+    {
+        CallDeferred("OnExpUpdateDeferred", NetworkClient.KnownCharacterExp.lvl, NetworkClient.KnownCharacterExp.exp);
+    }
+
+    void OnExpUpdateDeferred(int lvl, long exp)
+    {
+        _currentLevel = lvl;
+        _currentExp = exp;
+
+        _ui.SetLevelAndExp(_currentLevel, _currentExp);
     }
 }

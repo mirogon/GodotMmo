@@ -86,13 +86,13 @@ public partial class SelectCharacterScene : Node3D
             CS_SelectedCharacterPacket selectedCharPacket = new(LoginClient.NewestSessionId, (byte)_currentCharSlotSelected);
             NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((selectedCharPacket, typeof(CS_SelectedCharacterPacket)));
 
-            var char_ = NetworkClient.KnownCharacters[_currentCharSlotSelected];
-            MapType map = char_.CurrentlyOnMap;
-            M1Vector3 pos = char_.PositionOnMap;
+            var character = NetworkClient.KnownCharacters[_currentCharSlotSelected];
+            MapType map = character.CurrentlyOnMap;
+            M1Vector3 pos = character.PositionOnMap;
 
             var mapScene = MapManager.MapScenes[map];
             MapManager mapInstance = mapScene.Instantiate() as MapManager;
-            mapInstance.Initialize(char_.MaxHealth, char_.CurrentHealth, char_.IsDead, pos);
+            mapInstance.Initialize(character);
             GetTree().Root.AddChild(mapInstance);
             QueueFree();
             return; 

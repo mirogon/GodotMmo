@@ -49,6 +49,9 @@ public class NetworkClient
 
     public static Action<UInt64> EquippedItemsUpdate;
 
+    public static Action CharacterExpUpdate;
+    public static (int lvl, long exp) KnownCharacterExp;
+
     public static Action<ulong, short> CharacterAnimationUpdate; //PublicId, CharacterAnimationType
 
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
@@ -105,6 +108,7 @@ public class NetworkClient
                 case EPacketType.SC_MonstersHealthUpdate: HandleSC_MonstersHealthUpdate(dataReader); break;
                 case EPacketType.SC_EquippedItemsUpdate: Handle_SC_EquippedItemsUpdate(dataReader); break;
                 case EPacketType.SC_CharacterAnimationUpdate: Handle_SC_CharacterAnimationUpdate(dataReader); break;
+                case EPacketType.SC_CharacterExpUpdatePacket: Handle_SC_CharacterExpUpdatePacket(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -364,4 +368,11 @@ public class NetworkClient
             CharacterAnimationUpdate?.Invoke(packet.PublicId, (short)packet.AnimationType);
         }
     }
+    static void Handle_SC_CharacterExpUpdatePacket(NetPacketReader dataReader)
+    {
+        SC_CharacterExpUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterExpUpdatePacket>(dataReader);
+        KnownCharacterExp = (packet.Level, packet.Exp);
+        CharacterExpUpdate?.Invoke();
+    }
+
 }
