@@ -128,6 +128,11 @@ public partial class Player : Node3D
         {
             TestEquipItem();
         }
+
+        if (Input.IsActionJustPressed("Logout"))
+        {
+            Logout();
+        }
     }
     void WeaponAttack()
     {
@@ -234,5 +239,10 @@ public partial class Player : Node3D
         _currentExp = exp;
 
         _ui.SetLevelAndExp(_currentLevel, _currentExp);
+    }
+
+    void Logout()
+    {
+        NetworkClient.Logout();
     }
 }

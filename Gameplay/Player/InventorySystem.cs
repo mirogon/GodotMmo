@@ -67,7 +67,7 @@ public partial class InventorySystem : Panel
             if (_currentlyMoving != Guid.Empty)
             {
                 var item = Items[_currentlyMoving];
-                var itemSize = ItemInfo.ItemTypeToTileSizeDict[item.ItemType];
+                var itemSize = ItemInfo.ItemTypeToItemInfo[item.ItemType].TileSize;
                 var invItem = InventoryUiItems[_currentlyMoving];
 
                 var tilePos = Utility.LocalMousePosToTilePos(localMousePos, TILE_PIXEL_SIZE);
@@ -124,8 +124,8 @@ public partial class InventorySystem : Panel
 
     void OccupyTiles(MongoInventoryItem item)
     {
-        int tileWidth = ItemInfo.ItemTypeToTileSizeDict[item.ItemType].X;
-        int tileHeight = ItemInfo.ItemTypeToTileSizeDict[item.ItemType].Y;
+        int tileWidth = ItemInfo.ItemTypeToItemInfo[item.ItemType].TileSize.X;
+        int tileHeight = ItemInfo.ItemTypeToItemInfo[item.ItemType].TileSize.Y;
         for (int i = 0; i < tileWidth; i++)
         {
             for (int j = 0; j < tileHeight; j++)

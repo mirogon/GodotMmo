@@ -1,27 +1,17 @@
 # Current Task
 
 # Current Macrotask
-- Server logs out/disconnects character when not connected anymore
+- First enemy model 
+    1. Figure out what kind of enemy its going to be (animal, creature, etc.)
+    2. Model it
+    3. Rig it
+    4. UV MAP
+    5. Textures
+
 
 # Later
 - Player metin like attack
-- Character Inventory
-    - 3D Item Instances are not part of the inventory, they get instantiated when thrown to the ground/equipped into the eq
-    - 2D Ui Item Instances are part of the inventory
-- Walking Animation
-- Download metin2 p server to check how the char creation screen works in the game
-- Create metin like char screen with 4 rotating bases (4 can be changed by changing a single number)
-- [GameServer] Keeps track of which player is successfully logged in with its session id, etc.
-- GameServerLogin: 
-    1. Player sends login packet to Gameserver with email, sessionId
-    2. GameServer checks if email and sessionId match, registers players connection if it does
-- Create char: Client sends create char packet -> GameServer creates char, creates mongodb entry -> GameServer sends result -> Client
-- [GameServer] Character type
-- Show when signup was successful or failed
-- Godot Client Signup and Login
-- When login succeeds, it switches to the main scene
-- Server list of clients (ID, IP, Name)
-- Log every drop, trade, upgrade, etc. to reverse problems
+- Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
 
 # DONE
 - Login: Client Sends Login HTTP message -> LoginServer sends success with session id -> Client
@@ -234,3 +224,28 @@ Model Clothes
 - Client also shows EXP in its ui
 - Client uses exp and level from SC_CharacterPacket
 - Character has experience and a level
+- CS_LogoutPacket that the client can send to log out of the char 
+- Server handles Logout packet
+- Test logout logic
+- SC_CharacterLoggedOutPacket
+- Server sends SC_CharacterLoggedOutPacket to all clients
+- Client handles SC_CharacterLoggedOutPacket
+- Test peer logout
+- Every client on the server has a lastTimePacketReceived
+- Timerwheel task every 10sec to check last packet received for each client and to disconnect inactive connections
+- Server logs out/disconnects character when not connected anymore
+- Test disconnect on connection lost
+- Sync all peer equipped weapons on peer character spawn
+    - Client uses all peer client eq info ✔
+        - Every time a client spawns, send eq update of each other client ✔
+            - Client type also has equipment state (or full inventory) ✔
+- New connecting peers have the correct equipped weapon status
+    - Send all connected peers the new connected cliens eq status
+- Enemy Info type or functions to get info about enemies like XP, etc.
+- Make ItemInfo struct just like the ENemyInfo instead of dictionaries like I have right now for each info item
+- Enemies have a ItemDropTable just like I did in HallwaySurvivor
+    - ItemType, DropChance pairs. Enemies can drop 0 or multiple items of the droptable
+- Server drops item on enemy death
+- Enemies can drop items
+- Walking Animation
+- Replicate enemy rotation

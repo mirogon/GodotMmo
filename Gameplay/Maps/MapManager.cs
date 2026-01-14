@@ -34,6 +34,7 @@ public partial class MapManager : Node
         NetworkClient.MonstersHealthUpdate += OnMonstersHealthUpdate;
         NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
         NetworkClient.CharacterAnimationUpdate += OnCharacterAnimationUpdate;
+        NetworkClient.CharacterLoggedOut += OnCharacterLoggedOut;
     }
 
 
@@ -69,6 +70,12 @@ public partial class MapManager : Node
             var rot = ppInstance.Rotation;
             rot.Y = Mathf.DegToRad(update.YRotationEuler);
             ppInstance.Rotation = rot;
+
+            if (NetworkClient.KnownEquippedItems.ContainsKey(update.PublicId))
+            {
+                OnEquippedItemsUpdateDeferred(update.PublicId);
+            }
+
             return;
         }
 
@@ -160,6 +167,9 @@ public partial class MapManager : Node
 
         var instance = EnemyInstances[newUpdate.Id];
         instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), 0, newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
+
+        Vector3 lookAtPos = instance.GlobalPosition + newUpdate.Velocity.ToVector3().Normalized();
+        instance.LookAt(lookAtPos);
     }
     void OnMonstersHealthUpdate()
     {
@@ -209,6 +219,15 @@ public partial class MapManager : Node
         var peer = _peerInstances[publicId];
 
         peer.PlayAnimation((CharacterAnimationType)animationType);
+    }
+
+    void OnCharacterLoggedOut(ulong publicId)
+    {
+        if (!_peerInstances.ContainsKey(publicId)) { return; }
+
+        var peer = _peerInstances[publicId];
+        _peerInstances.Remove(publicId);
+        peer.QueueFree();
     }
 
 }

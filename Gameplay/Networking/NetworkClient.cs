@@ -54,6 +54,8 @@ public class NetworkClient
 
     public static Action<ulong, short> CharacterAnimationUpdate; //PublicId, CharacterAnimationType
 
+    public static Action<UInt64> CharacterLoggedOut;
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -109,6 +111,7 @@ public class NetworkClient
                 case EPacketType.SC_EquippedItemsUpdate: Handle_SC_EquippedItemsUpdate(dataReader); break;
                 case EPacketType.SC_CharacterAnimationUpdate: Handle_SC_CharacterAnimationUpdate(dataReader); break;
                 case EPacketType.SC_CharacterExpUpdatePacket: Handle_SC_CharacterExpUpdatePacket(dataReader); break;
+                case EPacketType.SC_CharacterLoggedOut: Handle_SC_CharacterLoggedOut(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -193,6 +196,12 @@ public class NetworkClient
     {
         CS_CharacterAnimationUpdatePacket packet = new(LoginClient.NewestSessionId, type, AnimationState.Start);
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CharacterAnimationUpdatePacket)));
+    }
+
+    public static void Logout()
+    {
+        CS_LogoutPacket packet = new(LoginClient.NewestSessionId);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_LogoutPacket)));
     }
 
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
@@ -373,6 +382,12 @@ public class NetworkClient
         SC_CharacterExpUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterExpUpdatePacket>(dataReader);
         KnownCharacterExp = (packet.Level, packet.Exp);
         CharacterExpUpdate?.Invoke();
+    }
+
+    static void Handle_SC_CharacterLoggedOut(NetPacketReader dataReader)
+    {
+        SC_CharacterLoggedOutPacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterLoggedOutPacket>(dataReader);
+        CharacterLoggedOut?.Invoke(packet.PublicId);
     }
 
 }
