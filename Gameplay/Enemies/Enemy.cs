@@ -27,6 +27,8 @@ public partial class Enemy : Node3D
 {
     public HealthSystem HealthSystem;
 
+    EnemyFbx _enemyModel;
+
     List<ServerMovementSnapshot> _snapshots = new();
     int renderTimeDelayMs = 150;
     long renderTime = 0;
@@ -38,6 +40,8 @@ public partial class Enemy : Node3D
         base._Ready();
         HealthSystem = GetNode("HealthSystem") as HealthSystem;
         HealthSystem.Died += OnDied;
+
+        _enemyModel = GetNode<EnemyFbx>("Model");
     }
 
     void OnDied()
@@ -148,9 +152,12 @@ public partial class Enemy : Node3D
 
         if(GlobalPosition.DistanceTo(_targetPos) < 0.05f)
         {
+            _enemyModel?.PlayAnimation(MonsterAnimationType.Idle);
             return;
         }
 
         GlobalPosition = GlobalPosition.Lerp(_targetPos, (float)delta * (_snapshots[0].MoveSpeed * 0.95f));
+
+        _enemyModel?.PlayAnimation(MonsterAnimationType.Walk);
     }
 }

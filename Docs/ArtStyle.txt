@@ -1,0 +1,7 @@
+Models:
+	- Low Poly
+
+Materials/Textures:	
+	1. Poly paint only
+	2. Color only Textures 
+	3. PBR Textures

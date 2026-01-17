@@ -1,13 +1,7 @@
 # Current Task
 
 # Current Macrotask
-- First enemy model 
-    1. Figure out what kind of enemy its going to be (animal, creature, etc.)
-    2. Model it
-    3. Rig it
-    4. UV MAP
-    5. Textures
-
+- Rat Enemy that has walk, attack animation
 
 # Later
 - Player metin like attack
@@ -249,3 +243,15 @@ Model Clothes
 - Enemies can drop items
 - Walking Animation
 - Replicate enemy rotation
+- Import wild dog model into blender
+- Find rat or wolf model to use as first mob
+- Create Rat Bone structure
+- Weight Paint rat bones
+- Rat walk animation
+- Rat Run Animation
+- Rat Attack Animation
+- Export Rat and import it into Godot
+- Rat Idle Animation
+- Export Rat and import it into Godot
+- Rat AnimationTree
+- EnemyFbx script to handle the animationstate, etc.

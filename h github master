@@ -1,0 +1,215 @@
+[33mcommit 2603c621880d39885e009d67c584eb454c8738bd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31mgithub/master[m[33m)[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Wed Jan 14 14:28:33 2026 +0100
+
+    ENemy rotation
+
+[33mcommit 23e7426f560ab1252915bf9e208ea0af0c37e467[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sun Jan 11 04:21:25 2026 +0100
+
+    char lvl and exp
+
+[33mcommit 04bd5f104de034a548ecaefe3a894a6bd9c840ac[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sat Jan 10 07:57:57 2026 +0100
+
+    Unequip weapon works
+
+[33mcommit c2a58bf5166b6ec093bb6aa78197e10b3f4b0a42[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Jan 9 01:38:28 2026 +0100
+
+    Replicate attack anim
+
+[33mcommit c3c63806efe3c811cef3bfd31b09d41aecf3812b[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Thu Jan 8 13:53:37 2026 +0100
+
+    WIP: Replicate anims
+
+[33mcommit d72541bd3ef6939009518c5620b42127b75497c6[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Thu Jan 8 10:49:40 2026 +0100
+
+    Pre MonsterAttackPacket change
+
+[33mcommit 8b3991fb231a4c53ec3195409531946c9b557a8f[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Wed Jan 7 00:52:24 2026 +0100
+
+    Weapon equip gets replicated
+
+[33mcommit f4c37c8365f73c31aed8506f59cf0766f4ed45d4[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Tue Jan 6 07:42:39 2026 +0100
+
+    Pick up item and equip it
+
+[33mcommit 77a322e3f57d52905505c639a2f16c7d758e8abd[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sat Jan 3 22:45:27 2026 +0100
+
+    Attach weapon to weapon bone with simple function call
+
+[33mcommit a3f6146ad9e43882bffd5dedcf52b0c06c9950df[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sat Jan 3 10:16:45 2026 +0100
+
+    WIP: KATANA
+
+[33mcommit c813d123843adf6c8b88ec697638ed2c008c5d6c[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Jan 2 20:52:50 2026 +0100
+
+    remove pck
+
+[33mcommit 53e8684a303ae9a45a0699961f4f9c5b9c1ac5a3[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Jan 2 20:45:03 2026 +0100
+
+    weaponbone
+
+[33mcommit 1a3c4ab22c9f749a6fd65a426b448f281f2c258e[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Thu Jan 1 05:16:32 2026 +0100
+
+    First working animationTree
+
+[33mcommit 4f90be3e8172b2b48810709a7be8def7c685080f[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sun Dec 28 10:52:48 2025 +0100
+
+    New models, wip: fixing scene paths
+
+[33mcommit 01ca730005c3ae17a7f0cb5dc667af73015b6460[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Dec 5 19:54:53 2025 +0100
+
+    removed build
+
+[33mcommit 023673336a2f1d0809a25b2db75358d0aaae077d[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Dec 5 19:53:40 2025 +0100
+
+    PeerPlayerMovement
+
+[33mcommit 5405313e7025ec570083c79fc567375ca213e77d[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Thu Dec 4 18:41:02 2025 +0100
+
+    Damage, kill enmeies
+
+[33mcommit 42590f77eb00eb346bfddcf18e3465d785ff570d[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Thu Dec 4 09:00:26 2025 +0100
+
+    WIP: MonstersHealthUddate
+
+[33mcommit c2bae4486335c9c56baec28c5c5d27f4d57094e7[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Wed Dec 3 16:00:22 2025 +0100
+
+    simple and not so simple server client movement logic
+
+[33mcommit 91c1f0fe8d2590cf3109d20e93c7f3313008d8ae[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Mon Dec 1 23:16:12 2025 +0100
+
+    as
+
+[33mcommit 56df9e3f3035cbf62be6257dc7bd1c316b428560[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sat Nov 29 19:27:03 2025 +0100
+
+    Enemy spawns, health bar
+
+[33mcommit b5593f6485b9dcd03fdad2b32e80fdee1d3a808f[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sat Nov 29 14:40:34 2025 +0100
+
+    editor assignment bugged
+
+[33mcommit f54d47fb585c56f7a3dee954a013cc5dbfc34118[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Wed Nov 12 01:35:38 2025 +0100
+
+    Throw items out of the inv
+
+[33mcommit 7ff3154a775a1ec2505abd92af09949f62454ad1[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sun Nov 9 03:28:43 2025 +0100
+
+    Able to move items
+
+[33mcommit 0bb175d98426158299af94d55e4aea0aa4e08570[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Mon Oct 27 21:20:53 2025 +0100
+
+    Delete character
+
+[33mcommit bee1a5dfbcbf20adb329eadd5dc66dae1c3db757[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Mon Oct 27 21:05:43 2025 +0100
+
+    Create and Select character with preview model
+
+[33mcommit d46203a309e47714df794598f20ef0892f642e5f[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Oct 24 16:32:23 2025 +0200
+
+    Char slots rotate slowly, etc.
+
+[33mcommit 319af6e15c448a056aa10dc7f999637b4ab1f47a[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Thu Oct 23 12:07:24 2025 +0200
+
+    Char Create/Req
+
+[33mcommit 9b279e65e28ec6e9cccce471fe434eb90ac9f123[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sun Oct 19 10:56:13 2025 +0200
+
+    Send CreateNewChar packet
+
+[33mcommit 8c973e861d0129a2cb6671ffb69499f1a2e27334[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sun Oct 19 10:48:51 2025 +0200
+
+    WIP: CreateCharacter
+
+[33mcommit aa85f1a3cebd96a8db93d919cd943790a783384c[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Sep 5 15:00:15 2025 +0200
+
+    Register/Login stuff
+
+[33mcommit db5cb8abe6733a96ce793c0c664c681102cd070e[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Wed Sep 3 21:03:06 2025 +0200
+
+    login works, login event works
+
+[33mcommit bb6faeb9fdf6a68b3c60d7f1ff464614199b723d[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Fri Aug 29 13:49:22 2025 +0200
+
+    Register/Login Screen
+
+[33mcommit e04a73791ca7a7cb73374cab65d70f0d4e3f9da8[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Sun Aug 24 12:43:25 2025 +0200
+
+    Movement
+
+[33mcommit 88aaff04eb8a2c55abbe18b8a0fb682ac07cd2f3[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Thu Aug 21 14:21:47 2025 +0200
+
+    Working replicated positions
+
+[33mcommit a1eab90390470bd8d81176464e92d694469104c0[m
+Author: Marcel Römer <marcelroemersoftware@gmail.com>
+Date:   Tue Aug 19 12:45:11 2025 +0200
+
+    init
