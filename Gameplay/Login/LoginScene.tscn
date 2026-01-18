@@ -60,6 +60,7 @@ offset_top = 74.0
 offset_right = 34.5625
 offset_bottom = 105.0
 grow_horizontal = 2
+text = "test@test.com"
 placeholder_text = "Email"
 
 [node name="PwEdit" type="LineEdit" parent="LoginPanel"]
@@ -73,6 +74,7 @@ offset_top = 117.0
 offset_right = 100.0
 offset_bottom = 148.0
 grow_horizontal = 2
+text = "123456"
 placeholder_text = "Password"
 secret = true
 

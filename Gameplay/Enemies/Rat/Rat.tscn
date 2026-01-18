@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://bk6s2mr0824vg"]
+[gd_scene load_steps=7 format=3 uid="uid://bk6s2mr0824vg"]
 
 [ext_resource type="Script" uid="uid://ddw747ri8b57x" path="res://Gameplay/Enemies/Enemy.cs" id="1_yuqjr"]
 [ext_resource type="PackedScene" uid="uid://dc16skv6271dg" path="res://Gameplay/Enemies/Rat/RatFbx.tscn" id="2_yuqjr"]
 [ext_resource type="Script" uid="uid://5puh3pl51fne" path="res://Gameplay/Scripts/HealthSystem.cs" id="3_4yyr2"]
+[ext_resource type="PackedScene" uid="uid://nx30ltybjbg6" path="res://Gameplay/Enemies/3DHealthBar.tscn" id="4_wy1nn"]
+[ext_resource type="Script" uid="uid://crdtoxfgq5nfi" path="res://Gameplay/Enemies/HealthBar3D.cs" id="5_rih0i"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wy1nn"]
+viewport_path = NodePath("SubViewport")
 
 [node name="Rat" type="Node3D"]
 script = ExtResource("1_yuqjr")
@@ -12,3 +17,14 @@ transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="HealthSystem" type="Node" parent="."]
 script = ExtResource("3_4yyr2")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+
+[node name="ProgressBar" parent="SubViewport" instance=ExtResource("4_wy1nn")]
+script = ExtResource("5_rih0i")
+
+[node name="HealthbarSprite" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6157427, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_wy1nn")

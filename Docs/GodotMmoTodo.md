@@ -1,11 +1,9 @@
 # Current Task
-- Client plays enemy attack animation
 
 # Current Macrotask
 - Enemies can have a combat target which will make them move to it/attack it
 
 # Later
-- Enemies have health bars above them (probably only when its your target)
 - Player metin like attack
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
 
@@ -262,3 +260,7 @@ Model Clothes
 - Enemy follows player when it has it as the target
 - Enemy attacks when close
 - SC_MonsterAnimationUpdate packet
+- Client plays enemy attack animation
+- Server sends monster animation first and then the actual attack at the right time
+    - Dictionary for attack animation to attack time delay
+- Enemies have health bars above them (probably only when its your target)

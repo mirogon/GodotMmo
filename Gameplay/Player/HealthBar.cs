@@ -13,7 +13,6 @@ public partial class HealthBar : ProgressBar
 
     private void OnHealthChange(int health)
     {
-        GD.Print("OnHealthChanged: " + health);
         var healthPercentage = (float)((float)health / (float)_healthSystem.MaxHealth) * 100.0f;
         Value = healthPercentage;
     }

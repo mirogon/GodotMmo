@@ -35,6 +35,13 @@ public partial class Enemy : Node3D
 
     int usedRealSnapshots = 0;
     int usedPredSnapshots = 0;
+
+    public void Init(int currentHealth, int maxHealth)
+    {
+        HealthSystem = GetNode("HealthSystem") as HealthSystem;
+        HealthSystem.CurrentHealth = currentHealth;
+        HealthSystem.MaxHealth = maxHealth;
+    }
     public override void _Ready()
     {
         base._Ready();
@@ -56,6 +63,11 @@ public partial class Enemy : Node3D
         base._Process(delta);
         SimpleMovement(delta);
         return;
+    }
+
+    public void PlayAnimation(MonsterAnimationType type)
+    {
+        _enemyModel.PlayAnimation(type);
     }
 
     void NotSoSimpleMovement(double delta)

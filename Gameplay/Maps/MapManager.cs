@@ -35,6 +35,7 @@ public partial class MapManager : Node
         NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
         NetworkClient.CharacterAnimationUpdate += OnCharacterAnimationUpdate;
         NetworkClient.CharacterLoggedOut += OnCharacterLoggedOut;
+        NetworkClient.MonsterAnimationUpdate += OnMonsterAnimationUpdate;
     }
 
 
@@ -150,6 +151,8 @@ public partial class MapManager : Node
             var enemyScenePath = Classes.EnemyTypeToEnemySceneDictionary[c.EnemyType];
             var enemyScene = GD.Load<PackedScene>(enemyScenePath);
             Enemy enemyInstance = enemyScene.Instantiate() as Enemy;
+            enemyInstance.Init(c.CurrentHealth, c.MaxHealth);
+
             EnemyInstances.Add(c.Id, enemyInstance);
             GetNode("Enemies").CallDeferred("add_child", enemyInstance);
             enemyInstance.Position = c.PositionOnMap.ToVector3();
@@ -183,6 +186,10 @@ public partial class MapManager : Node
 
             var enemy = EnemyInstances[c.Id];
             enemy.HealthSystem.CurrentHealth = c.CurrentHealth;
+            if(enemy.HealthSystem.IsDead)
+            {
+                EnemyInstances.Remove(c.Id);
+            }
         }
     }
 
@@ -229,6 +236,22 @@ public partial class MapManager : Node
         _peerInstances.Remove(publicId);
         peer.QueueFree();
     }
+    void OnMonsterAnimationUpdate()
+    {
+        CallDeferred("OnMonsterAnimationUpdateDeferred");
+    }
 
+    void OnMonsterAnimationUpdateDeferred()
+    {
+        for(int i = 0; i < NetworkClient.MonsterAnimationUpdates.Count; ++i)
+        {
+            var update = NetworkClient.MonsterAnimationUpdates[0];
+            NetworkClient.MonsterAnimationUpdates.RemoveAt(0);
+
+            if (!EnemyInstances.ContainsKey(update.MonsterId)) { continue; }
+            var enemyInstance = EnemyInstances[update.MonsterId];
+            enemyInstance.PlayAnimation(update.AnimationType);
+        }
+    }
 }
 

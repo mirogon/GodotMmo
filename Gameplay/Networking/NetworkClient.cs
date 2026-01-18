@@ -56,6 +56,9 @@ public class NetworkClient
 
     public static Action<UInt64> CharacterLoggedOut;
 
+    public static Action MonsterAnimationUpdate;
+    public static List<SC_MonsterAnimationUpdatePacket> MonsterAnimationUpdates = new();
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -112,6 +115,7 @@ public class NetworkClient
                 case EPacketType.SC_CharacterAnimationUpdate: Handle_SC_CharacterAnimationUpdate(dataReader); break;
                 case EPacketType.SC_CharacterExpUpdate: Handle_SC_CharacterExpUpdatePacket(dataReader); break;
                 case EPacketType.SC_CharacterLoggedOut: Handle_SC_CharacterLoggedOut(dataReader); break;
+                case EPacketType.SC_MonsterAnimationUpdate: Handle_SC_MonsterAnimationUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -389,5 +393,12 @@ public class NetworkClient
         SC_CharacterLoggedOutPacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterLoggedOutPacket>(dataReader);
         CharacterLoggedOut?.Invoke(packet.PublicId);
     }
+    static void Handle_SC_MonsterAnimationUpdate(NetPacketReader dataReader)
+    {
+        SC_MonsterAnimationUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_MonsterAnimationUpdatePacket>(dataReader);
+        MonsterAnimationUpdates.Add(packet);
+        MonsterAnimationUpdate?.Invoke();
+    }
+
 
 }

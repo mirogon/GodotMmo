@@ -5,7 +5,7 @@ public partial class HealthSystem : Node
 {
     public Action<int> HealthChanged;
     public Action Died;
-    public int MaxHealth;
+    public int MaxHealth = 100;
     public int CurrentHealth
     {
         get { return _currentHealth; }
@@ -36,7 +36,7 @@ public partial class HealthSystem : Node
         }
     }
 
-    int _maxHealth;
+    int _maxHealth = 100;
     int _currentHealth;
     bool _isDead = false;
 
