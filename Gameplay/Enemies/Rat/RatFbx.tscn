@@ -22,7 +22,7 @@ animation = &"RatArmature|Rat_Walk"
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_wrmbj"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wrmbj"]
-graph_offset = Vector2(-628.0817, -97.366394)
+graph_offset = Vector2(-800.04156, 63.10196)
 nodes/output/position = Vector2(460, 140)
 nodes/Idle/node = SubResource("AnimationNodeAnimation_wrmbj")
 nodes/Idle/position = Vector2(-680, -40)
@@ -47,7 +47,7 @@ script = ExtResource("2_r04jg")
 bones/1/rotation = Quaternion(0.50840586, -9.473779e-17, -9.47378e-17, 0.8611176)
 bones/1/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/2/position = Vector3(-3.5407613e-25, 0.010526184, -3.1457031e-10)
-bones/2/rotation = Quaternion(0.12648535, -0.042550538, 0.10764263, 0.98519236)
+bones/2/rotation = Quaternion(0.12693375, 0.011244056, -0.028415576, 0.99144036)
 bones/2/scale = Vector3(1, 0.9999999, 1)
 bones/3/position = Vector3(2.7996286e-25, 0.0067421976, -3.2088074e-10)
 bones/3/rotation = Quaternion(0.2019639, 2.8967928e-17, 3.4321062e-18, 0.979393)

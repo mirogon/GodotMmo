@@ -1,14 +1,6 @@
 using Godot;
 using System;
 
-public enum MonsterAnimationType
-{
-    Unknown = 0,
-    Idle = 1,
-    Walk = 2,
-    Run = 3,
-    Attack
-}
 public partial class EnemyFbx : Node3D
 {
     AnimationTree _animationTree;
@@ -22,14 +14,14 @@ public partial class EnemyFbx : Node3D
     {
         switch (animType)
         {
-            case MonsterAnimationType.Idle: _animationTree.Set("parameters/IdleMoveBlend/blend_position", 0.0f); break;
+            case MonsterAnimationType.Idle: _animationTree.Set("parameters/IdleMoveBlend/blend_amount", 0.0f); break;
             case MonsterAnimationType.Walk:
-                _animationTree.Set("parameters/WalkRunBlend/blend_position", 0.0f);
-                _animationTree.Set("parameters/IdleMoveBlend/blend_position", 1.0f);
+                _animationTree.Set("parameters/WalkRunBlend/blend_amount", 0.0f);
+                _animationTree.Set("parameters/IdleMoveBlend/blend_amount", 1.0f);
                 break;
             case MonsterAnimationType.Run: 
-                _animationTree.Set("parameters/WalkRunBlend/blend_position", 1.0f);
-                _animationTree.Set("parameters/IdleMoveBlend/blend_position", 1.0f);
+                _animationTree.Set("parameters/WalkRunBlend/blend_amount", 1.0f);
+                _animationTree.Set("parameters/IdleMoveBlend/blend_amount", 1.0f);
                 break;
             case MonsterAnimationType.Attack: _animationTree.Set("parameters/AttackOneShot/request", (int)AnimationNodeOneShot.OneShotRequest.Fire); break;
         }

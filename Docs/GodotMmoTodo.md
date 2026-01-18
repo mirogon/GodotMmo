@@ -1,9 +1,11 @@
 # Current Task
+- Client plays enemy attack animation
 
 # Current Macrotask
-- Rat Enemy that has walk, attack animation
+- Enemies can have a combat target which will make them move to it/attack it
 
 # Later
+- Enemies have health bars above them (probably only when its your target)
 - Player metin like attack
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
 
@@ -255,3 +257,8 @@ Model Clothes
 - Export Rat and import it into Godot
 - Rat AnimationTree
 - EnemyFbx script to handle the animationstate, etc.
+- Rat uses idle and walk animation
+- Enemy state changes when player attacks
+- Enemy follows player when it has it as the target
+- Enemy attacks when close
+- SC_MonsterAnimationUpdate packet

@@ -16,6 +16,7 @@ public partial class HealthSystem : Node
             {
                 _currentHealth = 0;
                 _isDead = true;
+                HealthChanged?.Invoke(CurrentHealth);
                 Died?.Invoke();
                 return;
             }

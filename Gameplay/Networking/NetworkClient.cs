@@ -110,7 +110,7 @@ public class NetworkClient
                 case EPacketType.SC_MonstersHealthUpdate: HandleSC_MonstersHealthUpdate(dataReader); break;
                 case EPacketType.SC_EquippedItemsUpdate: Handle_SC_EquippedItemsUpdate(dataReader); break;
                 case EPacketType.SC_CharacterAnimationUpdate: Handle_SC_CharacterAnimationUpdate(dataReader); break;
-                case EPacketType.SC_CharacterExpUpdatePacket: Handle_SC_CharacterExpUpdatePacket(dataReader); break;
+                case EPacketType.SC_CharacterExpUpdate: Handle_SC_CharacterExpUpdatePacket(dataReader); break;
                 case EPacketType.SC_CharacterLoggedOut: Handle_SC_CharacterLoggedOut(dataReader); break;
             }
 
@@ -324,7 +324,7 @@ public class NetworkClient
     {
         SC_CharacterHealthUpdatePacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterHealthUpdatePacket>(dataReader);
 
-        if(receivedPacket.PublicId != PublicId) { return; }
+        //if(receivedPacket.PublicId != PublicId) { return; }
 
         CharacterHealthUpdate?.Invoke((receivedPacket.PublicId, receivedPacket.CurrentHealth, receivedPacket.MaxHealth));
     }
