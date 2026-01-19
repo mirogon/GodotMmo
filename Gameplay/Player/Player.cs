@@ -22,6 +22,12 @@ public partial class Player : Node3D
     int _currentLevel = 1;
     long _currentExp = 0;
 
+    Enemy _currentEnemyTarget = null;
+    PeerPlayer3D _currentPeerPlayerTarget = null;
+
+    PackedScene _targetIndicatorScene = ResourceLoader.Load<PackedScene>("res://Gameplay/TargetIndicator.tscn");
+    Node3D _targetIndicator = null;
+
     public override void _Ready()
     {
         base._Ready();
@@ -133,6 +139,11 @@ public partial class Player : Node3D
         {
             Logout();
         }
+
+        if (Input.IsActionJustPressed("RightClick"))
+        {
+            HandleTargetAcquisition();
+        }
     }
     void WeaponAttack()
     {
@@ -141,10 +152,73 @@ public partial class Player : Node3D
         _attackAnimationEvent.Restart();
     }
 
+    void HandleTargetAcquisition()
+    {
+        var cam = GetViewport().GetCamera3D();
+        var result = Utility.Camera3DRaycast(cam);
+        if(result.Count > 0)
+        {
+            var obj = result["collider"].As<GodotObject>();
+            if(obj is Area3D area)
+            {
+                Node3D parent = area.GetParent() as Node3D;
+                if(parent is GameEntity ge)
+                {
+                    SetTargetIndicator(ge);
+                    if(ge is Enemy enemy)
+                    {
+                        _currentEnemyTarget = enemy;
+                        _currentPeerPlayerTarget = null;
+                    }
+                    if(ge is PeerPlayer3D peerPlayer)
+                    {
+                        _currentPeerPlayerTarget = peerPlayer;
+                        _currentEnemyTarget = null;
+                    }
+                }
+            }
+        }
+        else
+        {
+            GD.Print("No collision");
+        }
+    }
+
+    void SetTargetIndicator(Node3D target)
+    {
+        if(!IsInstanceValid(_targetIndicator))
+        {
+            _targetIndicator = _targetIndicatorScene.Instantiate() as Node3D;
+        }
+
+        if (IsInstanceValid(_currentEnemyTarget))
+        {
+            _currentEnemyTarget.RemoveChild(_targetIndicator);
+        }
+        if (IsInstanceValid(_currentPeerPlayerTarget))
+
+        {
+            _currentPeerPlayerTarget.RemoveChild(_targetIndicator);
+        }
+
+        _targetIndicator.Position = Vector3.Zero;
+        target.AddChild(_targetIndicator);
+    }
+
     private void OnAttackAnimationEvent()
     {
         var map = GetParent<MapManager>();
         NetworkClient.WeaponAttack();
+
+        var scene = ResourceLoader.Load<PackedScene>("res://Gameplay/DamageNumber.tscn");
+        var instance = scene.Instantiate() as Node3D;
+
+        var right = _model.Transform.Basis.X;
+
+        instance.Position = right;
+        GD.Print("instance of DamageNumber: " + instance);
+        AddChild(instance);
+        GD.Print("Added instance of DamageNumber");
     }
 
     void PickUpItem()

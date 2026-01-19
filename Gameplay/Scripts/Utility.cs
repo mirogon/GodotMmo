@@ -35,4 +35,30 @@ public class Utility
         }
         return (xTile, yTile);
     }
+
+    public static Godot.Collections.Dictionary Camera3DRaycast(Camera3D camera) 
+    {
+        Vector2 mousePos = camera.GetViewport().GetMousePosition();
+        Vector3 rayOrigin = camera.ProjectRayOrigin(mousePos);
+        Vector3 rayDir = camera.ProjectRayNormal(mousePos);
+        Vector3 rayEnd = rayOrigin + rayDir * 250f;
+
+        var queryParams = PhysicsRayQueryParameters3D.Create(rayOrigin, rayEnd);
+        queryParams.CollideWithAreas = true;
+        queryParams.CollideWithBodies = true;
+
+        var spaceState = camera.GetWorld3D().DirectSpaceState;
+
+        /*
+           position: Vector2 # point in world space for collision
+           normal: Vector2 # normal in world space for collision
+           collider: Object # Object collided or null (if unassociated)
+           collider_id: ObjectID # Object it collided against
+           rid: RID # RID it collided against
+           shape: int # shape index of collider
+           metadata: Variant() # metadata of collider
+        */
+        var result = spaceState.IntersectRay(queryParams);
+        return result;
+    }
 }

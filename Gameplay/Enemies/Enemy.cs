@@ -23,8 +23,9 @@ public class ServerMovementSnapshot
     }
 }
 
-public partial class Enemy : Node3D
+public partial class Enemy : GameEntity
 {
+    public Guid Id = Guid.Empty;
     public HealthSystem HealthSystem;
 
     EnemyFbx _enemyModel;
@@ -36,8 +37,9 @@ public partial class Enemy : Node3D
     int usedRealSnapshots = 0;
     int usedPredSnapshots = 0;
 
-    public void Init(int currentHealth, int maxHealth)
+    public void Init(Guid id, int currentHealth, int maxHealth)
     {
+        Id = id;
         HealthSystem = GetNode("HealthSystem") as HealthSystem;
         HealthSystem.CurrentHealth = currentHealth;
         HealthSystem.MaxHealth = maxHealth;

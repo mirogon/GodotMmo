@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class PeerPlayer3D : Node3D
+public partial class PeerPlayer3D : GameEntity
 {
     List<ServerMovementSnapshot> _snapshots = new();
     Vector3 _targetPos;

@@ -9,6 +9,9 @@ public partial class HealthBar3D : ProgressBar
         base._Ready();
         _healthSystem = GetParent().GetParent().GetNode<HealthSystem>("HealthSystem");
         _healthSystem.HealthChanged += OnHealthChanged;
+
+        int healthPercentage = (int)( ((float)_healthSystem.CurrentHealth / (float)_healthSystem.MaxHealth) * 100 );
+        Value = healthPercentage;
     }
 
     void OnHealthChanged(int newHealth)

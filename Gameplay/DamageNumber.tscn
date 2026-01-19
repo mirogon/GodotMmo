@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvhebqi6qn24x"]
+
+[ext_resource type="Script" uid="uid://bs1fnsl0us34e" path="res://Gameplay/DamageNumber.cs" id="1_wrcsj"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wrcsj"]
+viewport_path = NodePath("SubViewport")
+
+[node name="DamageNumber" type="Node3D"]
+script = ExtResource("1_wrcsj")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+
+[node name="Label" type="Label" parent="SubViewport"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.87, 0.80388004, 0.2088, 1)
+theme_override_font_sizes/font_size = 32
+text = "55"
+horizontal_alignment = 1
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_wrcsj")

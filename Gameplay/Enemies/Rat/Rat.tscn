@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bk6s2mr0824vg"]
+[gd_scene load_steps=8 format=3 uid="uid://bk6s2mr0824vg"]
 
 [ext_resource type="Script" uid="uid://ddw747ri8b57x" path="res://Gameplay/Enemies/Enemy.cs" id="1_yuqjr"]
 [ext_resource type="PackedScene" uid="uid://dc16skv6271dg" path="res://Gameplay/Enemies/Rat/RatFbx.tscn" id="2_yuqjr"]
@@ -8,6 +8,9 @@
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_wy1nn"]
 viewport_path = NodePath("SubViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rih0i"]
+size = Vector3(0.6542969, 0.64160156, 1.28125)
 
 [node name="Rat" type="Node3D"]
 script = ExtResource("1_yuqjr")
@@ -21,10 +24,16 @@ script = ExtResource("3_4yyr2")
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
 
-[node name="ProgressBar" parent="SubViewport" instance=ExtResource("4_wy1nn")]
+[node name="HealthBar3D" parent="SubViewport" instance=ExtResource("4_wy1nn")]
 script = ExtResource("5_rih0i")
 
 [node name="HealthbarSprite" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6157427, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1264486, 0)
 billboard = 1
 texture = SubResource("ViewportTexture_wy1nn")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28638232, 0)
+shape = SubResource("BoxShape3D_rih0i")

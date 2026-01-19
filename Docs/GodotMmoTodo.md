@@ -1,9 +1,12 @@
 # Current Task
+- SC_DamageHitsPacket info about damage done to which enemy
+- Damage Numbers
 
 # Current Macrotask
-- Enemies can have a combat target which will make them move to it/attack it
 
 # Later
+- Get HallwaySurvivor's Quest system
+- CS_SetTargetPacket
 - Player metin like attack
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
 
@@ -264,3 +267,8 @@ Model Clothes
 - Server sends monster animation first and then the actual attack at the right time
     - Dictionary for attack animation to attack time delay
 - Enemies have health bars above them (probably only when its your target)
+- Enemies can have a combat target which will make them move to it/attack it
+- Enemy and PeerPlayer has base class called GameEntity
+- Player has a target, can target enemies with right click
+- Target indication (Red circle/cylinder on target)
+- Enemy healthbar value is correct at spawn

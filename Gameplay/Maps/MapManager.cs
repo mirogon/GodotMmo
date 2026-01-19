@@ -151,7 +151,7 @@ public partial class MapManager : Node
             var enemyScenePath = Classes.EnemyTypeToEnemySceneDictionary[c.EnemyType];
             var enemyScene = GD.Load<PackedScene>(enemyScenePath);
             Enemy enemyInstance = enemyScene.Instantiate() as Enemy;
-            enemyInstance.Init(c.CurrentHealth, c.MaxHealth);
+            enemyInstance.Init(c.Id, c.CurrentHealth, c.MaxHealth);
 
             EnemyInstances.Add(c.Id, enemyInstance);
             GetNode("Enemies").CallDeferred("add_child", enemyInstance);
