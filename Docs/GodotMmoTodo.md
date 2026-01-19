@@ -1,6 +1,5 @@
 # Current Task
-- SC_DamageHitsPacket info about damage done to which enemy
-- Damage Numbers
+- 
 
 # Current Macrotask
 
@@ -272,3 +271,6 @@ Model Clothes
 - Player has a target, can target enemies with right click
 - Target indication (Red circle/cylinder on target)
 - Enemy healthbar value is correct at spawn
+- SC_DamageHitsPacket info about damage done to which enemy
+- Server sends SC_DamageHitsInfoPacket on hits
+- Damage Numbers

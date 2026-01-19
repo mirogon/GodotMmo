@@ -59,6 +59,9 @@ public class NetworkClient
     public static Action MonsterAnimationUpdate;
     public static List<SC_MonsterAnimationUpdatePacket> MonsterAnimationUpdates = new();
 
+    public static Action DamageHitsUpdate;
+    public static List<SC_DamageHitsUpdatePacket> DamageHitsUpdates = new();
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -74,7 +77,6 @@ public class NetworkClient
     public static bool SuccessfullyLoggedIn = false;
     static bool _isRunning = true;
     static long _packetsSent = 0;
-
 
     public static void StartClient()
     {
@@ -116,6 +118,7 @@ public class NetworkClient
                 case EPacketType.SC_CharacterExpUpdate: Handle_SC_CharacterExpUpdatePacket(dataReader); break;
                 case EPacketType.SC_CharacterLoggedOut: Handle_SC_CharacterLoggedOut(dataReader); break;
                 case EPacketType.SC_MonsterAnimationUpdate: Handle_SC_MonsterAnimationUpdate(dataReader); break;
+                case EPacketType.SC_DamageHitsUpdate: Handle_SC_DamageHitsUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -399,6 +402,10 @@ public class NetworkClient
         MonsterAnimationUpdates.Add(packet);
         MonsterAnimationUpdate?.Invoke();
     }
-
-
+    static void Handle_SC_DamageHitsUpdate(NetPacketReader dataReader)
+    {
+        SC_DamageHitsUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_DamageHitsUpdatePacket>(dataReader);
+        DamageHitsUpdates.Add(packet);
+        DamageHitsUpdate?.Invoke();
+    }
 }

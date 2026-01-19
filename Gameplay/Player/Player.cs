@@ -48,6 +48,7 @@ public partial class Player : Node3D
         NetworkClient.CharacterHealthUpdate += OnCharacterHealthUpdate;
         NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
         NetworkClient.CharacterExpUpdate += OnExpUpdate;
+        NetworkClient.DamageHitsUpdate += OnDamageHitsUpdate;
 
         _attackAnimationEvent = new AnimationEvent(0.8f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
@@ -56,6 +57,7 @@ public partial class Player : Node3D
         OnEquippedItemsUpdateDeferred();
         OnExpUpdateDeferred(_initializedChar.Level, _initializedChar.Exp);
     }
+
 
     public void Initialize(Character c)
     {
@@ -209,16 +211,6 @@ public partial class Player : Node3D
     {
         var map = GetParent<MapManager>();
         NetworkClient.WeaponAttack();
-
-        var scene = ResourceLoader.Load<PackedScene>("res://Gameplay/DamageNumber.tscn");
-        var instance = scene.Instantiate() as Node3D;
-
-        var right = _model.Transform.Basis.X;
-
-        instance.Position = right;
-        GD.Print("instance of DamageNumber: " + instance);
-        AddChild(instance);
-        GD.Print("Added instance of DamageNumber");
     }
 
     void PickUpItem()
@@ -314,6 +306,30 @@ public partial class Player : Node3D
 
         _ui.SetLevelAndExp(_currentLevel, _currentExp);
     }
+    void OnDamageHitsUpdate()
+    {
+        CallDeferred("OnDamageHitsUpdateDeferred");
+    }
+
+    void OnDamageHitsUpdateDeferred()
+    {
+        if(NetworkClient.DamageHitsUpdates.Count < 1) { return; }
+
+        var update = NetworkClient.DamageHitsUpdates[0];
+        NetworkClient.DamageHitsUpdates.RemoveAt(0);    
+
+        var scene = ResourceLoader.Load<PackedScene>("res://Gameplay/DamageNumber.tscn");
+        var instance = scene.Instantiate() as DamageNumber;
+        instance.Init(update.Hits[0].Damage);
+
+        var right = _model.Transform.Basis.X;
+
+        instance.Position = right;
+        GD.Print("instance of DamageNumber: " + instance);
+        AddChild(instance);
+        GD.Print("Added instance of DamageNumber");
+    }
+
 
     void Logout()
     {
