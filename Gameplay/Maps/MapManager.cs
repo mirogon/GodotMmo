@@ -138,15 +138,24 @@ public partial class MapManager : Node
     {
         foreach(var e in EnemyInstances)
         {
-            e.Value.QueueFree();
+            //e.Value.QueueFree();
         }
 
-        EnemyInstances.Clear();
+        //EnemyInstances.Clear();
 
-
-        foreach(var c in NetworkClient.NewestEnemiesOnMapUpdate)
+        for(int i = 0; i < 99999; ++i)
         {
-            if(c.EnemyType == EEnemyType.Unknown) { continue; }
+            EnemyData c;
+            if(!NetworkClient.NewestEnemiesOnMapUpdate.TryTake(out c)) {
+                GD.Print("NewestEnemyUpdate trytake");
+                return; 
+            }
+
+            GD.Print("Took Enemy out of update");
+            if(c.EnemyType == EEnemyType.Unknown) { 
+                GD.Print("Skipping unknown enemy type");
+                continue; 
+            }
 
             var enemyScenePath = Classes.EnemyTypeToEnemySceneDictionary[c.EnemyType];
             var enemyScene = GD.Load<PackedScene>(enemyScenePath);
@@ -154,7 +163,8 @@ public partial class MapManager : Node
             enemyInstance.Init(c.Id, c.CurrentHealth, c.MaxHealth);
 
             EnemyInstances.Add(c.Id, enemyInstance);
-            GetNode("Enemies").CallDeferred("add_child", enemyInstance);
+            GetNode("Enemies").AddChild(enemyInstance);
+            GD.Print("Add enemy as child");
             enemyInstance.Position = c.PositionOnMap.ToVector3();
         }
     }
@@ -164,15 +174,18 @@ public partial class MapManager : Node
     }
     void OnMonsterPositionUpdateDeferred()
     {
-        var newUpdate = NetworkClient.NewerstMonsterPosUpdate;
+        for(int i = 0; i < 99999; ++i)
+        {
+            SC_MonsterPositionUpdatePacket newUpdate;
+            if(!NetworkClient.MonsterPosUpdates.TryTake(out newUpdate)) { return; }
+            if (!EnemyInstances.ContainsKey(newUpdate.Id)) { continue; }
 
-        if (!EnemyInstances.ContainsKey(newUpdate.Id)) { return; }
+            var instance = EnemyInstances[newUpdate.Id];
+            instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), 0, newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
 
-        var instance = EnemyInstances[newUpdate.Id];
-        instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), 0, newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
-
-        Vector3 lookAtPos = instance.GlobalPosition + newUpdate.Velocity.ToVector3().Normalized();
-        instance.LookAt(lookAtPos);
+            Vector3 lookAtPos = instance.GlobalPosition + newUpdate.Velocity.ToVector3().Normalized();
+            instance.LookAt(lookAtPos);
+        }
     }
     void OnMonstersHealthUpdate()
     {

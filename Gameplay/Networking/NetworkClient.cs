@@ -42,7 +42,7 @@ public class NetworkClient
     public static ConcurrentBag<EnemyData> NewestEnemiesOnMapUpdate = new();
 
     public static Action MonsterPositionUpdate;
-    public static SC_MonsterPositionUpdatePacket NewerstMonsterPosUpdate = new();
+    public static ConcurrentBag<SC_MonsterPositionUpdatePacket> MonsterPosUpdates = new();
 
     public static Action MonstersHealthUpdate;
     public static ConcurrentQueue<SC_MonstersHealthUpdate> MonstersHealthUpdateQueue = new();
@@ -339,14 +339,19 @@ public class NetworkClient
     static void Handle_SC_EnemiesOnMapPacket(NetPacketReader packetReader)
     {
         SC_EnemiesOnMapPacket enemiesUpdatePacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_EnemiesOnMapPacket>(packetReader);
-        NewestEnemiesOnMapUpdate = new(enemiesUpdatePacket.Enemies);
+        foreach(var enemy in enemiesUpdatePacket.Enemies)
+        {
+            if(enemy.Id == Guid.Empty) { continue; }
+            NewestEnemiesOnMapUpdate.Add(enemy);
+        }
+        GD.Print("NUM ENEMIES UPDATE: " + NewestEnemiesOnMapUpdate.Count);
         EnemiesOnMapUpdate?.Invoke();
     }
 
     static void Handle_SC_MonsterPositionUpdate(NetPacketReader packetReader)
     {
         SC_MonsterPositionUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_MonsterPositionUpdatePacket>(packetReader);
-        NewerstMonsterPosUpdate = packet;
+        MonsterPosUpdates.Add(packet);
         MonsterPositionUpdate?.Invoke();
     }
     static void HandleSC_MonstersHealthUpdate(NetPacketReader dataReader)

@@ -1,10 +1,10 @@
 # Current Task
-- 
+- Quest can be progressed, completed
 
 # Current Macrotask
+- Quest System
 
 # Later
-- Get HallwaySurvivor's Quest system
 - CS_SetTargetPacket
 - Player metin like attack
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
@@ -274,3 +274,9 @@ Model Clothes
 - SC_DamageHitsPacket info about damage done to which enemy
 - Server sends SC_DamageHitsInfoPacket on hits
 - Damage Numbers
+- Every MongoCharacter has a list of ActiveQuests (max. 10 or so)
+    - Or seperate collection for character quest states
+    - MongoCharacterQuestStatus
+- Create CharacterQuestStatus db entry on char creation
+- DB QuestData for new player adds the first quest
+- Make Kill 5 rats the first quest
