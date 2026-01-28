@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3 uid="uid://gbck2o61nu1c"]
+
+[ext_resource type="Script" uid="uid://cdix7gmhgfd31" path="res://Gameplay/Player/Ui/QuestUi.cs" id="1_t8afd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qj0hi"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="QuestUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t8afd")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -193.0
+offset_bottom = -328.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="QuestPanel" type="Panel" parent="MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qj0hi")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/QuestPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainerChild" type="VBoxContainer" parent="MarginContainer/QuestPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1

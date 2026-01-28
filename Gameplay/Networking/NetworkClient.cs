@@ -59,17 +59,20 @@ public class NetworkClient
     public static Action MonsterAnimationUpdate;
     public static List<SC_MonsterAnimationUpdatePacket> MonsterAnimationUpdates = new();
 
+    public static Dictionary<int, Character> KnownCharacters = new(); //Slot, Char
+    public static List<MongoInventoryItem> KnownInventoryItems = new();
+
     public static Action DamageHitsUpdate;
     public static List<SC_DamageHitsUpdatePacket> DamageHitsUpdates = new();
+
+    public static Action QuestsProgressUpdate;
+    public static ConcurrentBag<SC_QuestsUpdatePacket> QuestProgressUpdates = new();
 
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
 
     public static UInt64 PublicId;
-
-    public static Dictionary<int, Character> KnownCharacters = new(); //Slot, Char
-    public static List<MongoInventoryItem> KnownInventoryItems = new();
 
     public static Dictionary<UInt64, Dictionary<EquipmentSlot, MongoInventoryItem>> KnownEquippedItems = new();
 
@@ -119,6 +122,7 @@ public class NetworkClient
                 case EPacketType.SC_CharacterLoggedOut: Handle_SC_CharacterLoggedOut(dataReader); break;
                 case EPacketType.SC_MonsterAnimationUpdate: Handle_SC_MonsterAnimationUpdate(dataReader); break;
                 case EPacketType.SC_DamageHitsUpdate: Handle_SC_DamageHitsUpdate(dataReader); break;
+                case EPacketType.SC_QuestsUpdate: Handle_SC_QuestsUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -412,5 +416,11 @@ public class NetworkClient
         SC_DamageHitsUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_DamageHitsUpdatePacket>(dataReader);
         DamageHitsUpdates.Add(packet);
         DamageHitsUpdate?.Invoke();
+    }
+    static void Handle_SC_QuestsUpdate(NetPacketReader dataReader)
+    {
+        SC_QuestsUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_QuestsUpdatePacket>(dataReader);
+        QuestProgressUpdates.Add(packet);
+        QuestsProgressUpdate?.Invoke();
     }
 }

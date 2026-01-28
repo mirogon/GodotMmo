@@ -17,9 +17,7 @@ public partial class HealthBar3D : ProgressBar
     void OnHealthChanged(int newHealth)
     {
 
-        GD.Print("HealthBad3DHEalthChanged: " + newHealth);
         int healthPercentage = (int)( ((float)newHealth / (float)_healthSystem.MaxHealth) * 100 );
-        GD.Print("HealthBad3DHealthPercent: " + healthPercentage);
         Value = healthPercentage;
     }
 }

@@ -1,5 +1,5 @@
 # Current Task
-- Quest can be progressed, completed
+- Refactor: Get rid of QuestInfo and put everything into Quest
 
 # Current Macrotask
 - Quest System
@@ -280,3 +280,12 @@ Model Clothes
 - Create CharacterQuestStatus db entry on char creation
 - DB QuestData for new player adds the first quest
 - Make Kill 5 rats the first quest
+- Server saves character quest status in ram
+- SC_QuestUpdatePacket
+    - List of QuestData with updates
+- Server updates quest progress in db
+- MongoCharacterQuestStatus has FinishedQuests (QuestId[])
+- if quest is finished, remove it from active quests and add it to finished quests
+- Give player XP on quest completion
+- First Ugly Quest UI
+- Send quests after selecting char

@@ -28,6 +28,7 @@ public partial class Player : Node3D
     PackedScene _targetIndicatorScene = ResourceLoader.Load<PackedScene>("res://Gameplay/TargetIndicator.tscn");
     Node3D _targetIndicator = null;
 
+    QuestUi _questUi;
     public override void _Ready()
     {
         base._Ready();
@@ -44,11 +45,14 @@ public partial class Player : Node3D
 
         _model = GetNode<CharacterModel>("Model");
 
+        _questUi = FindChild("QuestUi") as QuestUi;
+
         NetworkClient.KnownItemsUpdate += OnItemsUpdate;
         NetworkClient.CharacterHealthUpdate += OnCharacterHealthUpdate;
         NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
         NetworkClient.CharacterExpUpdate += OnExpUpdate;
         NetworkClient.DamageHitsUpdate += OnDamageHitsUpdate;
+        NetworkClient.QuestsProgressUpdate += OnQuestsProgressUpdate;
 
         _attackAnimationEvent = new AnimationEvent(0.8f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
@@ -56,6 +60,7 @@ public partial class Player : Node3D
         OnItemsUpdateDeferred();
         OnEquippedItemsUpdateDeferred();
         OnExpUpdateDeferred(_initializedChar.Level, _initializedChar.Exp);
+        OnQuestsProgressUpdateDeferred();
     }
 
 
@@ -182,7 +187,6 @@ public partial class Player : Node3D
         }
         else
         {
-            GD.Print("No collision");
         }
     }
 
@@ -325,14 +329,33 @@ public partial class Player : Node3D
         var right = _model.Transform.Basis.X;
 
         instance.Position = right;
-        GD.Print("instance of DamageNumber: " + instance);
         AddChild(instance);
-        GD.Print("Added instance of DamageNumber");
     }
 
 
     void Logout()
     {
         NetworkClient.Logout();
+    }
+    void OnQuestsProgressUpdate()
+    {
+        CallDeferred("OnQuestsProgressUpdateDeferred");
+    }
+    void OnQuestsProgressUpdateDeferred()
+    {
+        for(int i = 0; i < 999; ++i)
+        {
+            SC_QuestsUpdatePacket current;
+            if(!NetworkClient.QuestProgressUpdates.TryTake(out current)) { return; }
+
+            for (int j = 0; j < current.QuestUpdates.Length; ++j)
+            {
+                var currentQuestUpdate = current.QuestUpdates[j];
+                if(currentQuestUpdate.Id == QuestId.Unknown) { continue; }
+                GD.Print("QUEST UPDATE FOR: " + currentQuestUpdate.Id.ToString() + " PROGRESS[0].Value: " + currentQuestUpdate.ProgressData[0].Value);
+
+                _questUi.AddOrUpdateQuest(currentQuestUpdate);
+            }
+        }
     }
 }

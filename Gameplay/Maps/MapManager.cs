@@ -147,13 +147,10 @@ public partial class MapManager : Node
         {
             EnemyData c;
             if(!NetworkClient.NewestEnemiesOnMapUpdate.TryTake(out c)) {
-                GD.Print("NewestEnemyUpdate trytake");
                 return; 
             }
 
-            GD.Print("Took Enemy out of update");
             if(c.EnemyType == EEnemyType.Unknown) { 
-                GD.Print("Skipping unknown enemy type");
                 continue; 
             }
 
@@ -164,7 +161,6 @@ public partial class MapManager : Node
 
             EnemyInstances.Add(c.Id, enemyInstance);
             GetNode("Enemies").AddChild(enemyInstance);
-            GD.Print("Add enemy as child");
             enemyInstance.Position = c.PositionOnMap.ToVector3();
         }
     }
