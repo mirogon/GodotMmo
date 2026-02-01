@@ -68,6 +68,9 @@ public class NetworkClient
     public static Action QuestsProgressUpdate;
     public static ConcurrentBag<SC_QuestsUpdatePacket> QuestProgressUpdates = new();
 
+    public static Action NpcUpdate;
+    public static ConcurrentBag<SC_NpcUpdatePacket> NpcUpdates = new();
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -123,6 +126,7 @@ public class NetworkClient
                 case EPacketType.SC_MonsterAnimationUpdate: Handle_SC_MonsterAnimationUpdate(dataReader); break;
                 case EPacketType.SC_DamageHitsUpdate: Handle_SC_DamageHitsUpdate(dataReader); break;
                 case EPacketType.SC_QuestsUpdate: Handle_SC_QuestsUpdate(dataReader); break;
+                case EPacketType.SC_NpcUpdate: Handle_SC_NpcUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -423,4 +427,11 @@ public class NetworkClient
         QuestProgressUpdates.Add(packet);
         QuestsProgressUpdate?.Invoke();
     }
+    static void Handle_SC_NpcUpdate(NetPacketReader dataReader)
+    {
+        SC_NpcUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_NpcUpdatePacket>(dataReader);
+        NpcUpdates.Add(packet);
+        NpcUpdate?.Invoke();
+    }
+
 }

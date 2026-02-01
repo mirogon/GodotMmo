@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Linq;
 
 public partial class QuestUi : Control
 {
@@ -15,17 +16,17 @@ public partial class QuestUi : Control
     }
     public void AddOrUpdateQuest(QuestData quest)
     {
-        QuestInfo info = QuestInfo.QuestTypeToQuestInfoDict[quest.Id];
+        Quest info = Quest.QuestIdToQuest(quest.Id, quest.ProgressData.ToList());
 
         if (_questInstances.ContainsKey(quest.Id))
         {
             var scene = _questInstances[quest.Id];
-            scene.SetData(info.Name, info.TaskDescriptions[0]);
+            scene.SetData(info.GetName(), info.GetTaskDescriptions()[0]);
         }
         else
         {
             var sceneInstance = _singleQuestUiScene.Instantiate() as SingleQuestUi;
-            sceneInstance.SetData(info.Name, info.TaskDescriptions[0]);
+            sceneInstance.SetData(info.GetName(), info.GetTaskDescriptions()[0]);
             _scrollContainer.AddChild(sceneInstance);
 
             if (!_questInstances.ContainsKey(quest.Id))

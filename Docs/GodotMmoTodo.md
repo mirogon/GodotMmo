@@ -1,8 +1,7 @@
 # Current Task
-- Refactor: Get rid of QuestInfo and put everything into Quest
 
 # Current Macrotask
-- Quest System
+- NPC Box that you can right click for a menu
 
 # Later
 - CS_SetTargetPacket
@@ -289,3 +288,6 @@ Model Clothes
 - Give player XP on quest completion
 - First Ugly Quest UI
 - Send quests after selecting char
+- Refactor: Get rid of QuestInfo and put everything into Quest
+- Quest.GetTaskDescriptions that is implemented by each quest
+- Client shows completed if the quest is completed

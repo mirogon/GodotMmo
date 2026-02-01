@@ -17,6 +17,8 @@ public partial class MapManager : Node
     public static PackedScene InfoWindowScreen = ResourceLoader.Load<PackedScene>("res://Gameplay/InfoWindow.tscn");
     public static PackedScene SelectCharacterScene = ResourceLoader.Load<PackedScene>("res://Gameplay/CharacterScreen/SelectCharacterScene.tscn");
 
+    public PackedScene NpcScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Npc/Npc.tscn");
+
     Dictionary<UInt64, PeerPlayer3D> _peerInstances = new();
 
     public List<MongoMapItem> KnownItemsOnMap = new();
@@ -36,6 +38,7 @@ public partial class MapManager : Node
         NetworkClient.CharacterAnimationUpdate += OnCharacterAnimationUpdate;
         NetworkClient.CharacterLoggedOut += OnCharacterLoggedOut;
         NetworkClient.MonsterAnimationUpdate += OnMonsterAnimationUpdate;
+        NetworkClient.NpcUpdate += OnNpcUpdate;
     }
 
 
@@ -260,6 +263,23 @@ public partial class MapManager : Node
             if (!EnemyInstances.ContainsKey(update.MonsterId)) { continue; }
             var enemyInstance = EnemyInstances[update.MonsterId];
             enemyInstance.PlayAnimation(update.AnimationType);
+        }
+    }
+    void OnNpcUpdate()
+    {
+        CallDeferred("OnNpcUpdateDeferred");
+    }
+    void OnNpcUpdateDeferred()
+    {
+        for(int i = 0; i < 999; ++i)
+        {
+            SC_NpcUpdatePacket current;
+            if(!NetworkClient.NpcUpdates.TryTake(out current)) { return; }
+
+            var npcInstance = NpcScene.Instantiate() as Npc;
+            npcInstance.Init(current.NpcType);
+            AddChild(npcInstance);
+            npcInstance.GlobalPosition = current.PositionOnMap.ToVector3();
         }
     }
 }

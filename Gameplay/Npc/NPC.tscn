@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://dogs2bgxgs4ql"]
+
+[ext_resource type="Script" uid="uid://bvj52bfs5ab03" path="res://Gameplay/Npc/Npc.cs" id="1_mbrpj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kxm4x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mbrpj"]
+albedo_color = Color(0.5146318, 0.6893103, 0.7688569, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6lf1l"]
+
+[node name="Npc" type="Node3D"]
+script = ExtResource("1_mbrpj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_kxm4x")
+surface_material_override/0 = SubResource("StandardMaterial3D_mbrpj")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_6lf1l")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+
+[node name="Label" type="Label" parent="SubViewport"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Name
+"
