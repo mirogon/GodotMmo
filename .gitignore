@@ -3,7 +3,7 @@
 /android/
 .vs/
 Build/
-Assets/Character/
+Assets/
 
 *.exe
 *.pck
