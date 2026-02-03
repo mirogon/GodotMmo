@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c57s4gqeyy3nu"]
 
 [ext_resource type="Script" uid="uid://bfnunfswq0hbf" path="res://Gameplay/Items/ItemOnGround.cs" id="1_aht62"]
-[ext_resource type="PackedScene" uid="uid://cvw5nxexwqr8x" path="res://Assets/Weapons/Katana/Model/katana_scaled.tscn" id="2_xxbkp"]
+[ext_resource type="PackedScene" uid="uid://dsqa6knd2670k" path="res://Assets/Weapons/Katana/Model/KatanaFbx.tscn" id="2_xxbkp"]
 
 [sub_resource type="TextMesh" id="TextMesh_kr8x0"]
 text = "Sword"
@@ -16,4 +16,4 @@ visible = false
 mesh = SubResource("TextMesh_kr8x0")
 
 [node name="KatanaScaled" parent="." instance=ExtResource("2_xxbkp")]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.01898995, -0.43927944)
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.40733743, 0.01898995, 0.0056419373)

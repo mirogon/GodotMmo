@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dogs2bgxgs4ql"]
+[gd_scene load_steps=7 format=3 uid="uid://dogs2bgxgs4ql"]
 
 [ext_resource type="Script" uid="uid://bvj52bfs5ab03" path="res://Gameplay/Npc/Npc.cs" id="1_mbrpj"]
+[ext_resource type="PackedScene" uid="uid://i37ia5bgkq1s" path="res://Gameplay/Npc/NpcTitle.tscn" id="2_6vdhr"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_kxm4x"]
 
@@ -8,6 +9,9 @@
 albedo_color = Color(0.5146318, 0.6893103, 0.7688569, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6lf1l"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_t07eo"]
+viewport_path = NodePath("SubViewport")
 
 [node name="Npc" type="Node3D"]
 script = ExtResource("1_mbrpj")
@@ -24,9 +28,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_6lf1l")
 
 [node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
 
-[node name="Label" type="Label" parent="SubViewport"]
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Name
-"
+[node name="NpcTitle" parent="SubViewport" instance=ExtResource("2_6vdhr")]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 1
+texture = SubResource("ViewportTexture_t07eo")

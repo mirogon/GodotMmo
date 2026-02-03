@@ -219,6 +219,12 @@ public class NetworkClient
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_LogoutPacket)));
     }
 
+    public static void AcceptQuest(QuestId id)
+    {
+        CS_AcceptQuestPacket packet = new(LoginClient.NewestSessionId, id);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_AcceptQuestPacket)));
+    }
+
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         SC_RegisterPacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_RegisterPacket>(packetReader);
@@ -423,6 +429,7 @@ public class NetworkClient
     }
     static void Handle_SC_QuestsUpdate(NetPacketReader dataReader)
     {
+        GD.Print("SC_QuestUpdate");
         SC_QuestsUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_QuestsUpdatePacket>(dataReader);
         QuestProgressUpdates.Add(packet);
         QuestsProgressUpdate?.Invoke();

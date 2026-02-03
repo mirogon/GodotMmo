@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://dc16skv6271dg"]
 
-[ext_resource type="PackedScene" uid="uid://bppf7jebpki3w" path="res://Assets/Mobs/Rat/Model/Rat.fbx" id="1_wrmbj"]
+[ext_resource type="PackedScene" uid="uid://bivb551d7xikt" path="res://Assets/Mobs/Rat/Model/Rat.fbx" id="1_wrmbj"]
 [ext_resource type="Script" uid="uid://yftf1as2n8s1" path="res://Gameplay/Enemies/EnemyFbx.cs" id="2_r04jg"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l550g"]
@@ -22,7 +22,7 @@ animation = &"RatArmature|Rat_Walk"
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_wrmbj"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wrmbj"]
-graph_offset = Vector2(-800.04156, 63.10196)
+graph_offset = Vector2(-656.65045, -61.468994)
 nodes/output/position = Vector2(460, 140)
 nodes/Idle/node = SubResource("AnimationNodeAnimation_wrmbj")
 nodes/Idle/position = Vector2(-680, -40)
@@ -44,23 +44,28 @@ node_connections = [&"output", 0, &"AttackOneShot", &"AttackOneShot", 0, &"IdleM
 script = ExtResource("2_r04jg")
 
 [node name="Skeleton3D" parent="RatArmature" index="0"]
+bones/0/position = Vector3(0, 0, 0)
 bones/1/rotation = Quaternion(0.50840586, -9.473779e-17, -9.47378e-17, 0.8611176)
 bones/1/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/2/position = Vector3(-3.5407613e-25, 0.010526184, -3.1457031e-10)
-bones/2/rotation = Quaternion(0.12693375, 0.011244056, -0.028415576, 0.99144036)
+bones/2/rotation = Quaternion(0.12627357, -0.042611163, 0.10772876, 0.9852075)
 bones/2/scale = Vector3(1, 0.9999999, 1)
 bones/3/position = Vector3(2.7996286e-25, 0.0067421976, -3.2088074e-10)
 bones/3/rotation = Quaternion(0.2019639, 2.8967928e-17, 3.4321062e-18, 0.979393)
 bones/3/scale = Vector3(1, 1.0000001, 1.0000001)
+bones/5/position = Vector3(0.002925597, 0.01043514, 0.0051378286)
 bones/5/rotation = Quaternion(0.7242902, 0.09258085, 0.023843575, 0.68283534)
 bones/5/scale = Vector3(1, 0.99999994, 1)
+bones/7/position = Vector3(-0.002925597, 0.01043514, 0.0051378286)
 bones/7/rotation = Quaternion(0.7242902, -0.09258085, -0.023843575, 0.68283534)
 bones/7/scale = Vector3(1, 0.99999994, 1)
 bones/9/position = Vector3(4.6132307e-19, -0.006562603, -0.0027819527)
 bones/9/rotation = Quaternion(0.96927124, 4.716154e-19, -1.3397873e-16, -0.24599455)
 bones/9/scale = Vector3(1, 1, 1.0000008)
-bones/11/rotation = Quaternion(0.99994236, 0, 0, 0.010736194)
-bones/13/rotation = Quaternion(0.99994236, 0, 0, 0.010736194)
+bones/11/rotation = Quaternion(0.99994236, 0, 0, 0.010736328)
+bones/11/scale = Vector3(1, 0.99999994, 0.99999994)
+bones/13/rotation = Quaternion(0.99994236, 0, 0, 0.010736328)
+bones/13/scale = Vector3(1, 0.99999994, 0.99999994)
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 tree_root = SubResource("AnimationNodeBlendTree_wrmbj")

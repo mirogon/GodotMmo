@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 public partial class Player : Node3D
 {
@@ -27,6 +28,8 @@ public partial class Player : Node3D
 
     PackedScene _targetIndicatorScene = ResourceLoader.Load<PackedScene>("res://Gameplay/TargetIndicator.tscn");
     Node3D _targetIndicator = null;
+
+    PackedScene _npcUiScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Npc/NpcUi/NpcUi.tscn");
 
     QuestUi _questUi;
     public override void _Ready()
@@ -149,7 +152,7 @@ public partial class Player : Node3D
 
         if (Input.IsActionJustPressed("RightClick"))
         {
-            HandleTargetAcquisition();
+            HandleRightClick();
         }
     }
     void WeaponAttack()
@@ -159,7 +162,7 @@ public partial class Player : Node3D
         _attackAnimationEvent.Restart();
     }
 
-    void HandleTargetAcquisition()
+    void HandleRightClick()
     {
         var cam = GetViewport().GetCamera3D();
         var result = Utility.Camera3DRaycast(cam);
@@ -171,6 +174,10 @@ public partial class Player : Node3D
                 Node3D parent = area.GetParent() as Node3D;
                 if(parent is GameEntity ge)
                 {
+                    if(ge is Npc npc) {
+                        OpenNpcUi(npc);
+                        return;
+                    }
                     SetTargetIndicator(ge);
                     if(ge is Enemy enemy)
                     {
@@ -188,6 +195,13 @@ public partial class Player : Node3D
         else
         {
         }
+    }
+    void OpenNpcUi(Npc npc)
+    {
+        var npcUiInstance = _npcUiScene.Instantiate() as NpcUi;
+        var info = NpcInfo.NpcTypeToNpcInfoDict[npc.NpcType];
+        npcUiInstance.Init(info.Name, "", info.AvailableQuests);
+        AddChild(npcUiInstance);
     }
 
     void SetTargetIndicator(Node3D target)
@@ -343,6 +357,7 @@ public partial class Player : Node3D
     }
     void OnQuestsProgressUpdateDeferred()
     {
+        GD.Print("OnQuestProgressUpdateDeferred");
         for(int i = 0; i < 999; ++i)
         {
             SC_QuestsUpdatePacket current;
