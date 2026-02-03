@@ -1,7 +1,7 @@
 # Current Task
+- Add bool: Finished to QuestData
 
 # Current Macrotask
-- NPC Box that you can right click for a menu
 
 # Later
 - CS_SetTargetPacket
@@ -291,3 +291,6 @@ Model Clothes
 - Refactor: Get rid of QuestInfo and put everything into Quest
 - Quest.GetTaskDescriptions that is implemented by each quest
 - Client shows completed if the quest is completed
+- NPC Box with that you can right click for a menu
+- MongoCharacterQuestStatus has a List of ActiveQuests, not an array
+- Support for as many quests as you want (Server sends X amount of quests correctly, etc.)
