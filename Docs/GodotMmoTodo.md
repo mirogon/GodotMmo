@@ -1,5 +1,4 @@
 # Current Task
-- Add bool: Finished to QuestData
 
 # Current Macrotask
 
@@ -294,3 +293,10 @@ Model Clothes
 - NPC Box with that you can right click for a menu
 - MongoCharacterQuestStatus has a List of ActiveQuests, not an array
 - Support for as many quests as you want (Server sends X amount of quests correctly, etc.)
+- Fix: Attacking enemies at the same time/after another bug
+Mount
+1. Make unturned level horse mesh
+2. Create a rig 
+3. Weight the rig to the model
+4. Animate Idle, Run
+- Make low poly character

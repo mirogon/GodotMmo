@@ -357,7 +357,6 @@ public partial class Player : Node3D
     }
     void OnQuestsProgressUpdateDeferred()
     {
-        GD.Print("OnQuestProgressUpdateDeferred");
         for(int i = 0; i < 999; ++i)
         {
             SC_QuestsUpdatePacket current;
@@ -367,8 +366,6 @@ public partial class Player : Node3D
             {
                 var currentQuestUpdate = current.QuestUpdates[j];
                 if(currentQuestUpdate.Id == QuestId.Unknown) { continue; }
-                GD.Print("QUEST UPDATE FOR: " + currentQuestUpdate.Id.ToString() + " PROGRESS[0].Value: " + currentQuestUpdate.ProgressData[0].Value);
-
                 _questUi.AddOrUpdateQuest(currentQuestUpdate);
             }
         }

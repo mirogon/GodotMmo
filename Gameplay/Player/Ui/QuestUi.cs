@@ -21,12 +21,13 @@ public partial class QuestUi : Control
         if (_questInstances.ContainsKey(quest.Id))
         {
             var scene = _questInstances[quest.Id];
-            scene.SetData(info.GetName(), info.GetTaskDescriptions()[0]);
+            scene.SetData(info.GetName(), info.GetTaskDescriptions()[0], quest.Finished);
         }
         else
         {
             var sceneInstance = _singleQuestUiScene.Instantiate() as SingleQuestUi;
-            sceneInstance.SetData(info.GetName(), info.GetTaskDescriptions()[0]);
+            sceneInstance.SetData(info.GetName(), info.GetTaskDescriptions()[0], quest.Finished);
+            sceneInstance.CompletedQuest += () => { OnCompletedQuest(sceneInstance, quest.Id); };
             _scrollContainer.AddChild(sceneInstance);
 
             if (!_questInstances.ContainsKey(quest.Id))
@@ -38,5 +39,12 @@ public partial class QuestUi : Control
                 _questInstances[quest.Id] = sceneInstance;
             }
         }
+    }
+
+    void OnCompletedQuest(SingleQuestUi completedInstance, QuestId id)
+    {
+        _scrollContainer.RemoveChild(completedInstance);
+        completedInstance.QueueFree();
+        NetworkClient.CompleteQuest(id);
     }
 }

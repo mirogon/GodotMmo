@@ -45,7 +45,7 @@ public class NetworkClient
     public static ConcurrentBag<SC_MonsterPositionUpdatePacket> MonsterPosUpdates = new();
 
     public static Action MonstersHealthUpdate;
-    public static ConcurrentQueue<SC_MonstersHealthUpdate> MonstersHealthUpdateQueue = new();
+    public static ConcurrentBag<SC_MonstersHealthUpdate> MonstersHealthUpdateQueue = new();
 
     public static Action<UInt64> EquippedItemsUpdate;
 
@@ -224,6 +224,11 @@ public class NetworkClient
         CS_AcceptQuestPacket packet = new(LoginClient.NewestSessionId, id);
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_AcceptQuestPacket)));
     }
+    public static void CompleteQuest(QuestId id)
+    {
+        CS_CompleteQuestPacket packet = new(LoginClient.NewestSessionId, id);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CompleteQuestPacket)));
+    }
 
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
@@ -371,7 +376,7 @@ public class NetworkClient
     static void HandleSC_MonstersHealthUpdate(NetPacketReader dataReader)
     {
         SC_MonstersHealthUpdate packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_MonstersHealthUpdate>(dataReader);
-        MonstersHealthUpdateQueue.Enqueue(packet);
+        MonstersHealthUpdateQueue.Add(packet);
         MonstersHealthUpdate?.Invoke();
     }
 
@@ -429,7 +434,6 @@ public class NetworkClient
     }
     static void Handle_SC_QuestsUpdate(NetPacketReader dataReader)
     {
-        GD.Print("SC_QuestUpdate");
         SC_QuestsUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_QuestsUpdatePacket>(dataReader);
         QuestProgressUpdates.Add(packet);
         QuestsProgressUpdate?.Invoke();

@@ -5,3 +5,16 @@ Materials/Textures:
 	1. Poly paint only
 	2. Color only Textures 
 	3. PBR Textures
+
+
+
+# OTHER
+Options:
+1. Find an artist at some point
+    - IN ANY CASE, BE 100% HONEST, MAKE AN ENVIRONMENT WHERE WE ARE BRUTALLY HONEST WITH EACH OTHER AND CAN TELL EACH OTHER WE DONT WANT TO WORK ON IT ANYMORE, ETC
+    1.1 Find an artist now
+    1.2 Make everything with boxes, simple shapes and find an artist later
+2. Do everything myself
+    2.1 Use realistic models and make realistic styled assets myself
+
+Answer: I honestly believe I should make a functional game completely by myself with own and free realistic models

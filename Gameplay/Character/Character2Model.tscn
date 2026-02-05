@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://cu5oqh1nes7e5"]
+
+[ext_resource type="PackedScene" uid="uid://0ev5yxpu3b4i" path="res://Assets/Character/Warrior/Models/Character2.fbx" id="1_m0tem"]
+[ext_resource type="Script" uid="uid://hxik11hvjgnc" path="res://Gameplay/Character/CharacterModel.cs" id="2_v0y8g"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2tdma"]
+animation = &"Character2|Character2_Attack"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_lfveg"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d0lu6"]
+animation = &"Character2|Character2_Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jimtn"]
+animation = &"Character2|Character2_Run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_dljq1"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_d0lu6")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_jimtn")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_d0lu6"]
+graph_offset = Vector2(-437.53162, 85.07675)
+nodes/IdleWalkSpace/node = SubResource("AnimationNodeBlendSpace1D_dljq1")
+nodes/IdleWalkSpace/position = Vector2(-320, 140)
+nodes/Attack/node = SubResource("AnimationNodeOneShot_lfveg")
+nodes/Attack/position = Vector2(60, 200)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_2tdma")
+nodes/Animation/position = Vector2(-300, 360)
+node_connections = [&"output", 0, &"Attack", &"Attack", 0, &"IdleWalkSpace", &"Attack", 1, &"Animation"]
+
+[node name="Character2" instance=ExtResource("1_m0tem")]
+script = ExtResource("2_v0y8g")
+
+[node name="Skeleton3D" parent="Character2" index="0"]
+bones/2/position = Vector3(0.0025661439, 0.0060441354, 6.118164e-10)
+bones/2/rotation = Quaternion(0.7071069, 4.3296364e-17, -0.70710665, 4.329638e-17)
+bones/4/position = Vector3(-0.0025661439, 0.0060441354, -6.118164e-10)
+bones/4/rotation = Quaternion(0.7071069, 4.3296364e-17, -0.70710665, 4.329638e-17)
+bones/5/position = Vector3(0, 0.005433749, 0)
+bones/5/rotation = Quaternion(0.50000006, -0.49999994, -0.49999994, -0.50000006)
+bones/7/position = Vector3(0, 0.006494654, 0)
+bones/9/rotation = Quaternion(0.7071068, 4.3296377e-17, -0.7071067, 4.3296384e-17)
+bones/11/rotation = Quaternion(0.7071068, 4.3296377e-17, -0.7071067, 4.3296384e-17)
+
+[node name="WeaponAttachment" type="BoneAttachment3D" parent="Character2/Skeleton3D" index="1"]
+transform = Transform3D(0.9999999, 1.19209254e-07, 1.2246062e-16, 1.1920923e-07, -0.9999997, 1.19209275e-07, 1.433331e-14, -1.1920926e-07, -0.9999998, -0.0025661439, -9.785591e-10, 0.00820875)
+bone_name = "WeaponBone"
+bone_idx = 5
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource("AnimationNodeBlendTree_d0lu6")
+anim_player = NodePath("../AnimationPlayer")
+parameters/IdleWalkSpace/blend_position = -1.0
+parameters/Attack/active = false
+parameters/Attack/internal_active = false
+parameters/Attack/request = 0

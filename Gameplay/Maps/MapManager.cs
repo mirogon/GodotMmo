@@ -188,8 +188,14 @@ public partial class MapManager : Node
     }
     void OnMonstersHealthUpdate()
     {
+        GD.Print("OnMonsterHealthUpdate, numHealthUpdates: " + NetworkClient.MonstersHealthUpdateQueue.Count);
+
+
         SC_MonstersHealthUpdate update;
-        NetworkClient.MonstersHealthUpdateQueue.TryDequeue(out update);
+        NetworkClient.MonstersHealthUpdateQueue.TryTake(out update);
+
+        int numHealthUpdates = update.HealthUpdates.Count(hu => hu.Id != Guid.Empty);
+        GD.Print("OnMonsterHealthUpdate, ActualHealthUpdates: " + numHealthUpdates);
 
         for(int i = 0; i < update.HealthUpdates.Length; ++i)
         {

@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqwyvxqdoguk1"]
+[gd_scene load_steps=3 format=3 uid="uid://cqwyvxqdoguk1"]
 
 [ext_resource type="Script" uid="uid://g62keoull271" path="res://Gameplay/Player/Ui/SingleQuestUi.cs" id="1_ujvsw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ujvsw"]
 
 [node name="SingleQuestUi" type="Control"]
 custom_minimum_size = Vector2(50, 55)
@@ -15,20 +17,39 @@ grow_vertical = 2
 script = ExtResource("1_ujvsw")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -65.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ujvsw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel"]
 layout_mode = 0
 offset_right = 173.0
 offset_bottom = 53.0
 
-[node name="ScrollContainer" type="VBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="Name" type="Label" parent="MarginContainer/ScrollContainer"]
+[node name="Name" type="Label" parent="MarginContainer/Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96800005, 1, 0.36, 1)
 theme_override_font_sizes/font_size = 16
 text = "Name"
 
-[node name="TaskDescription" type="Label" parent="MarginContainer/ScrollContainer"]
+[node name="TaskDescription" type="Label" parent="MarginContainer/Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "- Task Description"
+
+[node name="CompleteButton" type="Button" parent="MarginContainer/Panel"]
+layout_mode = 0
+offset_left = 169.0
+offset_top = 15.0
+offset_right = 233.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 12
+text = "Complete"
