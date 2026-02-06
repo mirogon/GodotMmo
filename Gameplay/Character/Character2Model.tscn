@@ -35,24 +35,27 @@ script = ExtResource("2_v0y8g")
 
 [node name="Skeleton3D" parent="Character2" index="0"]
 bones/2/position = Vector3(0.0025661439, 0.0060441354, 6.118164e-10)
-bones/2/rotation = Quaternion(0.7071069, 4.3296364e-17, -0.70710665, 4.329638e-17)
+bones/2/rotation = Quaternion(0.68597144, 0.17159021, -0.6859714, -0.1715903)
 bones/4/position = Vector3(-0.0025661439, 0.0060441354, -6.118164e-10)
-bones/4/rotation = Quaternion(0.7071069, 4.3296364e-17, -0.70710665, 4.329638e-17)
+bones/4/rotation = Quaternion(0.6891773, -0.15822372, -0.6891772, 0.15822363)
 bones/5/position = Vector3(0, 0.005433749, 0)
-bones/5/rotation = Quaternion(0.50000006, -0.49999994, -0.49999994, -0.50000006)
+bones/5/rotation = Quaternion(0.5000001, -0.5, -0.5, -0.50000006)
 bones/7/position = Vector3(0, 0.006494654, 0)
-bones/9/rotation = Quaternion(0.7071068, 4.3296377e-17, -0.7071067, 4.3296384e-17)
-bones/11/rotation = Quaternion(0.7071068, 4.3296377e-17, -0.7071067, 4.3296384e-17)
+bones/9/rotation = Quaternion(0.6990265, -0.106592394, -0.6990265, 0.106592245)
+bones/11/rotation = Quaternion(0.7005595, 0.09600246, -0.7005595, -0.096002385)
 
-[node name="WeaponAttachment" type="BoneAttachment3D" parent="Character2/Skeleton3D" index="1"]
-transform = Transform3D(0.9999999, 1.19209254e-07, 1.2246062e-16, 1.1920923e-07, -0.9999997, 1.19209275e-07, 1.433331e-14, -1.1920926e-07, -0.9999998, -0.0025661439, -9.785591e-10, 0.00820875)
+[node name="WeaponBoneAttachment" type="BoneAttachment3D" parent="Character2/Skeleton3D" index="1"]
+transform = Transform3D(0.9999999, 3.9335748e-07, -4.5018982e-08, 3.5975097e-07, -0.89986086, -0.43617642, -1.5466475e-07, 0.43617636, -0.8998609, -0.002566144, -0.0023700746, 0.008752879)
 bone_name = "WeaponBone"
 bone_idx = 5
+
+[node name="WeaponAttachment" type="Node3D" parent="Character2/Skeleton3D/WeaponBoneAttachment" index="0"]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 tree_root = SubResource("AnimationNodeBlendTree_d0lu6")
 anim_player = NodePath("../AnimationPlayer")
-parameters/IdleWalkSpace/blend_position = -1.0
+parameters/IdleWalkSpace/blend_position = 0.6333333
 parameters/Attack/active = false
 parameters/Attack/internal_active = false
 parameters/Attack/request = 0

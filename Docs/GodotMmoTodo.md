@@ -1,6 +1,8 @@
 # Current Task
+- Add Horse riding animation to player animation tree with a parameter
 
 # Current Macrotask
+- Mount
 
 # Later
 - CS_SetTargetPacket
@@ -300,3 +302,5 @@ Mount
 3. Weight the rig to the model
 4. Animate Idle, Run
 - Make low poly character
+- Import mount into Godot, setup animations, animationtree, etc.
+- New Character mount ride animation

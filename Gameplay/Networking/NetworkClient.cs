@@ -229,6 +229,11 @@ public class NetworkClient
         CS_CompleteQuestPacket packet = new(LoginClient.NewestSessionId, id);
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_CompleteQuestPacket)));
     }
+    public static void MountUp(MountType type)
+    {
+        CS_Mount packet = new(LoginClient.NewestSessionId, type);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_Mount));
+    }
 
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {

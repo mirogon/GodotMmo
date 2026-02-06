@@ -57,7 +57,7 @@ public partial class Player : Node3D
         NetworkClient.DamageHitsUpdate += OnDamageHitsUpdate;
         NetworkClient.QuestsProgressUpdate += OnQuestsProgressUpdate;
 
-        _attackAnimationEvent = new AnimationEvent(0.8f);
+        _attackAnimationEvent = new AnimationEvent(0.5f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
 
         OnItemsUpdateDeferred();
@@ -154,7 +154,13 @@ public partial class Player : Node3D
         {
             HandleRightClick();
         }
+        if (Input.IsActionJustPressed("Mount"))
+        {
+            HandleMount();
+        }
     }
+
+
     void WeaponAttack()
     {
         _model.PlayAnimation(CharacterAnimationType.WeaponAttack);
@@ -250,6 +256,10 @@ public partial class Player : Node3D
 
         }
         NetworkClient.PickUpItem(closestItem.Id);
+    }
+    void HandleMount()
+    {
+        NetworkClient.MountUp(MountType.Horse);
     }
 
     void TestEquipItem()

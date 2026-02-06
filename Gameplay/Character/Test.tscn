@@ -1,3 +1,7 @@
-[gd_scene format=3 uid="uid://d1sjd7lvrwxbt"]
+[gd_scene load_steps=2 format=3 uid="uid://d1sjd7lvrwxbt"]
+
+[ext_resource type="PackedScene" uid="uid://0ev5yxpu3b4i" path="res://Assets/Character/Warrior/Models/Character2.fbx" id="1_vof62"]
 
 [node name="Test" type="Node3D"]
+
+[node name="Character2" parent="." instance=ExtResource("1_vof62")]

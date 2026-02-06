@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://cciwrb7c8q2hd"]
+
+[ext_resource type="PackedScene" uid="uid://7io0k35odb6g" path="res://Assets/Mounts/Horse2/Horse.fbx" id="1_us1cp"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t1k3k"]
+animation = &"Horse2Armature|Horse2_Idle"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_3vx4n"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_emdih"]
+animation = &"Horse2Armature|Horse2_Run"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_v7sjy"]
+graph_offset = Vector2(-256.66522, 12.208511)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_t1k3k")
+nodes/Idle/position = Vector2(-240, 140)
+nodes/IdleRunBlend/node = SubResource("AnimationNodeBlend2_3vx4n")
+nodes/IdleRunBlend/position = Vector2(100, 140)
+nodes/Run/node = SubResource("AnimationNodeAnimation_emdih")
+nodes/Run/position = Vector2(-280, 340)
+node_connections = [&"output", 0, &"IdleRunBlend", &"IdleRunBlend", 0, &"Idle", &"IdleRunBlend", 1, &"Run"]
+
+[node name="Horse" instance=ExtResource("1_us1cp")]
+
+[node name="Skeleton3D" parent="Horse2Armature" index="0"]
+bones/1/position = Vector3(-0.001395423, -0.00010754471, 0.004819801)
+bones/1/rotation = Quaternion(1, -4.6227604e-24, 7.54979e-08, 6.123032e-17)
+bones/1/scale = Vector3(1, 1, 1)
+bones/3/position = Vector3(0.001395423, -0.00010754471, 0.004819801)
+bones/3/rotation = Quaternion(1, -4.6227604e-24, -7.54979e-08, -6.123032e-17)
+bones/5/position = Vector3(0.001395423, -0.00010754471, -0.004819801)
+bones/5/rotation = Quaternion(1, 4.6227604e-24, -7.54979e-08, 6.123032e-17)
+bones/5/scale = Vector3(1, 1, 1)
+bones/7/position = Vector3(-0.001395423, -0.00010754471, -0.004819801)
+bones/7/rotation = Quaternion(1, 4.6227604e-24, 7.54979e-08, -6.123032e-17)
+bones/9/rotation = Quaternion(0.8494927, 0.03162275, 0.051250923, 0.5241522)
+bones/9/scale = Vector3(1, 0.99999994, 0.9999999)
+bones/11/position = Vector3(0, 0.004887724, -0.007073246)
+bones/11/rotation = Quaternion(1, 0, -7.54979e-08, 0)
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource("AnimationNodeBlendTree_v7sjy")
+anim_player = NodePath("../AnimationPlayer")
+parameters/IdleRunBlend/blend_amount = 0.0
