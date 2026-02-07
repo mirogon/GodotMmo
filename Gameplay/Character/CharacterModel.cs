@@ -41,8 +41,14 @@ public partial class CharacterModel : Node3D
         }
         else if (animType == CharacterAnimationType.Walk)
         {
+            _animationTree.Set("parameters/MountedBlend/blend_amount", 0.0f);
             _animationTree.Set("parameters/IdleWalkSpace/blend_position", 1.0f);
         }
+        else if(animType == CharacterAnimationType.RideHorse)
+        {
+            _animationTree.Set("parameters/MountedBlend/blend_amount", 1.0f);
+        }
+
         else if (animType == CharacterAnimationType.WeaponAttack)
         {
             _animationTree.Set("parameters/Attack/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);

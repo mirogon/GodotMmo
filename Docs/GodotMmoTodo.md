@@ -1,5 +1,5 @@
-# Current Task
-- Add Horse riding animation to player animation tree with a parameter
+# Current Task#
+- Fix: Riding horse anim not really played on peer
 
 # Current Macrotask
 - Mount
@@ -304,3 +304,6 @@ Mount
 - Make low poly character
 - Import mount into Godot, setup animations, animationtree, etc.
 - New Character mount ride animation
+- Fix: Character walk anim
+- Able to walk around on the mount
+- Update PeerPlayer, replicate riding horse, etc.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cu5oqh1nes7e5"]
+[gd_scene load_steps=11 format=3 uid="uid://cu5oqh1nes7e5"]
 
 [ext_resource type="PackedScene" uid="uid://0ev5yxpu3b4i" path="res://Assets/Character/Warrior/Models/Character2.fbx" id="1_m0tem"]
 [ext_resource type="Script" uid="uid://hxik11hvjgnc" path="res://Gameplay/Character/CharacterModel.cs" id="2_v0y8g"]
@@ -20,32 +20,41 @@ blend_point_0/pos = -1.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_jimtn")
 blend_point_1/pos = 1.0
 
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_v0y8g"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w3i0w"]
+animation = &"Character2|Character2_RideHorse"
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_d0lu6"]
-graph_offset = Vector2(-437.53162, 85.07675)
+graph_offset = Vector2(-582.8345, 45.11609)
 nodes/IdleWalkSpace/node = SubResource("AnimationNodeBlendSpace1D_dljq1")
-nodes/IdleWalkSpace/position = Vector2(-320, 140)
+nodes/IdleWalkSpace/position = Vector2(-460, 80)
 nodes/Attack/node = SubResource("AnimationNodeOneShot_lfveg")
 nodes/Attack/position = Vector2(60, 200)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_2tdma")
-nodes/Animation/position = Vector2(-300, 360)
-node_connections = [&"output", 0, &"Attack", &"Attack", 0, &"IdleWalkSpace", &"Attack", 1, &"Animation"]
+nodes/Animation/position = Vector2(-280, 520)
+nodes/MountedBlend/node = SubResource("AnimationNodeBlend2_v0y8g")
+nodes/MountedBlend/position = Vector2(-220, 200)
+nodes/RideHorse/node = SubResource("AnimationNodeAnimation_w3i0w")
+nodes/RideHorse/position = Vector2(-600, 300)
+node_connections = [&"output", 0, &"Attack", &"Attack", 0, &"MountedBlend", &"Attack", 1, &"Animation", &"MountedBlend", 0, &"IdleWalkSpace", &"MountedBlend", 1, &"RideHorse"]
 
 [node name="Character2" instance=ExtResource("1_m0tem")]
 script = ExtResource("2_v0y8g")
 
 [node name="Skeleton3D" parent="Character2" index="0"]
 bones/2/position = Vector3(0.0025661439, 0.0060441354, 6.118164e-10)
-bones/2/rotation = Quaternion(0.68597144, 0.17159021, -0.6859714, -0.1715903)
+bones/2/rotation = Quaternion(0.68842727, 0.16145588, -0.68842715, -0.16145597)
 bones/4/position = Vector3(-0.0025661439, 0.0060441354, -6.118164e-10)
-bones/4/rotation = Quaternion(0.6891773, -0.15822372, -0.6891772, 0.15822363)
+bones/4/rotation = Quaternion(0.6914629, -0.14791618, -0.6914628, 0.14791611)
 bones/5/position = Vector3(0, 0.005433749, 0)
 bones/5/rotation = Quaternion(0.5000001, -0.5, -0.5, -0.50000006)
 bones/7/position = Vector3(0, 0.006494654, 0)
-bones/9/rotation = Quaternion(0.6990265, -0.106592394, -0.6990265, 0.106592245)
-bones/11/rotation = Quaternion(0.7005595, 0.09600246, -0.7005595, -0.096002385)
+bones/9/rotation = Quaternion(0.7001418, -0.099002615, -0.7001418, 0.099002466)
+bones/11/rotation = Quaternion(0.7014286, 0.08943153, -0.7014286, -0.08943146)
 
 [node name="WeaponBoneAttachment" type="BoneAttachment3D" parent="Character2/Skeleton3D" index="1"]
-transform = Transform3D(0.9999999, 3.9335748e-07, -4.5018982e-08, 3.5975097e-07, -0.89986086, -0.43617642, -1.5466475e-07, 0.43617636, -0.8998609, -0.002566144, -0.0023700746, 0.008752879)
+transform = Transform3D(0.9999999, 3.3676218e-07, -2.1668892e-08, 3.6114727e-07, -0.91248304, -0.40911385, -1.3255904e-07, 0.40911376, -0.91248304, -0.002566144, -0.0022230234, 0.008684293)
 bone_name = "WeaponBone"
 bone_idx = 5
 
@@ -59,3 +68,4 @@ parameters/IdleWalkSpace/blend_position = 0.6333333
 parameters/Attack/active = false
 parameters/Attack/internal_active = false
 parameters/Attack/request = 0
+parameters/MountedBlend/blend_amount = 0.0

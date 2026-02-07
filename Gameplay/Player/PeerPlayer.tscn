@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://crwro3rdi0lir"]
 
 [ext_resource type="Script" uid="uid://dr6vtpk3gai4d" path="res://Gameplay/Player/PeerPlayer3D.cs" id="1_20dvd"]
-[ext_resource type="PackedScene" uid="uid://lnbvocxb3i5t" path="res://Gameplay/Character/Character1Fbx.tscn" id="2_20dvd"]
+[ext_resource type="PackedScene" uid="uid://cu5oqh1nes7e5" path="res://Gameplay/Character/Character2Model.tscn" id="2_20dvd"]
 
 [node name="PeerPlayer" type="Node3D"]
 script = ExtResource("1_20dvd")

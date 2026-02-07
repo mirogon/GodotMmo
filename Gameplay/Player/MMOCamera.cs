@@ -47,8 +47,6 @@ public partial class MMOCamera : Camera3D
             _yaw += -mouseX * _cameraSpeed;
 
             _cameraPivot.Rotation = new Vector3(_pitch, _yaw, 0);
-
-
         }
         if(@event is InputEventMouseButton mouseButton)
         {

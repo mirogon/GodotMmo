@@ -31,6 +31,9 @@ public partial class Player : Node3D
 
     PackedScene _npcUiScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Npc/NpcUi/NpcUi.tscn");
 
+
+    Mount _mountInstance = null;
+
     QuestUi _questUi;
     public override void _Ready()
     {
@@ -56,6 +59,7 @@ public partial class Player : Node3D
         NetworkClient.CharacterExpUpdate += OnExpUpdate;
         NetworkClient.DamageHitsUpdate += OnDamageHitsUpdate;
         NetworkClient.QuestsProgressUpdate += OnQuestsProgressUpdate;
+        NetworkClient.MountUpdate += OnMountUpdate;
 
         _attackAnimationEvent = new AnimationEvent(0.5f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
@@ -116,11 +120,25 @@ public partial class Player : Node3D
 
         if(moveDir.Length() > 0.05f && _model.CurrentAnimation != CharacterAnimationType.Walk)
         {
-            _model.PlayAnimation(CharacterAnimationType.Walk);
+            if(_mountInstance == null)
+            {
+                _model.PlayAnimation(CharacterAnimationType.Walk);
+            }
+            else
+            {
+                _mountInstance.PlayAnimation(CharacterAnimationType.RideHorse); 
+            }
         }
         else if(moveDir.Length() <= 0.05f && _model.CurrentAnimation != CharacterAnimationType.Idle)
         {
-            _model.PlayAnimation(CharacterAnimationType.Idle);
+            if(_mountInstance == null)
+            {
+                _model.PlayAnimation(CharacterAnimationType.Idle);
+            }
+            else
+            {
+                _mountInstance.PlayAnimation(CharacterAnimationType.Idle); 
+            }
         }
 
         Position += moveDir * MovementSpeed * (float)delta;
@@ -378,6 +396,36 @@ public partial class Player : Node3D
                 if(currentQuestUpdate.Id == QuestId.Unknown) { continue; }
                 _questUi.AddOrUpdateQuest(currentQuestUpdate);
             }
+        }
+    }
+    void OnMountUpdate()
+    {
+        CallDeferred("OnMountUpdateDeferred");
+    }
+
+    void OnMountUpdateDeferred()
+    {
+        if(NetworkClient.NewestMountUpdate == null) { return; }
+        SC_Mount update = NetworkClient.NewestMountUpdate;
+        if(update.PublicId != NetworkClient.PublicId) { return; }
+
+        if (update.MountingUp)
+        {
+            GD.Print("Mounting up");
+            var mountInstance = Mount.MountTypeToMountSceneDict[MountType.Horse].Instantiate() as Mount;
+
+            AddChild(mountInstance);
+            mountInstance.Position = Vector3.Zero;
+            _mountInstance = mountInstance;
+            _mountInstance.Init(_model);
+
+            _model.PlayAnimation(CharacterAnimationType.RideHorse);
+        }
+        else
+        {
+            GD.Print("Mounting down");
+            _mountInstance.QueueFree();
+            _mountInstance = null;
         }
     }
 }

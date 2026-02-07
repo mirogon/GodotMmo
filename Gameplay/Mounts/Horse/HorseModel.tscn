@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cciwrb7c8q2hd"]
+[gd_scene load_steps=7 format=3 uid="uid://cciwrb7c8q2hd"]
 
-[ext_resource type="PackedScene" uid="uid://7io0k35odb6g" path="res://Assets/Mounts/Horse2/Horse.fbx" id="1_us1cp"]
+[ext_resource type="PackedScene" uid="uid://7io0k35odb6g" path="res://Assets/Mounts/Horse2/Horse.fbx" id="1_ojr3s"]
+[ext_resource type="Script" uid="uid://4d4biqi7ws2c" path="res://Gameplay/Mounts/Mount.cs" id="2_dx45f"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t1k3k"]
 animation = &"Horse2Armature|Horse2_Idle"
@@ -11,7 +12,7 @@ animation = &"Horse2Armature|Horse2_Idle"
 animation = &"Horse2Armature|Horse2_Run"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_v7sjy"]
-graph_offset = Vector2(-256.66522, 12.208511)
+graph_offset = Vector2(-168, -50)
 nodes/Idle/node = SubResource("AnimationNodeAnimation_t1k3k")
 nodes/Idle/position = Vector2(-240, 140)
 nodes/IdleRunBlend/node = SubResource("AnimationNodeBlend2_3vx4n")
@@ -20,7 +21,8 @@ nodes/Run/node = SubResource("AnimationNodeAnimation_emdih")
 nodes/Run/position = Vector2(-280, 340)
 node_connections = [&"output", 0, &"IdleRunBlend", &"IdleRunBlend", 0, &"Idle", &"IdleRunBlend", 1, &"Run"]
 
-[node name="Horse" instance=ExtResource("1_us1cp")]
+[node name="Horse" instance=ExtResource("1_ojr3s")]
+script = ExtResource("2_dx45f")
 
 [node name="Skeleton3D" parent="Horse2Armature" index="0"]
 bones/1/position = Vector3(-0.001395423, -0.00010754471, 0.004819801)

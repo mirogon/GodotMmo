@@ -11,6 +11,9 @@ public partial class PeerPlayer3D : GameEntity
     long _renderTimeDelayMs = 150;
 
     CharacterModel _characterModel;
+
+    Mount _mountInstance;
+
     public override void _Ready()
     {
         base._Ready();
@@ -92,5 +95,19 @@ public partial class PeerPlayer3D : GameEntity
     public void PlayAnimation(CharacterAnimationType animType)
     {
         _characterModel.PlayAnimation(animType);
+    }
+
+    public void MountUp() {
+        _mountInstance = Mount.MountTypeToMountSceneDict[MountType.Horse].Instantiate() as Mount;
+        AddChild(_mountInstance);
+        _mountInstance.Init(_characterModel);
+        _mountInstance.Position = Vector3.Zero;
+
+        _characterModel.PlayAnimation(CharacterAnimationType.RideHorse);
+    }
+    public void MountDown() { 
+        if(_mountInstance == null) { return; }
+        _mountInstance.QueueFree();
+        _mountInstance = null;
     }
 }

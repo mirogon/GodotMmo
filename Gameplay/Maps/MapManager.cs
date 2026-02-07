@@ -39,6 +39,7 @@ public partial class MapManager : Node
         NetworkClient.CharacterLoggedOut += OnCharacterLoggedOut;
         NetworkClient.MonsterAnimationUpdate += OnMonsterAnimationUpdate;
         NetworkClient.NpcUpdate += OnNpcUpdate;
+        NetworkClient.MountUpdate += OnMountUpdate;
     }
 
 
@@ -288,5 +289,26 @@ public partial class MapManager : Node
             npcInstance.GlobalPosition = current.PositionOnMap.ToVector3();
         }
     }
+    void OnMountUpdate()
+    {
+        CallDeferred("OnMountUpdateDeferred");
+    }
+    void OnMountUpdateDeferred()
+    {
+        var update = NetworkClient.NewestMountUpdate;
+        if(update.PublicId == NetworkClient.PublicId) { return; }
+        if (!_peerInstances.ContainsKey(update.PublicId)) { return; }
+
+        var peerInstance = _peerInstances[update.PublicId];
+        if (update.MountingUp)
+        {
+            peerInstance.MountUp();
+        }
+        else
+        {
+            peerInstance.MountDown();
+        }
+    }
+
 }
 

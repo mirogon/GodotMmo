@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
-
 public class PeerPlayer
 {
     public UInt64 PublicId;
@@ -71,6 +70,9 @@ public class NetworkClient
     public static Action NpcUpdate;
     public static ConcurrentBag<SC_NpcUpdatePacket> NpcUpdates = new();
 
+    public static Action MountUpdate;
+    public static SC_Mount NewestMountUpdate = new();
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -127,6 +129,7 @@ public class NetworkClient
                 case EPacketType.SC_DamageHitsUpdate: Handle_SC_DamageHitsUpdate(dataReader); break;
                 case EPacketType.SC_QuestsUpdate: Handle_SC_QuestsUpdate(dataReader); break;
                 case EPacketType.SC_NpcUpdate: Handle_SC_NpcUpdate(dataReader); break;
+                case EPacketType.SC_Mount: Handle_SC_Mount(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -232,7 +235,7 @@ public class NetworkClient
     public static void MountUp(MountType type)
     {
         CS_Mount packet = new(LoginClient.NewestSessionId, type);
-        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_Mount));
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_Mount)));
     }
 
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
@@ -449,5 +452,10 @@ public class NetworkClient
         NpcUpdates.Add(packet);
         NpcUpdate?.Invoke();
     }
-
+    static void Handle_SC_Mount(NetPacketReader dataReader)
+    {
+        SC_Mount packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_Mount>(dataReader);
+        NewestMountUpdate = packet;
+        MountUpdate?.Invoke();
+    }
 }
