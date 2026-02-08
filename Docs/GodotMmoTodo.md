@@ -1,8 +1,8 @@
-# Current Task#
-- Fix: Riding horse anim not really played on peer
+# Current Task
+- Inventory has Dictionary<EquipmentSlot, Item> for eq slots
+- Right click eq item in inv to equip
 
 # Current Macrotask
-- Mount
 
 # Later
 - CS_SetTargetPacket
@@ -307,3 +307,9 @@ Mount
 - Fix: Character walk anim
 - Able to walk around on the mount
 - Update PeerPlayer, replicate riding horse, etc.
+- Fix: Riding horse anim not really played on peer
+- Fix: Disconnect on char screen cause no incoming packets
+    - Send some random packet every few secs in that screen
+- Try is more complex movement works for peerplayer
+- Toggle Inv with I
+- Log if my mouse is in eq ui and on which slot

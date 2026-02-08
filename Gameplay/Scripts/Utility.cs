@@ -61,4 +61,18 @@ public class Utility
         var result = spaceState.IntersectRay(queryParams);
         return result;
     }
+
+    public static bool MouseIsInControl(Control c)
+    {
+        var localMousePos = c.GetLocalMousePosition();
+        if(localMousePos.X < 0 || localMousePos.X > c.Size.X)
+        {
+            return false;
+        }
+        if(localMousePos.Y < 0 || localMousePos.Y > c.Size.Y)
+        {
+            return false;
+        }
+        return true;
+    }
 }

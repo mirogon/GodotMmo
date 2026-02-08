@@ -4,72 +4,55 @@ using System.Collections.Generic;
 
 public partial class PeerPlayer3D : GameEntity
 {
-    List<ServerMovementSnapshot> _snapshots = new();
-    Vector3 _targetPos;
-    float _targetYRotEuler;
-    long _renderTime = 0;
-    long _renderTimeDelayMs = 150;
-
     CharacterModel _characterModel;
-
+    MovementLogic _movement;
     Mount _mountInstance;
 
     public override void _Ready()
     {
         base._Ready();
+        _movement = new(this);
         _characterModel = GetNode<CharacterModel>("CharacterModel");
     }
     public override void _Process(double delta)
     {
         base._Process(delta);
-        SimpleMovement(delta);
-    }
-    void SimpleMovement(double delta)
-    {
-        float dist = GlobalPosition.DistanceTo(_targetPos);
-        if(_snapshots.Count < 1 || dist <= 0.05) { 
+        var moving = _movement.SimpleMovement(delta);
+        if (moving)
+        {
+            if (_mountInstance == null)
+            {
+                if(_characterModel.CurrentAnimation != CharacterAnimationType.Walk)
+                {
+                    _characterModel.PlayAnimation(CharacterAnimationType.Walk);
+                }
+            }
+            else
+            {
+                _characterModel.PlayAnimation(CharacterAnimationType.RideHorse);
+                _mountInstance.PlayAnimation(CharacterAnimationType.RideHorse);
+            }
+        }
+        else
+        {
             if(_characterModel.CurrentAnimation != CharacterAnimationType.Idle)
             {
-                _characterModel.PlayAnimation(CharacterAnimationType.Idle);
-            }
-            return; 
-        }
-
-        if (dist > 0.05f)
-        {
-            GlobalPosition = GlobalPosition.Lerp(_targetPos, (float)delta * (_snapshots[_snapshots.Count - 1].MoveSpeed));
-            if(_characterModel.CurrentAnimation != CharacterAnimationType.Walk)
-            {
-                _characterModel.PlayAnimation(CharacterAnimationType.Walk);
+                if(_mountInstance == null)
+                {
+                    _characterModel.PlayAnimation(CharacterAnimationType.Idle);
+                }
+                else
+                {
+                    _characterModel.PlayAnimation(CharacterAnimationType.RideHorse);
+                    _mountInstance.PlayAnimation(CharacterAnimationType.Idle);
+                }
             }
         }
 
-        if(Mathf.Abs(_targetYRotEuler - RotationDegrees.Y) > 5)
-        {
-            var targetRot = Quaternion.FromEuler(new Vector3(0, _targetYRotEuler, 0));
-            targetRot = targetRot.Normalized();
-            Quaternion = Quaternion.Slerp(targetRot, (float)delta * 90.0f);
-        }
     }
-
-    public void OnMovementUpdate(Vector3 serverPos, Vector3 moveDir, float moveSpeed, float yRotationEuler, bool isMoving, long serverTime)
+    public void OnMovementUpdate(Vector3 serverPos, Vector3 moveDir, float moveSpeed, Vector3 lookDir, bool isMoving, long serverTime)
     {
-        ServerMovementSnapshot snapshot = new(serverPos, moveDir, moveSpeed, yRotationEuler, serverTime, isMoving);
-        _snapshots.Add(snapshot);
-
-        if(_snapshots.Count > 10)
-        {
-            _snapshots.RemoveAt(0);
-        }
-
-        long diff = Math.Abs(_renderTime - (snapshot.ServerTimeUtcUnixMs - _renderTimeDelayMs));
-        if(_renderTime == 0 || diff > 1000)
-        {
-            _renderTime = serverTime - _renderTimeDelayMs;
-        }
-
-        _targetPos = serverPos;
-        _targetYRotEuler = yRotationEuler;
+        _movement.MovementUpdate(serverPos, moveDir, moveSpeed, lookDir, isMoving, serverTime);
     }
 
     public void EquipItem(EquipmentSlot slot, ItemType type)

@@ -85,7 +85,7 @@ public partial class MapManager : Node
         }
 
         var currentInstance = _peerInstances[update.PublicId];
-        currentInstance.OnMovementUpdate(update.Position.ToVector3(), update.MoveDir.ToVector3(), update.MoveSpeed,  update.YRotationEuler, update.IsMoving, update.ServerTimeUtcUnixMs);
+        currentInstance.OnMovementUpdate(update.Position.ToVector3(), update.MoveDir.ToVector3(), update.MoveSpeed,  update.MoveDir.ToVector3(), update.IsMoving, update.ServerTimeUtcUnixMs);
         var r = currentInstance.Rotation;
         r.Y = Mathf.DegToRad(update.YRotationEuler);
         currentInstance.Rotation = r;
@@ -181,10 +181,10 @@ public partial class MapManager : Node
             if (!EnemyInstances.ContainsKey(newUpdate.Id)) { continue; }
 
             var instance = EnemyInstances[newUpdate.Id];
-            instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), 0, newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
+            instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), newUpdate.LookDir.ToVector3(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
 
-            Vector3 lookAtPos = instance.GlobalPosition + newUpdate.Velocity.ToVector3().Normalized();
-            instance.LookAt(lookAtPos);
+            //Vector3 lookAtPos = instance.GlobalPosition + newUpdate.Velocity.ToVector3().Normalized();
+            //instance.LookAt(lookAtPos);
         }
     }
     void OnMonstersHealthUpdate()

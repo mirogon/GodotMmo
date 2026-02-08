@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class InventorySystem : Panel
 {
@@ -19,11 +20,25 @@ public partial class InventorySystem : Panel
     public Action<EquipmentSlot, Node3D> AttachEquipment;
 
     //Moving
-    Guid _currentlyMoving = Guid.Empty;
+    Guid _currentlyMoving = Guid.Empty; 
+    bool _currentlyShown = false;
+
+    //EQ
+    Panel _equipmentPanel;
+
+    Dictionary<EquipmentSlot, TextureRect> _equipmentSlots = new();
+
     public override void _Ready()
     {
         base._Ready();
-        for(int y = 0; y < TILE_HEIGHT; y++)
+        _equipmentPanel = GetNode("EquipmentPanel") as Panel;
+
+        _equipmentSlots.Add(EquipmentSlot.Weapon, GetNode("EquipmentPanel/WeaponSlot") as TextureRect);
+        _equipmentSlots.Add(EquipmentSlot.Helmet, GetNode("EquipmentPanel/HelmetSlot") as TextureRect);
+        _equipmentSlots.Add(EquipmentSlot.BodyArmor, GetNode("EquipmentPanel/BodyArmorSlot") as TextureRect);
+        _equipmentSlots.Add(EquipmentSlot.Shoes, GetNode("EquipmentPanel/ShoesSlot") as TextureRect);
+
+        for (int y = 0; y < TILE_HEIGHT; y++)
         {
             for (int x = 0; x < TILE_WIDTH; x++)
             {
@@ -34,15 +49,21 @@ public partial class InventorySystem : Panel
         }
 
         var values = Enum.GetValues(typeof(EquipmentSlot));
-        foreach(var v in values)
+        foreach (var v in values)
         {
             EquippedItems.Add((EquipmentSlot)v, new MongoInventoryItem());
         }
+
+        Visible = false;
+    }
+    public void ToggleInventory()
+    {
+        Visible = !Visible;
     }
     public override void _Process(double delta)
     {
         var localMousePos = GetLocalMousePosition();
-        bool mouseIsInInv = MouseIsInInventoryPanel();
+        bool mouseIsInInv = Utility.MouseIsInControl(this);
         if (Input.IsActionJustPressed("MouseLeft") && mouseIsInInv)
         {
             var mouseTilePos = Utility.LocalMousePosToTilePos(localMousePos, TILE_PIXEL_SIZE);
@@ -84,14 +105,56 @@ public partial class InventorySystem : Panel
 
                     _currentlyMoving = Guid.Empty;
                 }
-                else if(MouseIsInInventoryPanel())
+                else if(Utility.MouseIsInControl(this))
                 {
                     invItem.Position = new Vector2(Items[_currentlyMoving].TilePosTopLeftX * TILE_PIXEL_SIZE, Items[_currentlyMoving].TilePosTopLeftY * TILE_PIXEL_SIZE);
                     _currentlyMoving = Guid.Empty;
                 }
             }
         }
+        if (Input.IsActionJustPressed("MouseRight") && mouseIsInInv)
+        {
+            var mouseTilePos = Utility.LocalMousePosToTilePos(localMousePos, TILE_PIXEL_SIZE);
+            var tileIndex = Utility.GridXAndYPosToIndex(mouseTilePos.Item1, mouseTilePos.Item2, TILE_WIDTH);
+
+            if (tileIndex >= Tiles.Count || tileIndex < 0) { return; }
+
+            var itemId = Tiles[tileIndex].OccupiedBy;
+            if (!Items.ContainsKey(itemId)) { return; }
+            var item = Items[itemId];
+            GD.Print("Clicked at inv tile " + mouseTilePos.Item1 + ":" + mouseTilePos.Item2 + " " + item.Id);
+        }
+        HandleEquipmentUi();
     }
+
+    void HandleEquipmentUi()
+    {
+        if (Input.IsActionJustPressed("MouseLeft"))
+        {
+            if (Utility.MouseIsInControl(_equipmentPanel))
+            {
+                GD.Print("Mouse is in EQ PANEL");
+            }
+            else
+            {
+                GD.Print("Mouse is NOT in EQ PANEL");
+            }
+
+            if (Utility.MouseIsInControl(_equipmentSlots[EquipmentSlot.Weapon]))
+            {
+                GD.Print("Mouse is in Weapon Slot");
+            }
+            if (Utility.MouseIsInControl(_equipmentSlots[EquipmentSlot.Helmet]))
+            {
+                GD.Print("Mouse is in Helmet Slot");
+            }
+            if (Utility.MouseIsInControl(_equipmentSlots[EquipmentSlot.BodyArmor]))
+            {
+                GD.Print("Mouse is in Body Armor Slot");
+            }
+        }
+    }
+
     public void HandleInventoryUpdate(List<MongoInventoryItem> items)
     {
         Items.Clear();
@@ -160,20 +223,7 @@ public partial class InventorySystem : Panel
 
     public bool MouseIsBlockedByUi()
     {
-        return MouseIsInInventoryPanel() || _currentlyMoving != Guid.Empty;
-    }
-    bool MouseIsInInventoryPanel()
-    {
-        var localMousePos = GetLocalMousePosition();
-        if(localMousePos.X < 0 || localMousePos.X > Size.X)
-        {
-            return false;
-        }
-        if(localMousePos.Y < 0 || localMousePos.Y > Size.Y)
-        {
-            return false;
-        }
-        return true;
+        return Utility.MouseIsInControl(this) || _currentlyMoving != Guid.Empty;
     }
 
     public void HandleEquipmentSystemUpdate(Dictionary<EquipmentSlot, MongoInventoryItem> update)

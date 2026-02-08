@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://clvi8sffjlg7q"]
+[gd_scene load_steps=3 format=3 uid="uid://clvi8sffjlg7q"]
 
 [ext_resource type="Script" uid="uid://b56jchg3vqqrp" path="res://Gameplay/Player/InventorySystem.cs" id="1_5f88h"]
+[ext_resource type="Texture2D" uid="uid://dmyhv8w5hiykj" path="res://icon.svg" id="2_5f88h"]
 
 [node name="InventorySystem" type="Panel"]
 custom_minimum_size = Vector2(200, 320)
@@ -9,3 +10,64 @@ offset_top = 302.0
 offset_right = 1130.0
 offset_bottom = 622.0
 script = ExtResource("1_5f88h")
+
+[node name="EquipmentPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_top = -180.0
+offset_right = 200.0
+
+[node name="HelmetSlot" type="TextureRect" parent="EquipmentPanel"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 4.000003
+offset_right = 20.0
+offset_bottom = 44.000004
+grow_horizontal = 2
+texture = ExtResource("2_5f88h")
+expand_mode = 2
+
+[node name="ShoesSlot" type="TextureRect" parent="EquipmentPanel"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 133.07
+offset_right = 20.0
+offset_bottom = 173.07
+grow_horizontal = 2
+texture = ExtResource("2_5f88h")
+expand_mode = 2
+
+[node name="BodyArmorSlot" type="TextureRect" parent="EquipmentPanel"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 50.79
+offset_right = 20.0
+offset_bottom = 130.79013
+grow_horizontal = 2
+texture = ExtResource("2_5f88h")
+expand_mode = 1
+
+[node name="WeaponSlot" type="TextureRect" parent="EquipmentPanel"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.45
+offset_top = 50.79
+offset_right = -24.44992
+offset_bottom = 130.79013
+grow_horizontal = 2
+texture = ExtResource("2_5f88h")
+expand_mode = 1

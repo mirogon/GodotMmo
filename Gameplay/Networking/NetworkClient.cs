@@ -238,6 +238,11 @@ public class NetworkClient
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_Mount)));
     }
 
+    public static void PingServer()
+    {
+        CS_PingPacket p = new();
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((p, typeof(CS_PingPacket)));
+    }
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         SC_RegisterPacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_RegisterPacket>(packetReader);

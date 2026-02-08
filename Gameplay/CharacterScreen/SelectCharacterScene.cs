@@ -19,6 +19,8 @@ public partial class SelectCharacterScene : Node3D
 
     Quaternion _targetRotation;
 
+    double _timeSecAccumulation;
+
     public override void _Ready()
     {
         base._Ready();
@@ -53,6 +55,17 @@ public partial class SelectCharacterScene : Node3D
 
         NetworkClient.GetCharactersUpdate();
         NetworkClient.KnownCharactersUpdate += OnKnownCharactersUpdate;
+    }
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+
+        if (_timeSecAccumulation >= 5.0)
+        {
+            NetworkClient.PingServer();
+            _timeSecAccumulation = 0; 
+        }
+        _timeSecAccumulation += delta;
     }
 
     public override void _ExitTree()

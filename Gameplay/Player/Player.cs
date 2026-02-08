@@ -172,6 +172,10 @@ public partial class Player : Node3D
         {
             HandleRightClick();
         }
+        if (Input.IsActionJustPressed("ToggleInventory"))
+        {
+            _inventorySystem.ToggleInventory();
+        }
         if (Input.IsActionJustPressed("Mount"))
         {
             HandleMount();
