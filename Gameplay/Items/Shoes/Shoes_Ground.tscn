@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpk58c0p3grb7"]
+
+[sub_resource type="TextMesh" id="TextMesh_l8y22"]
+text = "Shoes"
+
+[node name="ShoesGround_tscn" type="Node3D"]
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+visible = false
+text = "Shoes"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("TextMesh_l8y22")

@@ -1,6 +1,4 @@
 # Current Task
-- Inventory has Dictionary<EquipmentSlot, Item> for eq slots
-- Right click eq item in inv to equip
 
 # Current Macrotask
 
@@ -313,3 +311,11 @@ Mount
 - Try is more complex movement works for peerplayer
 - Toggle Inv with I
 - Log if my mouse is in eq ui and on which slot
+- Right click eq item in inv to equip
+- Fix: Equipping item doesnt remove it from inv ui
+- Unequip item with right click
+- Make first shoes
+- First armor item
+- First BodyArmor
+- First Helmet
+- Fix: Can equip item if one is already equipped

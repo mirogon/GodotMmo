@@ -123,21 +123,33 @@ public partial class InventorySystem : Panel
             if (!Items.ContainsKey(itemId)) { return; }
             var item = Items[itemId];
             GD.Print("Clicked at inv tile " + mouseTilePos.Item1 + ":" + mouseTilePos.Item2 + " " + item.Id);
+
+            var info = ItemInfo.ItemTypeToItemInfo[item.ItemType];
+            if(info.EquipmentSlot != EquipmentSlot.Unknown)
+            {
+                NetworkClient.EquipOrUnequipItem(itemId, true);
+            }
         }
         HandleEquipmentUi();
     }
 
     void HandleEquipmentUi()
     {
-        if (Input.IsActionJustPressed("MouseLeft"))
+        if (Input.IsActionJustPressed("MouseRight"))
         {
-            if (Utility.MouseIsInControl(_equipmentPanel))
+            var slots = Enum.GetValues(typeof(EquipmentSlot));
+            foreach(var s in slots)
             {
-                GD.Print("Mouse is in EQ PANEL");
-            }
-            else
-            {
-                GD.Print("Mouse is NOT in EQ PANEL");
+                EquipmentSlot currentSlot = (EquipmentSlot)s;
+                if(currentSlot == EquipmentSlot.Unknown) { continue; }
+
+                if (Utility.MouseIsInControl(_equipmentSlots[currentSlot]))
+                {
+                    if (EquippedItems[currentSlot].Id != Guid.Empty)
+                    {
+                        NetworkClient.EquipOrUnequipItem(EquippedItems[currentSlot].Id, false);
+                    }
+                }
             }
 
             if (Utility.MouseIsInControl(_equipmentSlots[EquipmentSlot.Weapon]))
@@ -162,6 +174,7 @@ public partial class InventorySystem : Panel
 
         foreach(var item in InventoryUiItems.Values)
         {
+            RemoveChild(item);
             item.QueueFree();
         }
         InventoryUiItems.Clear();
@@ -229,5 +242,24 @@ public partial class InventorySystem : Panel
     public void HandleEquipmentSystemUpdate(Dictionary<EquipmentSlot, MongoInventoryItem> update)
     {
         EquippedItems = update;
+
+        foreach (var eqSlot in _equipmentSlots)
+        {
+            if (eqSlot.Value.GetChildren().Count > 0)
+            {
+                var child = eqSlot.Value.GetChild(0);
+                eqSlot.Value.RemoveChild(child);
+                child.QueueFree();
+            }
+        }
+
+        foreach(var item in update)
+        {
+            if(item.Value.Id == Guid.Empty) { continue; }
+            var uiScene = ResourceLoader.Load<PackedScene>(ItemInfo.ItemTypeToScenePath(item.Value.ItemType, ItemInfo.SceneType.InventoryScene));
+            var instance = uiScene.Instantiate() as Control;
+            _equipmentSlots[item.Key].AddChild(instance);
+            instance.Position = Vector2.Zero;
+        }
     }
 }

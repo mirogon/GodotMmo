@@ -89,7 +89,7 @@ public partial class Player : Node3D
 
     void OnItemsUpdateDeferred()
     {
-        if(NetworkClient.KnownInventoryItems.Count <= 0) { return; }
+        //if(NetworkClient.KnownInventoryItems.Count <= 0) { return; }
         _inventorySystem.HandleInventoryUpdate(NetworkClient.KnownInventoryItems);
     }
 
@@ -334,9 +334,9 @@ public partial class Player : Node3D
         _inventorySystem.HandleEquipmentSystemUpdate(knownEquippedItems);
 
         _model.UnattachWeapon();
-
         if(knownEquippedItems[EquipmentSlot.Weapon].Id != Guid.Empty)
         {
+            //Model
             var scenePath = ItemInfo.ItemTypeToScenePath(knownEquippedItems[EquipmentSlot.Weapon].ItemType, ItemInfo.SceneType.EquipmentScene);
             var scene = ResourceLoader.Load<PackedScene>(scenePath);
             var sceneInstance = scene.Instantiate() as Node3D;

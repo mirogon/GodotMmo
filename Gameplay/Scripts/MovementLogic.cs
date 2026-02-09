@@ -141,7 +141,10 @@ public partial class MovementLogic
     {
         if(_snapshots.Count < 1) { return false; }
 
-        _node3d.LookAt(_node3d.Position + _lookDir);
+        if(_lookDir.Length() > 0.1f)
+        {
+            _node3d.LookAt(_node3d.Position + _lookDir);
+        }
 
         if(_node3d.GlobalPosition.DistanceTo(_targetPos) < 0.05f)
         {
