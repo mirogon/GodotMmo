@@ -155,7 +155,7 @@ public partial class SelectCharacterScene : Node3D
 
         if (!NetworkClient.KnownCharacters.ContainsKey(_currentCharSlotSelected)) { return; }
         var character = NetworkClient.KnownCharacters[_currentCharSlotSelected];
-        _characterNameLabel.Text = character.Name;
+        _characterNameLabel.Text = character.Name.ToString();
         _createCharButton.Text = "Play";
     }
 

@@ -319,3 +319,10 @@ Mount
 - First BodyArmor
 - First Helmet
 - Fix: Can equip item if one is already equipped
+- Character or MongoCharacter to be used in SC_CharacterPacket (MongoCharacter with only specific things with MemberOrder)
+- Character has strength, vitality, intelligence and dexterity
+- Get 4 StatPoints per level
+- Character stats
+- Add available points to character stats window
+- Update available points on lvl up
+    - Add AvailableStatPoints to CharacterExpUpdate

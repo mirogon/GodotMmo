@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cytlqsasi6qxv"]
+[gd_scene load_steps=11 format=3 uid="uid://cytlqsasi6qxv"]
 
 [ext_resource type="Script" uid="uid://cra54traqw7if" path="res://Gameplay/Player/Player.cs" id="1_1rerk"]
 [ext_resource type="Script" uid="uid://kv4dkvv2qe55" path="res://Gameplay/Player/MMOCamera.cs" id="2_wonpf"]
 [ext_resource type="PackedScene" uid="uid://clvi8sffjlg7q" path="res://Gameplay/Player/InventorySystem.tscn" id="4_ofpx2"]
 [ext_resource type="Script" uid="uid://5puh3pl51fne" path="res://Gameplay/Scripts/HealthSystem.cs" id="5_4s7gy"]
 [ext_resource type="Script" uid="uid://dbl2rgtcnf6jt" path="res://Gameplay/Player/HealthBar.cs" id="6_4nq36"]
+[ext_resource type="PackedScene" uid="uid://c6wf3n6sdln2i" path="res://Gameplay/Player/Ui/CharacterStats.tscn" id="6_knblx"]
 [ext_resource type="Script" uid="uid://bqixko6k8jpk7" path="res://Gameplay/Player/PlayerUi.cs" id="7_546x7"]
 [ext_resource type="PackedScene" uid="uid://gbck2o61nu1c" path="res://Gameplay/Player/Ui/QuestUi.tscn" id="8_0fysc"]
 [ext_resource type="PackedScene" uid="uid://cu5oqh1nes7e5" path="res://Gameplay/Character/Character2Model.tscn" id="9_knblx"]
@@ -31,6 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("7_546x7")
 
 [node name="LevelLabel" type="Label" parent="Ui"]
@@ -58,6 +60,10 @@ text = "Exp: "
 
 [node name="QuestUi" parent="Ui" instance=ExtResource("8_0fysc")]
 layout_mode = 1
+mouse_filter = 1
+
+[node name="CharacterStatsUi" parent="Ui" instance=ExtResource("6_knblx")]
+layout_mode = 0
 
 [node name="InventorySystem" parent="." instance=ExtResource("4_ofpx2")]
 
@@ -68,6 +74,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("5_4s7gy")
 
 [node name="HealthBar" type="ProgressBar" parent="HealthSystem"]

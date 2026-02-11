@@ -31,10 +31,11 @@ public partial class Player : Node3D
 
     PackedScene _npcUiScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Npc/NpcUi/NpcUi.tscn");
 
-
     Mount _mountInstance = null;
 
     QuestUi _questUi;
+
+    CharacterStats _characterStatsUi;
     public override void _Ready()
     {
         base._Ready();
@@ -53,6 +54,8 @@ public partial class Player : Node3D
 
         _questUi = FindChild("QuestUi") as QuestUi;
 
+        _characterStatsUi = FindChild("CharacterStatsUi") as CharacterStats;
+
         NetworkClient.KnownItemsUpdate += OnItemsUpdate;
         NetworkClient.CharacterHealthUpdate += OnCharacterHealthUpdate;
         NetworkClient.EquippedItemsUpdate += OnEquippedItemsUpdate;
@@ -60,14 +63,16 @@ public partial class Player : Node3D
         NetworkClient.DamageHitsUpdate += OnDamageHitsUpdate;
         NetworkClient.QuestsProgressUpdate += OnQuestsProgressUpdate;
         NetworkClient.MountUpdate += OnMountUpdate;
+        NetworkClient.KnownCharacterUpdate += OnKnownCharacterUpdate;
 
         _attackAnimationEvent = new AnimationEvent(0.5f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
 
         OnItemsUpdateDeferred();
         OnEquippedItemsUpdateDeferred();
-        OnExpUpdateDeferred(_initializedChar.Level, _initializedChar.Exp);
+        OnExpUpdateDeferred(_initializedChar.Level, _initializedChar.Exp, _initializedChar.AvailableStatPoints);
         OnQuestsProgressUpdateDeferred();
+        OnKnownCharacterUpdateDeferred();
     }
 
 
@@ -346,15 +351,16 @@ public partial class Player : Node3D
 
     void OnExpUpdate()
     {
-        CallDeferred("OnExpUpdateDeferred", NetworkClient.KnownCharacterExp.lvl, NetworkClient.KnownCharacterExp.exp);
+        CallDeferred("OnExpUpdateDeferred", NetworkClient.KnownCharacterExp.lvl, NetworkClient.KnownCharacterExp.exp, NetworkClient.KnownCharacterExp.availablePoints);
     }
 
-    void OnExpUpdateDeferred(int lvl, long exp)
+    void OnExpUpdateDeferred(int lvl, long exp, short availablePoints)
     {
         _currentLevel = lvl;
         _currentExp = exp;
 
         _ui.SetLevelAndExp(_currentLevel, _currentExp);
+        _characterStatsUi.Update(availablePoints);
     }
     void OnDamageHitsUpdate()
     {
@@ -432,4 +438,14 @@ public partial class Player : Node3D
             _mountInstance = null;
         }
     }
+    void OnKnownCharacterUpdate()
+    {
+        CallDeferred("OnKnownCharacterUpdateDeferred");
+    }
+    void OnKnownCharacterUpdateDeferred()
+    {
+        var u = NetworkClient.NewestKnownCharacter;
+        _characterStatsUi.Update(u.Vitality, u.Intelligence, u.Strength, u.Dexterity, u.AvailableStatPoints);
+    }
+
 }

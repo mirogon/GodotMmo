@@ -31,7 +31,6 @@ public class NetworkClient
     public static ConcurrentQueue<SC_PeerPlayerPositionUpdatePacket> PeerPlayerPositionUpdateQueue = new();
 
     public static Action<bool> LoginAttemptUpdate;
-    public static Action KnownCharactersUpdate;
     public static Action<List<MongoMapItem>> NewItemsOnMapUpdate;
     public static Action<List<Guid>> RemovedItemsOnMap;
     public static Action KnownItemsUpdate;
@@ -49,7 +48,7 @@ public class NetworkClient
     public static Action<UInt64> EquippedItemsUpdate;
 
     public static Action CharacterExpUpdate;
-    public static (int lvl, long exp) KnownCharacterExp;
+    public static (int lvl, long exp, short availablePoints) KnownCharacterExp;
 
     public static Action<ulong, short> CharacterAnimationUpdate; //PublicId, CharacterAnimationType
 
@@ -59,6 +58,11 @@ public class NetworkClient
     public static List<SC_MonsterAnimationUpdatePacket> MonsterAnimationUpdates = new();
 
     public static Dictionary<int, Character> KnownCharacters = new(); //Slot, Char
+    public static Action KnownCharactersUpdate;
+
+    public static Character NewestKnownCharacter;
+    public static Action KnownCharacterUpdate;
+
     public static List<MongoInventoryItem> KnownInventoryItems = new();
 
     public static Action DamageHitsUpdate;
@@ -243,6 +247,12 @@ public class NetworkClient
         CS_PingPacket p = new();
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((p, typeof(CS_PingPacket)));
     }
+
+    public static void SendIncreaseStat(StatType type, int amount = 1)
+    {
+        CS_IncreaseStatPacket packet = new(LoginClient.NewestSessionId, type);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_IncreaseStatPacket)));
+    }
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         SC_RegisterPacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_RegisterPacket>(packetReader);
@@ -270,22 +280,17 @@ public class NetworkClient
     {
         SC_CharacterPacket charPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterPacket>(packetReader);
 
-        GD.Print("CHAR FROM SERVER WITH SLOT: " + charPacket.Slot);
+        GD.Print("CHAR FROM SERVER WITH SLOT: " + charPacket.CharacterData.Slot);
 
-        KnownCharacters.Add(charPacket.Slot, new Character(
-            charPacket.Slot, 
-            charPacket.Name.ToString(), 
-            charPacket.Class, 
-            charPacket.Level, 
-            charPacket.Exp, 
-            charPacket.CurrentlyOnMap, 
-            charPacket.PositionOnMap,
-            charPacket.MaxHealth,
-            charPacket.CurrentHealth,
-            charPacket.IsDead
-            )
-        );
-        GD.Print("New Characater received: " +  charPacket.Name);
+        if (KnownCharacters.ContainsKey(charPacket.CharacterData.Slot))
+        {
+            KnownCharacters.Remove(charPacket.CharacterData.Slot);
+        }
+        KnownCharacters.Add(charPacket.CharacterData.Slot, charPacket.CharacterData);
+
+        NewestKnownCharacter = charPacket.CharacterData;
+        KnownCharacterUpdate?.Invoke();
+        GD.Print("New Characater received: " +  charPacket.CharacterData.Name.ToString());
     }
 
 
@@ -424,7 +429,7 @@ public class NetworkClient
     static void Handle_SC_CharacterExpUpdatePacket(NetPacketReader dataReader)
     {
         SC_CharacterExpUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterExpUpdatePacket>(dataReader);
-        KnownCharacterExp = (packet.Level, packet.Exp);
+        KnownCharacterExp = (packet.Level, packet.Exp, packet.AvailableStatPoints);
         CharacterExpUpdate?.Invoke();
     }
 
