@@ -1,10 +1,9 @@
 # Current Task
 
 # Current Macrotask
+- Add UpgradeLevel to MongoInventoryItem, MongoMapItem
 
 # Later
-- CS_SetTargetPacket
-- Player metin like attack
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
 
 # DONE
@@ -326,3 +325,9 @@ Mount
 - Add available points to character stats window
 - Update available points on lvl up
     - Add AvailableStatPoints to CharacterExpUpdate
+- Character Health Regeneration
+- Character has Attack and Defense rating based on stats, equipment
+- Calculate damage including weapon dmg
+    - Function that takes in Character and CharacterEquipment and then calculates the damage
+- Sword has BaseDamage stat
+- Fix: Dead monsters still attack
