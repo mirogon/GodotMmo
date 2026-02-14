@@ -1,8 +1,6 @@
 # Current Task
 
 # Current Macrotask
-- Make make map with height differences
-- Make local player able to walk around height differences
 
 # Later
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
@@ -333,3 +331,7 @@ Mount
 - Sword has BaseDamage stat
 - Fix: Dead monsters still attack
 - Add UpgradeLevel to MongoInventoryItem, MongoMapItem
+- Make make map with height differences
+- Make local player able to walk around height differences
+- Function to get map floor height
+- Client moves enemies Y pos to Floor height

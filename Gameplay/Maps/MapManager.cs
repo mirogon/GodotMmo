@@ -181,7 +181,10 @@ public partial class MapManager : Node
             if (!EnemyInstances.ContainsKey(newUpdate.Id)) { continue; }
 
             var instance = EnemyInstances[newUpdate.Id];
-            instance.MovementUpdate(newUpdate.Position.ToVector3(), newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), newUpdate.LookDir.ToVector3(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
+            Vector3 pos = newUpdate.Position.ToVector3();
+            float yPos = Utility.GetFloorHeight(pos.X, pos.Z, instance.GetWorld3D());
+            pos.Y = yPos;
+            instance.MovementUpdate(pos, newUpdate.Velocity.ToVector3().Normalized(), newUpdate.Velocity.ToVector3().Length(), newUpdate.LookDir.ToVector3(), newUpdate.IsMoving, newUpdate.ServerTimeUtcUnixMs);
 
             //Vector3 lookAtPos = instance.GlobalPosition + newUpdate.Velocity.ToVector3().Normalized();
             //instance.LookAt(lookAtPos);

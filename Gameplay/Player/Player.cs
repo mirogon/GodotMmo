@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
 
-public partial class Player : Node3D
+public partial class Player : CharacterBody3D
 {
     public float MovementSpeed = 4.0f;
 
@@ -36,6 +36,10 @@ public partial class Player : Node3D
     QuestUi _questUi;
 
     CharacterStats _characterStatsUi;
+
+    //Movemen
+    const float GRAVITY = 9.81f;
+    Vector3 _moveDir = new();
     public override void _Ready()
     {
         base._Ready();
@@ -104,55 +108,6 @@ public partial class Player : Node3D
 
         _attackAnimationEvent.ManualProcess(delta);
 
-        Vector3 moveDir = Vector3.Zero;
-        if (Input.IsPhysicalKeyPressed(Key.W))
-        {
-            moveDir += -_playerMesh.GlobalTransform.Basis.Z;
-        }
-        if (Input.IsPhysicalKeyPressed(Key.S))
-        {
-            moveDir += _playerMesh.GlobalTransform.Basis.Z;
-        }
-        if (Input.IsPhysicalKeyPressed(Key.A))
-        {
-            moveDir += -_playerMesh.GlobalTransform.Basis.X;
-        }
-        if (Input.IsPhysicalKeyPressed(Key.D))
-        {
-            moveDir += _playerMesh.GlobalTransform.Basis.X;
-        }
-        moveDir = moveDir.Normalized();
-
-        if(moveDir.Length() > 0.05f && _model.CurrentAnimation != CharacterAnimationType.Walk)
-        {
-            if(_mountInstance == null)
-            {
-                _model.PlayAnimation(CharacterAnimationType.Walk);
-            }
-            else
-            {
-                _mountInstance.PlayAnimation(CharacterAnimationType.RideHorse); 
-            }
-        }
-        else if(moveDir.Length() <= 0.05f && _model.CurrentAnimation != CharacterAnimationType.Idle)
-        {
-            if(_mountInstance == null)
-            {
-                _model.PlayAnimation(CharacterAnimationType.Idle);
-            }
-            else
-            {
-                _mountInstance.PlayAnimation(CharacterAnimationType.Idle); 
-            }
-        }
-
-        Position += moveDir * MovementSpeed * (float)delta;
-        if(_posUpdateStopwatch.ElapsedMilliseconds >= _positionUpdateIntervalMs && NetworkClient.SuccessfullyLoggedIn)
-        {
-            SendPositionUpdate();
-            _posUpdateStopwatch.Restart();
-        }
-
         if (Input.IsActionJustPressed("PickUp"))
         {
             PickUpItem();
@@ -184,9 +139,80 @@ public partial class Player : Node3D
         if (Input.IsActionJustPressed("Mount"))
         {
             HandleMount();
+            GD.Print("Floor: " + Utility.GetFloorHeight(GlobalPosition.X, GlobalPosition.Z, GetWorld3D()));
         }
     }
 
+    void HandleMovement(double delta)
+    {
+        _moveDir = Vector3.Zero;
+        if (Input.IsPhysicalKeyPressed(Key.W))
+        {
+            _moveDir += -_playerMesh.GlobalTransform.Basis.Z;
+        }
+        if (Input.IsPhysicalKeyPressed(Key.S))
+        {
+            _moveDir += _playerMesh.GlobalTransform.Basis.Z;
+        }
+        if (Input.IsPhysicalKeyPressed(Key.A))
+        {
+            _moveDir += -_playerMesh.GlobalTransform.Basis.X;
+        }
+        if (Input.IsPhysicalKeyPressed(Key.D))
+        {
+            _moveDir += _playerMesh.GlobalTransform.Basis.X;
+        }
+
+        _moveDir = _moveDir.Normalized();
+
+        _moveDir *= MovementSpeed;
+        var velocity = new Vector3(_moveDir.X, Velocity.Y, _moveDir.Z);
+        velocity.Y -= GRAVITY * (float)delta;
+
+        //Position += _moveDir * MovementSpeed * (float)delta;
+
+        Velocity = velocity;
+
+        if(_posUpdateStopwatch.ElapsedMilliseconds >= _positionUpdateIntervalMs && NetworkClient.SuccessfullyLoggedIn)
+        {
+            SendPositionUpdate();
+            _posUpdateStopwatch.Restart();
+        }
+    }
+    void HandleMovementAnimations()
+    {
+        if(_moveDir.Length() > 0.05f && _model.CurrentAnimation != CharacterAnimationType.Walk)
+        {
+            if(_mountInstance == null)
+            {
+                _model.PlayAnimation(CharacterAnimationType.Walk);
+            }
+            else
+            {
+                _mountInstance.PlayAnimation(CharacterAnimationType.RideHorse); 
+            }
+        }
+        else if(_moveDir.Length() <= 0.05f && _model.CurrentAnimation != CharacterAnimationType.Idle)
+        {
+            if(_mountInstance == null)
+            {
+                _model.PlayAnimation(CharacterAnimationType.Idle);
+            }
+            else
+            {
+                _mountInstance.PlayAnimation(CharacterAnimationType.Idle); 
+            }
+        }
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+        HandleMovement(delta);
+        HandleMovementAnimations();
+
+        MoveAndSlide();
+    }
 
     void WeaponAttack()
     {

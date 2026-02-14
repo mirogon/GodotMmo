@@ -75,4 +75,31 @@ public class Utility
         }
         return true;
     }
+    public static float GetFloorHeight(float x, float z, World3D world)
+    {
+        Vector3 rayOrigin = new Vector3(x, 1000, z);
+        Vector3 rayDir = Vector3.Down;
+        Vector3 rayEnd = rayOrigin + rayDir * 2000;
+
+        var queryParams = PhysicsRayQueryParameters3D.Create(rayOrigin, rayEnd, 0b1);
+        queryParams.CollideWithAreas = true;
+        queryParams.CollideWithBodies = true;
+
+        var spaceState = world.DirectSpaceState;
+
+        /*
+           position: Vector2 # point in world space for collision
+           normal: Vector2 # normal in world space for collision
+           collider: Object # Object collided or null (if unassociated)
+           collider_id: ObjectID # Object it collided against
+           rid: RID # RID it collided against
+           shape: int # shape index of collider
+           metadata: Variant() # metadata of collider
+        */
+        var result = spaceState.IntersectRay(queryParams);
+        if (!result.ContainsKey("collider")) { return 0; }
+        if((Object)result["collider"] == null) { return 0; }
+        return ((Vector3)result["position"]).Y;
+
+    }
 }
