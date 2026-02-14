@@ -1,7 +1,8 @@
 # Current Task
 
 # Current Macrotask
-- Add UpgradeLevel to MongoInventoryItem, MongoMapItem
+- Make make map with height differences
+- Make local player able to walk around height differences
 
 # Later
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
@@ -331,3 +332,4 @@ Mount
     - Function that takes in Character and CharacterEquipment and then calculates the damage
 - Sword has BaseDamage stat
 - Fix: Dead monsters still attack
+- Add UpgradeLevel to MongoInventoryItem, MongoMapItem
