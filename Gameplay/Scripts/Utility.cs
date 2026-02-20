@@ -102,4 +102,27 @@ public class Utility
         return ((Vector3)result["position"]).Y;
 
     }
+    static public GameEntity CheckIfMouseOnGameEntity(Node caller)
+    {
+        var cam = caller.GetViewport().GetCamera3D();
+        var result = Utility.Camera3DRaycast(cam);
+        if (result.Count > 0)
+        {
+            var obj = result["collider"].As<GodotObject>();
+            if (obj is Area3D area)
+            {
+                Node3D parent = area.GetParent() as Node3D;
+                if (parent is GameEntity ge)
+                {
+                    return ge;
+                    if (ge is Npc npc)
+                    {
+                        GD.Print("Let go of item on NPC: " + npc.Name);
+                        return npc;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

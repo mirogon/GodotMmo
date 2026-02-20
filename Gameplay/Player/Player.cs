@@ -50,7 +50,7 @@ public partial class Player : CharacterBody3D
 
         _posUpdateStopwatch.Start();
 
-        _inventorySystem = GetNode("InventorySystem") as InventorySystem;
+        _inventorySystem = GetNode("Ui/InventorySystem") as InventorySystem;
 
         _healthSystem = GetNode("HealthSystem") as HealthSystem;
 
@@ -68,6 +68,7 @@ public partial class Player : CharacterBody3D
         NetworkClient.QuestsProgressUpdate += OnQuestsProgressUpdate;
         NetworkClient.MountUpdate += OnMountUpdate;
         NetworkClient.KnownCharacterUpdate += OnKnownCharacterUpdate;
+        NetworkClient.ItemUpgradeResultUpdate += OnItemUpgradeResultUpdate;
 
         _attackAnimationEvent = new AnimationEvent(0.5f);
         _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
@@ -99,7 +100,7 @@ public partial class Player : CharacterBody3D
     void OnItemsUpdateDeferred()
     {
         //if(NetworkClient.KnownInventoryItems.Count <= 0) { return; }
-        _inventorySystem.HandleInventoryUpdate(NetworkClient.KnownInventoryItems);
+        _inventorySystem.HandleInventoryUpdate(NetworkClient.KnownInventoryItems, NetworkClient.KnownCurrencyAmount);
     }
 
     public override void _Process(double delta)
@@ -223,36 +224,21 @@ public partial class Player : CharacterBody3D
 
     void HandleRightClick()
     {
-        var cam = GetViewport().GetCamera3D();
-        var result = Utility.Camera3DRaycast(cam);
-        if(result.Count > 0)
-        {
-            var obj = result["collider"].As<GodotObject>();
-            if(obj is Area3D area)
-            {
-                Node3D parent = area.GetParent() as Node3D;
-                if(parent is GameEntity ge)
-                {
-                    if(ge is Npc npc) {
-                        OpenNpcUi(npc);
-                        return;
-                    }
-                    SetTargetIndicator(ge);
-                    if(ge is Enemy enemy)
-                    {
-                        _currentEnemyTarget = enemy;
-                        _currentPeerPlayerTarget = null;
-                    }
-                    if(ge is PeerPlayer3D peerPlayer)
-                    {
-                        _currentPeerPlayerTarget = peerPlayer;
-                        _currentEnemyTarget = null;
-                    }
-                }
-            }
+        GameEntity ge = Utility.CheckIfMouseOnGameEntity(this);
+        if(ge is Npc npc) {
+            OpenNpcUi(npc);
+            return;
         }
-        else
+        SetTargetIndicator(ge);
+        if(ge is Enemy enemy)
         {
+            _currentEnemyTarget = enemy;
+            _currentPeerPlayerTarget = null;
+        }
+        if(ge is PeerPlayer3D peerPlayer)
+        {
+            _currentPeerPlayerTarget = peerPlayer;
+            _currentEnemyTarget = null;
         }
     }
     void OpenNpcUi(Npc npc)
@@ -265,6 +251,7 @@ public partial class Player : CharacterBody3D
 
     void SetTargetIndicator(Node3D target)
     {
+        if(target == null) { return; }
         if(!IsInstanceValid(_targetIndicator))
         {
             _targetIndicator = _targetIndicatorScene.Instantiate() as Node3D;
@@ -275,7 +262,6 @@ public partial class Player : CharacterBody3D
             _currentEnemyTarget.RemoveChild(_targetIndicator);
         }
         if (IsInstanceValid(_currentPeerPlayerTarget))
-
         {
             _currentPeerPlayerTarget.RemoveChild(_targetIndicator);
         }
@@ -293,6 +279,7 @@ public partial class Player : CharacterBody3D
     void PickUpItem()
     {
         MapManager currentMapManager = FindParent("MapManager") as MapManager;
+        if(currentMapManager.KnownItemsOnMap.Count < 1) { return; }
 
         var closestItem = currentMapManager.KnownItemsOnMap[0];
         var closestItemPos = Utility.PositionToVector3(closestItem.PositionOnMap);
@@ -473,5 +460,27 @@ public partial class Player : CharacterBody3D
         var u = NetworkClient.NewestKnownCharacter;
         _characterStatsUi.Update(u.Vitality, u.Intelligence, u.Strength, u.Dexterity, u.AvailableStatPoints);
     }
+    void OnItemUpgradeResultUpdate()
+    {
+        CallDeferred("OnItemUpgradeResultUpdateDeferred");
+    }
+    void OnItemUpgradeResultUpdateDeferred()
+    {
+        for(int i= 0; i < 100; ++i)
+        {
+            SC_ItemUpgradeResultPacket current;
+            if(!NetworkClient.ItemUpgradeResultUpdates.TryTake(out current)) { return; }
 
+            if (current.Success)
+            {
+                var item = new MongoInventoryItem(current.ResultingItem);
+                _inventorySystem.UpdateItem(item);
+            }
+            else
+            {
+                _inventorySystem.RemoveItem(current.ResultingItem.Id);
+                GD.Print("Item Upgrade Failure");
+            }
+        }
+    }
 }

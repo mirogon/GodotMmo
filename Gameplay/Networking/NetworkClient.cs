@@ -34,6 +34,7 @@ public class NetworkClient
     public static Action<List<MongoMapItem>> NewItemsOnMapUpdate;
     public static Action<List<Guid>> RemovedItemsOnMap;
     public static Action KnownItemsUpdate;
+    public static long KnownCurrencyAmount;
     public static Action<(UInt64 publicId, int currentHealth, int maxHealth)> CharacterHealthUpdate;
 
     public static Action EnemiesOnMapUpdate;
@@ -76,6 +77,9 @@ public class NetworkClient
 
     public static Action MountUpdate;
     public static SC_Mount NewestMountUpdate = new();
+
+    public static Action ItemUpgradeResultUpdate;
+    public static ConcurrentBag<SC_ItemUpgradeResultPacket> ItemUpgradeResultUpdates = new();
 
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
@@ -134,6 +138,7 @@ public class NetworkClient
                 case EPacketType.SC_QuestsUpdate: Handle_SC_QuestsUpdate(dataReader); break;
                 case EPacketType.SC_NpcUpdate: Handle_SC_NpcUpdate(dataReader); break;
                 case EPacketType.SC_Mount: Handle_SC_Mount(dataReader); break;
+                case EPacketType.SC_ItemUpgradeResult: Handle_SC_ItemUpgradeResult(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -253,6 +258,12 @@ public class NetworkClient
         CS_IncreaseStatPacket packet = new(LoginClient.NewestSessionId, type);
         NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_IncreaseStatPacket)));
     }
+    public static void AttemptUpgrade(Guid itemId)
+    {
+        CS_AttemptItemUpgradePacket packet = new(LoginClient.NewestSessionId, itemId);
+        NetworkClient.ReliableUnorderedPacketsToSend.Enqueue((packet, typeof(CS_AttemptItemUpgradePacket)));
+    }
+
     static void Handle_SC_RegisterPacket(NetPacketReader packetReader)
     {
         SC_RegisterPacket receivedPacket = NetworkPacketUtil.PacketBytesToPacketObject<SC_RegisterPacket>(packetReader);
@@ -359,8 +370,9 @@ public class NetworkClient
 
     static void Handle_SC_InventoryItemsUpdateEnd(NetPacketReader dataReader)
     {
+        SC_CharacterInventoryItemsUpdateEndPacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_CharacterInventoryItemsUpdateEndPacket>(dataReader);
         GD.Print("InventoryUpdateEnd");
-        dataReader.GetByte();
+        KnownCurrencyAmount = packet.CurrencyAmount;
         KnownItemsUpdate?.Invoke();
     }
 
@@ -468,4 +480,12 @@ public class NetworkClient
         NewestMountUpdate = packet;
         MountUpdate?.Invoke();
     }
+    static void Handle_SC_ItemUpgradeResult(NetPacketReader dataReader)
+    {
+        SC_ItemUpgradeResultPacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_ItemUpgradeResultPacket>(dataReader);
+        ItemUpgradeResultUpdates.Add(packet);
+        ItemUpgradeResultUpdate?.Invoke();
+    }
+
 }
+

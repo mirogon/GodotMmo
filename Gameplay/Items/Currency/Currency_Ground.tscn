@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://cuhp3b1lufxqc"]
+
+[ext_resource type="Script" uid="uid://bfnunfswq0hbf" path="res://Gameplay/Items/ItemOnGround.cs" id="1_2lmlf"]
+
+[sub_resource type="TextMesh" id="TextMesh_l8y22"]
+text = "Currency"
+font_size = 28
+depth = 0.25
+
+[node name="CurrencyGround" type="Node3D"]
+script = ExtResource("1_2lmlf")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+visible = false
+text = "Currency"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.056575835, 0)
+mesh = SubResource("TextMesh_l8y22")

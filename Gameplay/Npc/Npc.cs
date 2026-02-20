@@ -3,7 +3,7 @@ using System;
 
 public partial class Npc : GameEntity
 {
-    NpcTitle _npcTitle;
+    protected NpcTitle _npcTitle;
     public NPCType NpcType{ get; private set; }
     public override void _Ready()
     {

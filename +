@@ -19,9 +19,6 @@ public partial class InventorySystem : Panel
 
     public Action<EquipmentSlot, Node3D> AttachEquipment;
 
-    Label _currencyLabel;
-    public long CurrencyAmount = 0;
-
     //Moving
     Guid _currentlyMoving = Guid.Empty; 
     bool _currentlyShown = false;
@@ -35,8 +32,6 @@ public partial class InventorySystem : Panel
     PackedScene _hoverUiScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Player/Ui/HoverUi.tscn");
     HoverUi _hoverUiInstance;
 
-    PackedScene _upgradeUiScene = ResourceLoader.Load<PackedScene>("res://Gameplay/Player/Ui/BlacksmithUpgradeUi.tscn");
-    BlacksmithUpgradeUi _upgradeUiInstance;
     public override void _Ready()
     {
         base._Ready();
@@ -46,8 +41,6 @@ public partial class InventorySystem : Panel
         _equipmentSlots.Add(EquipmentSlot.Helmet, GetNode("EquipmentPanel/HelmetSlot") as TextureRect);
         _equipmentSlots.Add(EquipmentSlot.BodyArmor, GetNode("EquipmentPanel/BodyArmorSlot") as TextureRect);
         _equipmentSlots.Add(EquipmentSlot.Shoes, GetNode("EquipmentPanel/ShoesSlot") as TextureRect);
-
-        _currencyLabel = GetNode("CurrencyPanel/CurrencyLabel") as Label;
 
         for (int y = 0; y < TILE_HEIGHT; y++)
         {
@@ -133,14 +126,7 @@ public partial class InventorySystem : Panel
                 var tilePos = Utility.LocalMousePosToTilePos(localMousePos, TILE_PIXEL_SIZE);
                 if (!mouseIsInInv)
                 {
-                    if (HandleItemDroppedOnNpc(item))
-                    {
-                        invItem.Position = new Vector2(item.TilePosTopLeftX * TILE_PIXEL_SIZE, item.TilePosTopLeftY * TILE_PIXEL_SIZE);
-                    }
-                    else
-                    {
-                        NetworkClient.ThrowAwayItem(_currentlyMoving);
-                    }
+                    NetworkClient.ThrowAwayItem(_currentlyMoving);
                     _currentlyMoving = Guid.Empty;
                 }
                 else if(ItemCanFit(tilePos.x, tilePos.y, itemSize.X, itemSize.Y))
@@ -179,26 +165,6 @@ public partial class InventorySystem : Panel
         HandleEquipmentUi();
     }
 
-    bool HandleItemDroppedOnNpc(MongoInventoryItem movingItem)
-    {
-        var ge = Utility.CheckIfMouseOnGameEntity(this);
-        if(ge is Npc npc)
-        {
-            if(ge is Blacksmith blacksmith)
-            {
-                if(!IsInstanceValid (_upgradeUiInstance))
-                {
-                    _upgradeUiInstance = _upgradeUiScene.Instantiate() as BlacksmithUpgradeUi;
-                    _upgradeUiInstance.Initialize(movingItem);
-                    _upgradeUiInstance.Position = Vector2.Zero;
-                    GetParent().CallDeferred("add_child", _upgradeUiInstance);
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
     void SetupHoverUi()
     {
         var parent = _hoverUiInstance.GetParent() as Control;
@@ -209,7 +175,7 @@ public partial class InventorySystem : Panel
         {
             _hoverUiInstance.SetData(_mouseHoverItem.Name, _mouseHoverItem.DefaultStats.ToList());
             _hoverUiInstance.Visible = true;
-            _hoverUiInstance.Position = parentMousePos - new Vector2(width/2,-20);
+            _hoverUiInstance.Position = parentMousePos - new Vector2(width/2,-12);
         }
     }
     void HandleEquipmentUi()
@@ -246,11 +212,8 @@ public partial class InventorySystem : Panel
         }
     }
 
-    public void HandleInventoryUpdate(List<MongoInventoryItem> items, long currencyAmount)
+    public void HandleInventoryUpdate(List<MongoInventoryItem> items)
     {
-        CurrencyAmount = currencyAmount;
-        _currencyLabel.Text = "Gold: " + CurrencyAmount;
-
         Items.Clear();
         Tiles.Clear();
 
@@ -269,37 +232,17 @@ public partial class InventorySystem : Panel
         for(int i = 0; i < items.Count; ++i)
         {
             var newItem = new MongoInventoryItem(items[i]);
+            Items.Add(newItem.Id, newItem);
+            OccupyTiles(newItem);
 
-            if(newItem.ItemType == ItemType.Currency)
-            {
-                CurrencyAmount += newItem.ItemValue;
-            }
-            else
-            {
-                Items.Add(newItem.Id, newItem);
-                OccupyTiles(newItem);
-
-                var invScene = ResourceLoader.Load<PackedScene>(ItemInfo.ItemTypeToScenePath(newItem.ItemType, ItemInfo.SceneType.InventoryScene));
-                var sceneInstance = invScene.Instantiate() as Control;
-                AddChild(sceneInstance);
-                sceneInstance.Position = new Vector2(newItem.TilePosTopLeftX * TILE_PIXEL_SIZE, newItem.TilePosTopLeftY * TILE_PIXEL_SIZE);
-                InventoryUiItems.Add(newItem.Id, sceneInstance);
-            }
+            var invScene = ResourceLoader.Load<PackedScene>(ItemInfo.ItemTypeToScenePath(newItem.ItemType, ItemInfo.SceneType.InventoryScene));
+            var sceneInstance = invScene.Instantiate() as Control;
+            AddChild(sceneInstance);
+            sceneInstance.Position = new Vector2(newItem.TilePosTopLeftX * TILE_PIXEL_SIZE, newItem.TilePosTopLeftY * TILE_PIXEL_SIZE);
+            InventoryUiItems.Add(newItem.Id, sceneInstance);
         }
     }
 
-    public void UpdateItem(MongoInventoryItem update)
-    {
-        Items[update.Id] = update;
-    }
-    public void RemoveItem(Guid itemId)
-    {
-        Items.Remove(itemId);
-        InventoryUiItems[itemId].QueueFree();
-        InventoryUiItems.Remove(itemId);
-
-        UnoccupyTiles(itemId);
-    }
     void OccupyTiles(MongoInventoryItem item)
     {
         int tileWidth = ItemInfo.ItemTypeToItemInfo[item.ItemType].TileSize.X;
@@ -314,18 +257,6 @@ public partial class InventorySystem : Panel
             }
         }
     }
-    void UnoccupyTiles(Guid item)
-    {
-        foreach(var tile in Tiles)
-        {
-            if(tile.OccupiedBy == item)
-            {
-                tile.OccupiedBy = Guid.Empty;
-                tile.IsOccupied = false;
-            }
-        }
-    }
-
 
     bool ItemCanFit(int topLeftX, int topLeftY, int itemWidth, int itemHeight)
     {

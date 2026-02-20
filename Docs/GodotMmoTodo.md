@@ -1,6 +1,7 @@
 # Current Task
 
 # Current Macrotask
+- Item Upgrade has currency cost
 
 # Later
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
@@ -335,3 +336,30 @@ Mount
 - Make local player able to walk around height differences
 - Function to get map floor height
 - Client moves enemies Y pos to Floor height
+- Hover Over Item UI
+    - Print over which item the mouse currently is
+- HoverUi
+- InventorySystem creates a HoverUi instance that always exists, but is only visible when needed
+- Fix: MongoInventoryItem has no name
+    - MongoInventoryItem constructor from MongoInventoryItem
+- When letting go of item outside of inv, create a ray at mouse pos and check for NPC
+- Smith NPC Scene
+- Server spawns smith NPC, client spawns client sided
+- Upgrade Eq UI
+- If you drop a eq item on the blacksmith, upgrade ui opens
+- If you move an item on an npc, the item is added back to the inv at its original slot
+- Only one ugpradeUi can be open at a time
+- UpgradeUi shows weapon texture in slot, etc.
+- Pressing Attempt Upgrade sends CS_AttemptUpgradePacket
+- Server handles CS_AttemptUpgradePacket
+- Server sends SC_ItemUpgradeResult
+- Client accepts SC_ItemUpgradeResponsePacket
+- Client removes specific item from client inv if the upgrade failed
+- Name of the item includes upgrade Status
+- Fix: Name empty after upgrade
+- CharacterInventory has Currency value (long)
+- Server can spawn currency on the ground
+- When you pick up currency, it doesnt get added as an item in the inv, it gets added to the currency amount of the inv
+- Add CurrencyAmount to SC_CharacterInventoryItemsUpdateEndPacket
+- CurrencyItem (is normal item, but always an exception)
+    - ItemValue is used as amount of currency

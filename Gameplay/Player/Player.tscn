@@ -69,7 +69,19 @@ mouse_filter = 1
 [node name="CharacterStatsUi" parent="Ui" instance=ExtResource("6_knblx")]
 layout_mode = 0
 
-[node name="InventorySystem" parent="." instance=ExtResource("4_ofpx2")]
+[node name="InventorySystem" parent="Ui" instance=ExtResource("4_ofpx2")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -209.0
+offset_top = -348.0
+offset_right = -9.0
+offset_bottom = -28.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="HealthSystem" type="Control" parent="."]
 layout_mode = 3

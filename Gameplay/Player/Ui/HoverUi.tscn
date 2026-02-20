@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://bd7yyxfx8xom6"]
+
+[ext_resource type="Script" uid="uid://dv7cx7i32tjhu" path="res://Gameplay/Player/Ui/HoverUi.cs" id="1_fmwob"]
+
+[node name="HoverUi" type="Panel"]
+offset_right = 162.0
+offset_bottom = 169.0
+script = ExtResource("1_fmwob")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="NameLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Name"
+horizontal_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+horizontal_alignment = 1
