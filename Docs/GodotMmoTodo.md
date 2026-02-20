@@ -1,7 +1,6 @@
 # Current Task
 
 # Current Macrotask
-- Item Upgrade has currency cost
 
 # Later
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
@@ -363,3 +362,6 @@ Mount
 - Add CurrencyAmount to SC_CharacterInventoryItemsUpdateEndPacket
 - CurrencyItem (is normal item, but always an exception)
     - ItemValue is used as amount of currency
+- Add UpgradeCost List/Array to ItemInfo
+- Item Upgrade has currency cost
+- Item upgrade changes item stats

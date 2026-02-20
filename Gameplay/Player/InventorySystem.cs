@@ -294,6 +294,7 @@ public partial class InventorySystem : Panel
     }
     public void RemoveItem(Guid itemId)
     {
+        if (!Items.ContainsKey(itemId)) { return; }
         Items.Remove(itemId);
         InventoryUiItems[itemId].QueueFree();
         InventoryUiItems.Remove(itemId);
