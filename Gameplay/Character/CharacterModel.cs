@@ -1,8 +1,10 @@
 using Godot;
 using System;
+using System.Net.Http.Headers;
 
 public partial class CharacterModel : Node3D
 {
+    public Action<string> AnimationEvent;
     public CharacterAnimationType CurrentAnimation { get; private set; }
     AnimationTree _animationTree;
     Node3D _weaponAttachment;
@@ -49,9 +51,39 @@ public partial class CharacterModel : Node3D
             _animationTree.Set("parameters/MountedBlend/blend_amount", 1.0f);
         }
 
-        else if (animType == CharacterAnimationType.WeaponAttack)
+        else if (animType == CharacterAnimationType.Attack1)
         {
-            _animationTree.Set("parameters/Attack/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
+            _animationTree.Set("parameters/Attack1/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
+            _animationTree.Set("parameters/Attack2/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack3/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack4/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
         }
+        else if (animType == CharacterAnimationType.Attack2)
+        {
+
+            _animationTree.Set("parameters/Attack1/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack2/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
+            _animationTree.Set("parameters/Attack3/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack4/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+        }
+        else if (animType == CharacterAnimationType.Attack3)
+        {
+            _animationTree.Set("parameters/Attack1/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack2/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack3/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
+            _animationTree.Set("parameters/Attack4/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+        }
+        else if (animType == CharacterAnimationType.Attack4)
+        {
+            _animationTree.Set("parameters/Attack1/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack2/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack3/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            _animationTree.Set("parameters/Attack4/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+        }
+    }
+    public void HandleAnimationEvent(string eventName)
+    {
+        AnimationEvent?.Invoke(eventName);
     }
 }

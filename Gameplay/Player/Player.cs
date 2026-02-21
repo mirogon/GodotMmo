@@ -17,8 +17,6 @@ public partial class Player : CharacterBody3D
     CharacterModel _model;
     PlayerUi _ui;
 
-    AnimationEvent _attackAnimationEvent;
-
     Character _initializedChar;
     int _currentLevel = 1;
     long _currentExp = 0;
@@ -40,6 +38,9 @@ public partial class Player : CharacterBody3D
     //Movemen
     const float GRAVITY = 9.81f;
     Vector3 _moveDir = new();
+
+    int _currentAttackCombo = 1;
+
     public override void _Ready()
     {
         base._Ready();
@@ -70,8 +71,7 @@ public partial class Player : CharacterBody3D
         NetworkClient.KnownCharacterUpdate += OnKnownCharacterUpdate;
         NetworkClient.ItemUpgradeResultUpdate += OnItemUpgradeResultUpdate;
 
-        _attackAnimationEvent = new AnimationEvent(0.5f);
-        _attackAnimationEvent.EventFire += OnAttackAnimationEvent;
+        _model.AnimationEvent += OnModelAnimationEvent;
 
         OnItemsUpdateDeferred();
         OnEquippedItemsUpdateDeferred();
@@ -80,6 +80,32 @@ public partial class Player : CharacterBody3D
         OnKnownCharacterUpdateDeferred();
     }
 
+    private void OnModelAnimationEvent(string eventName)
+    {
+        if(eventName.Contains("Attack") && eventName.Length == 7)
+        {
+            OnAttackAnimationEvent();
+        }
+
+        bool spaceIsDown = Input.IsPhysicalKeyPressed(Key.Space);
+        if (eventName.Contains("AttackEnd"))
+        {
+            if (spaceIsDown)
+            {
+                WeaponAttack();
+            }
+
+        }
+        
+        if(eventName == "IdleStart")
+        {
+            _currentAttackCombo = 1;
+        }
+
+        switch (eventName)
+        {
+        }
+    }
 
     public void Initialize(Character c)
     {
@@ -106,8 +132,6 @@ public partial class Player : CharacterBody3D
     public override void _Process(double delta)
     {
         base._Process(delta);
-
-        _attackAnimationEvent.ManualProcess(delta);
 
         if (Input.IsActionJustPressed("PickUp"))
         {
@@ -217,10 +241,18 @@ public partial class Player : CharacterBody3D
 
     void WeaponAttack()
     {
-        _model.PlayAnimation(CharacterAnimationType.WeaponAttack);
-        NetworkClient.SendCharacterAnimationStart(CharacterAnimationType.WeaponAttack);
-        _attackAnimationEvent.Restart();
+        CharacterAnimationType type = CharacterAnimationType.Attack1 + (short)(_currentAttackCombo-1);
+
+        _model.PlayAnimation(type);
+        NetworkClient.SendCharacterAnimationStart(type);
+
+        ++_currentAttackCombo;
+        if(_currentAttackCombo > 4)
+        {
+            _currentAttackCombo = 1;
+        }
     }
+
 
     void HandleRightClick()
     {

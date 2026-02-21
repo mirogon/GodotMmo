@@ -1,0 +1,147 @@
+[gd_scene load_steps=26 format=3 uid="uid://cu5oqh1nes7e5"]
+
+[ext_resource type="PackedScene" uid="uid://0ev5yxpu3b4i" path="res://Assets/Character/Warrior/Models/Character2.fbx" id="1_pwjtw"]
+[ext_resource type="Script" uid="uid://hxik11hvjgnc" path="res://Gameplay/Character/CharacterModel.cs" id="2_akv8w"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2tdma"]
+animation = &"Character2|Character2_Attack"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_lfveg"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8208c"]
+animation = &"Character2|Character2_Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_psu4r"]
+animation = &"Character2|Character2_Run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_dljq1"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_8208c")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_psu4r")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_v0y8g"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w3i0w"]
+animation = &"Character2|Character2_RideHorse"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_d0lu6"]
+nodes/output/position = Vector2(620, 200)
+nodes/IdleWalkSpace/node = SubResource("AnimationNodeBlendSpace1D_dljq1")
+nodes/IdleWalkSpace/position = Vector2(-460, 80)
+nodes/Attack/node = SubResource("AnimationNodeOneShot_lfveg")
+nodes/Attack/position = Vector2(60, 200)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_2tdma")
+nodes/Animation/position = Vector2(-280, 520)
+nodes/MountedBlend/node = SubResource("AnimationNodeBlend2_v0y8g")
+nodes/MountedBlend/position = Vector2(-220, 200)
+nodes/RideHorse/node = SubResource("AnimationNodeAnimation_w3i0w")
+nodes/RideHorse/position = Vector2(-600, 300)
+node_connections = [&"output", 0, &"Attack", &"Attack", 0, &"MountedBlend", &"Attack", 1, &"Animation", &"MountedBlend", 0, &"IdleWalkSpace", &"MountedBlend", 1, &"RideHorse"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ouqrs"]
+animation = &"Character2|Character2_Atk1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mb3w6"]
+animation = &"Character2|Character2_Atk2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vdjnp"]
+animation = &"Character2|Character2_Atk3"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hao30"]
+animation = &"Character2|Character2_Atk4"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v0y8g"]
+animation = &"Character2|Character2_Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pt446"]
+animation = &"Character2|Character2_RideHorse"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w4k7a"]
+animation = &"Character2|Character2_Run"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ouqrs"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mb3w6"]
+advance_mode = 2
+advance_condition = &"IsRunning"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_udwd7"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ejf7t"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5vhss"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_m30i2"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jp7xk"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_vdjnp"]
+states/Character2|Character2_Atk1/node = SubResource("AnimationNodeAnimation_ouqrs")
+states/Character2|Character2_Atk1/position = Vector2(714, 178)
+states/Character2|Character2_Atk2/node = SubResource("AnimationNodeAnimation_mb3w6")
+states/Character2|Character2_Atk2/position = Vector2(714, 273)
+states/Character2|Character2_Atk3/node = SubResource("AnimationNodeAnimation_vdjnp")
+states/Character2|Character2_Atk3/position = Vector2(714, 365)
+states/Character2|Character2_Atk4/node = SubResource("AnimationNodeAnimation_hao30")
+states/Character2|Character2_Atk4/position = Vector2(714, 464)
+states/End/position = Vector2(978, 100)
+states/Idle/node = SubResource("AnimationNodeAnimation_v0y8g")
+states/Idle/position = Vector2(508, 100)
+states/RideHorse/node = SubResource("AnimationNodeAnimation_pt446")
+states/RideHorse/position = Vector2(678, 41)
+states/Run/node = SubResource("AnimationNodeAnimation_w4k7a")
+states/Run/position = Vector2(508, 205)
+states/Start/position = Vector2(286, 100)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_ouqrs"), "Idle", "Run", SubResource("AnimationNodeStateMachineTransition_mb3w6"), "Idle", "RideHorse", SubResource("AnimationNodeStateMachineTransition_udwd7"), "Idle", "Character2|Character2_Atk1", SubResource("AnimationNodeStateMachineTransition_ejf7t"), "Character2|Character2_Atk3", "Character2|Character2_Atk4", SubResource("AnimationNodeStateMachineTransition_5vhss"), "Character2|Character2_Atk2", "Character2|Character2_Atk3", SubResource("AnimationNodeStateMachineTransition_m30i2"), "Character2|Character2_Atk1", "Character2|Character2_Atk2", SubResource("AnimationNodeStateMachineTransition_jp7xk")]
+graph_offset = Vector2(342, 22)
+
+[node name="Character2" instance=ExtResource("1_pwjtw")]
+script = ExtResource("2_akv8w")
+
+[node name="Skeleton3D" parent="Character2" index="0"]
+bones/1/rotation = Quaternion(0.4288824, 0.006951973, -0.0014065877, 0.9033325)
+bones/2/position = Vector3(0.0025661439, 0.0060441354, 6.118164e-10)
+bones/2/rotation = Quaternion(0.74252266, -0.43868715, -0.4128678, 0.2928377)
+bones/2/scale = Vector3(0.99999994, 0.99999994, 0.99999994)
+bones/4/position = Vector3(-0.0025661439, 0.0060441354, -6.118164e-10)
+bones/4/rotation = Quaternion(0.4462384, -0.30072778, -0.6827135, 0.4943039)
+bones/4/scale = Vector3(0.99999994, 0.99999994, 0.99999994)
+bones/5/position = Vector3(0, 0.005433749, 0)
+bones/5/rotation = Quaternion(0.50000006, -0.49999994, -0.49999994, -0.50000006)
+bones/5/scale = Vector3(1, 0.99999994, 1)
+bones/7/position = Vector3(0, 0.006494654, 0)
+bones/7/rotation = Quaternion(0, -1.1920929e-07, 0, 1)
+bones/9/rotation = Quaternion(0.7071068, 4.3296377e-17, -0.7071067, 4.3296384e-17)
+bones/11/rotation = Quaternion(0.7071068, 4.3296377e-17, -0.7071067, 4.3296384e-17)
+
+[node name="WeaponBoneAttachment" type="BoneAttachment3D" parent="Character2/Skeleton3D" index="1"]
+transform = Transform3D(0.9019979, 0.12462345, 0.41336268, 0.25482154, -0.9265536, -0.27670184, 0.34851912, 0.35491815, -0.8675062, -0.0002683748, -0.0062220152, 0.006696364)
+bone_name = "WeaponBone"
+bone_idx = 5
+
+[node name="WeaponAttachment" type="Node3D" parent="Character2/Skeleton3D/WeaponBoneAttachment" index="0"]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource("AnimationNodeBlendTree_d0lu6")
+anim_player = NodePath("../AnimationPlayer")
+parameters/IdleWalkSpace/blend_position = 0.6333333
+parameters/Attack/active = false
+parameters/Attack/internal_active = false
+parameters/Attack/request = 0
+parameters/MountedBlend/blend_amount = 0.0
+
+[node name="AnimationTree2" type="AnimationTree" parent="." index="3"]
+tree_root = SubResource("AnimationNodeStateMachine_vdjnp")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/IsRunning = false

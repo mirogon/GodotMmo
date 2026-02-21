@@ -365,3 +365,8 @@ Mount
 - Add UpgradeCost List/Array to ItemInfo
 - Item Upgrade has currency cost
 - Item upgrade changes item stats
+- Enemies can drop currency and/or items
+    - EnemyInfo includes drops for items, currency amount
+- Fix: Attack animation timed hardcoded, fix with Animation track, etc.
+- Build Blend tree with all atk anims
+- Attack combo animations (4x combo)

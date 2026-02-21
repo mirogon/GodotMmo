@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c6wf3n6sdln2i" path="res://Gameplay/Player/Ui/CharacterStats.tscn" id="6_knblx"]
 [ext_resource type="Script" uid="uid://bqixko6k8jpk7" path="res://Gameplay/Player/PlayerUi.cs" id="7_546x7"]
 [ext_resource type="PackedScene" uid="uid://gbck2o61nu1c" path="res://Gameplay/Player/Ui/QuestUi.tscn" id="8_0fysc"]
-[ext_resource type="PackedScene" uid="uid://cu5oqh1nes7e5" path="res://Gameplay/Character/Character2Model.tscn" id="9_knblx"]
+[ext_resource type="PackedScene" uid="uid://4pdm66klt4ro" path="res://Gameplay/Character/Character2Model.tscn" id="9_knblx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4s7gy"]
 bg_color = Color(0.884314, 3.34509e-06, 3.85046e-07, 1)
@@ -20,14 +20,14 @@ size = Vector3(0.6855469, 1.6429443, 0.6152344)
 collision_layer = 16
 script = ExtResource("1_1rerk")
 
+[node name="Model" parent="." instance=ExtResource("9_knblx")]
+
 [node name="CameraPivot" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.968204, 0.25016, 0, -0.25016, 0.968204, 0, 1.63261, 2.6017)
 fov = 90.0
 script = ExtResource("2_wonpf")
-
-[node name="Model" parent="." instance=ExtResource("9_knblx")]
 
 [node name="Ui" type="Control" parent="."]
 layout_mode = 3
