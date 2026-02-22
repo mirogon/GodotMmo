@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 
 public partial class Player : CharacterBody3D
 {
@@ -40,6 +41,7 @@ public partial class Player : CharacterBody3D
     Vector3 _moveDir = new();
 
     int _currentAttackCombo = 1;
+    bool _isInAttackAnimation = false;
 
     public override void _Ready()
     {
@@ -90,20 +92,23 @@ public partial class Player : CharacterBody3D
         bool spaceIsDown = Input.IsPhysicalKeyPressed(Key.Space);
         if (eventName.Contains("AttackEnd"))
         {
+            _isInAttackAnimation = false;
             if (spaceIsDown)
             {
                 WeaponAttack();
             }
-
+            if(eventName == "HorseAttackEnd")
+            {
+                if (!spaceIsDown)
+                {
+                    _model.PlayAnimation(CharacterAnimationType.RideHorse);
+                }
+            }
         }
         
-        if(eventName == "IdleStart")
+        if(!eventName.Contains("Attack"))
         {
             _currentAttackCombo = 1;
-        }
-
-        switch (eventName)
-        {
         }
     }
 
@@ -141,6 +146,10 @@ public partial class Player : CharacterBody3D
         if (Input.IsActionJustPressed("WeaponAttack"))
         {
             WeaponAttack();
+        }
+        if (Input.IsActionJustReleased("WeaponAttack"))
+        {
+            WeaponRelease();
         }
 
         if (Input.IsActionJustPressed("EquipDebug"))
@@ -191,6 +200,8 @@ public partial class Player : CharacterBody3D
         _moveDir = _moveDir.Normalized();
 
         _moveDir *= MovementSpeed;
+        if (_isInAttackAnimation) { _moveDir *= 0; }
+
         var velocity = new Vector3(_moveDir.X, Velocity.Y, _moveDir.Z);
         velocity.Y -= GRAVITY * (float)delta;
 
@@ -241,6 +252,15 @@ public partial class Player : CharacterBody3D
 
     void WeaponAttack()
     {
+        _isInAttackAnimation = true;
+        if (IsInstanceValid(_mountInstance))
+        {
+            _model.PlayAnimation(CharacterAnimationType.HorseAttack);
+            NetworkClient.SendCharacterAnimationStart(CharacterAnimationType.HorseAttack);
+            _currentAttackCombo = 1;
+            return;
+        }
+
         CharacterAnimationType type = CharacterAnimationType.Attack1 + (short)(_currentAttackCombo-1);
 
         _model.PlayAnimation(type);
@@ -253,6 +273,17 @@ public partial class Player : CharacterBody3D
         }
     }
 
+    void WeaponRelease()
+    {
+        if (_isInAttackAnimation) { return; }
+        _currentAttackCombo = 1;
+        if (IsInstanceValid(_mountInstance))
+        {
+            _model.PlayAnimation(CharacterAnimationType.RideHorse);
+            return;
+        }
+        _model.PlayAnimation(CharacterAnimationType.Idle);
+    }
 
     void HandleRightClick()
     {

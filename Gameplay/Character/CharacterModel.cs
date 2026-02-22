@@ -39,16 +39,19 @@ public partial class CharacterModel : Node3D
         CurrentAnimation = animType;
         if (animType == CharacterAnimationType.Idle)
         {
-            _animationTree.Set("parameters/IdleWalkSpace/blend_position", -1.0f);
+            _animationTree.Set("parameters/Transition/transition_request", "Idle");
         }
         else if (animType == CharacterAnimationType.Walk)
         {
-            _animationTree.Set("parameters/MountedBlend/blend_amount", 0.0f);
-            _animationTree.Set("parameters/IdleWalkSpace/blend_position", 1.0f);
+            _animationTree.Set("parameters/Transition/transition_request", "Run");
         }
         else if(animType == CharacterAnimationType.RideHorse)
         {
-            _animationTree.Set("parameters/MountedBlend/blend_amount", 1.0f);
+            _animationTree.Set("parameters/Transition/transition_request", "RideHorse");
+        }
+        else if(animType == CharacterAnimationType.HorseAttack)
+        {
+            _animationTree.Set("parameters/Transition/transition_request", "HorseAttack");
         }
 
         else if (animType == CharacterAnimationType.Attack1)

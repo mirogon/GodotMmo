@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://4pdm66klt4ro"]
+[gd_scene load_steps=37 format=4 uid="uid://4pdm66klt4ro"]
 
 [ext_resource type="Script" uid="uid://hxik11hvjgnc" path="res://Gameplay/Character/CharacterModel.cs" id="2_v0y8g"]
 
@@ -449,6 +449,7 @@ tracks/7/keys = {
 [sub_resource type="Animation" id="Animation_e7urw"]
 resource_name = "Character2|Character2_Idle"
 length = 0.2
+loop_mode = 1
 tracks/0/type = "position_3d"
 tracks/0/imported = true
 tracks/0/enabled = true
@@ -619,6 +620,20 @@ tracks/6/path = NodePath("Character2/Skeleton3D:WeaponBone")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, -0.50000006, 0.49999997, 0.49999997, 0.50000006)
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["RunStart"],
+"method": &"HandleAnimationEvent"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_hep0o"]
 resource_name = "Character2|CharacterAction"
@@ -726,6 +741,78 @@ tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, -0.50000006, 0.49999997, 0.49999997, 0.50000006)
 
+[sub_resource type="Animation" id="Animation_6vqc3"]
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character2/Skeleton3D:Root")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0.0052149445)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character2/Skeleton3D:Body")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -1.4492111e-08, 1.1832511e-07, 0.121568635, 0.99258304, 0.16666667, 1, -1.4492111e-08, 1.1832511e-07, 0.121568635, 0.99258304, 0.2, 1, 0.0012919154, 0.013559501, 0.110428885, 0.9937907, 0.23333333, 1, 0.0048073516, 0.050455585, 0.079925165, 0.9955115, 0.26666668, 1, 0.009995599, 0.104908556, 0.034390178, 0.9938368, 0.3, 1, 0.016201347, 0.17004068, -0.020901896, 0.98508215, 0.33333334, 1, 0.022649923, 0.23772131, -0.07935735, 0.96782124, 0.36666667, 1, 0.028558878, 0.2997385, -0.13388354, 0.94414854, 0.4, 1, 0.033285763, 0.3493493, -0.17822795, 0.9192834, 0.43333334, 1, 0.036380734, 0.38183236, -0.20764658, 0.89986855, 0.46666667, 1, 0.037496433, 0.39354196, -0.21833152, 0.8922164, 0.6666667, 1, 0.037496433, 0.39354196, -0.21833152, 0.8922164, 0.7, 1, 0.036380734, 0.38183236, -0.20764658, 0.89986855, 0.73333335, 1, 0.033285797, 0.34934938, -0.17822796, 0.91928333, 0.76666665, 1, 0.028558873, 0.2997385, -0.13388349, 0.94414854, 0.8, 1, 0.022649921, 0.23772131, -0.07935732, 0.96782124, 0.8333333, 1, 0.016201349, 0.17004068, -0.020901889, 0.98508215, 0.8666667, 1, 0.0099956, 0.10490854, 0.034390204, 0.9938368, 0.9, 1, 0.004807351, 0.050455596, 0.07992522, 0.9955115, 0.93333334, 1, 0.001291916, 0.013559536, 0.110428914, 0.9937907, 0.96666664, 1, -1.4492111e-08, 1.1832511e-07, 0.121568635, 0.99258304)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character2/Skeleton3D:LeftLeg")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0.4768433, -0.37713465, -0.6227425, 0.4925259)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Character2/Skeleton3D:RightLeg")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.6392154, -0.5055545, -0.45452315, 0.35948154)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Character2/Skeleton3D:LeftArm")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0.6966283, -0.121281266, -0.6966281, 0.12128136)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Character2/Skeleton3D:RightArm")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, -0.6403581, 0.30824047, -0.3537155, 0.6081239, 0.033333335, 1, -0.6614106, 0.30120477, -0.3575424, 0.5864939, 0.06666667, 1, -0.7401695, 0.26964524, -0.36947915, 0.49287492, 0.1, 1, -0.9123473, 0.13416061, -0.3653613, 0.12702137, 0.13333334, 1, -0.5683376, -0.26865563, -0.0675455, -0.77476066, 0.16666667, 1, -0.059580475, -0.37181798, 0.14907487, -0.91431844, 0.2, 1, 0.04911359, -0.31995454, 0.2672213, -0.9076396, 0.23333333, 1, 0.11737914, -0.26210794, 0.3719076, -0.8827266, 0.26666668, 1, 0.15617822, -0.19886848, 0.46734363, -0.84714204, 0.3, 1, 0.17405511, -0.12827452, 0.5563409, -0.80233115, 0.33333334, 1, 0.17728974, -0.0474547, 0.63950115, -0.7465619, 0.36666667, 1, 0.1708945, 0.04643148, 0.71487087, -0.6764605, 0.4, 1, 0.15954734, 0.15519854, 0.77756405, -0.588092, 0.43333334, 1, 0.14823808, 0.2781866, 0.81963253, -0.47837245, 0.46666667, 1, 0.14241835, 0.4104907, 0.831048, -0.34723708, 0.5, 1, 0.14122818, 0.4129297, 0.8315001, -0.34373134, 0.53333336, 1, 0.13259304, 0.43021688, 0.8342626, -0.31833702, 0.56666666, 1, 0.10635654, 0.47858405, 0.83741885, -0.24160972, 0.6, 1, 0.043364342, 0.5722816, 0.81673086, -0.059698775, 0.6333333, 1, -0.08044111, 0.675192, 0.6736855, 0.28947002, 0.6666667, 1, -0.2157411, 0.64175487, 0.3334904, 0.6560416, 0.7, 1, -0.30067292, 0.60386413, 0.21879777, 0.7050329, 0.73333335, 1, -0.3800406, 0.55893654, 0.104181275, 0.72959256, 0.76666665, 1, -0.4509724, 0.5096436, -0.005461449, 0.7327056, 0.8, 1, -0.51115674, 0.4592502, -0.10529832, 0.7188326, 0.8333333, 1, -0.5593508, 0.41137087, -0.19124787, 0.6937759, 0.8666667, 1, -0.59551793, 0.36952543, -0.260467, 0.66405296, 0.9, 1, -0.6204892, 0.33678618, -0.31131607, 0.6361215, 0.93333334, 1, -0.63529646, 0.31567132, -0.3427993, 0.61582357, 0.96666664, 1, -0.64035815, 0.3082405, -0.35371548, 0.60812384)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Character2/Skeleton3D:WeaponBone")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, -0.50000006, 0.49999997, 0.49999997, 0.50000006)
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.13333334, 0.6333333, 0.96666664),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": ["AttackR"],
+"method": &"HandleAnimationEvent"
+}, {
+"args": ["AttackL"],
+"method": &"HandleAnimationEvent"
+}, {
+"args": ["HorseAttackEnd"],
+"method": &"HandleAnimationEvent"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ky01v"]
 _data = {
 &"Character2|Character2_Atk1": SubResource("Animation_hvkbw"),
@@ -738,7 +825,8 @@ _data = {
 &"Character2|Character2_RideHorse": SubResource("Animation_g0ssh"),
 &"Character2|Character2_Run": SubResource("Animation_fvxub"),
 &"Character2|CharacterAction": SubResource("Animation_hep0o"),
-&"Character2|Rat_Run": SubResource("Animation_vtxo7")
+&"Character2|Rat_Run": SubResource("Animation_vtxo7"),
+&"HorseAttack": SubResource("Animation_6vqc3")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vqc3"]
@@ -761,6 +849,12 @@ animation = &"Character2|Character2_Atk4"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_hao30"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mb3w6"]
+animation = &"HorseAttack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vdjnp"]
+animation = &"Character2|Character2_Idle"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8208c"]
 animation = &"Character2|Character2_Idle"
 
@@ -775,24 +869,48 @@ blend_point_1/pos = 1.0
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_v0y8g"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hao30"]
+animation = &"Character2|Character2_RideHorse"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w3i0w"]
 animation = &"Character2|Character2_RideHorse"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pt446"]
+animation = &"Character2|Character2_Run"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_udwd7"]
+input_0/name = "Idle"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "Run"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "RideHorse"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+input_3/name = "HorseAttack"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ibm68"]
-graph_offset = Vector2(276.46738, 126.61127)
+graph_offset = Vector2(-578.59863, -14.905746)
 nodes/output/position = Vector2(1340, 220)
 nodes/IdleWalkSpace/node = SubResource("AnimationNodeBlendSpace1D_dljq1")
-nodes/IdleWalkSpace/position = Vector2(-460, 80)
+nodes/IdleWalkSpace/position = Vector2(-1220, -200)
 nodes/Attack4/node = SubResource("AnimationNodeOneShot_hao30")
 nodes/Attack4/position = Vector2(1120, 260)
 "nodes/Animation 5/node" = SubResource("AnimationNodeAnimation_ouqrs")
 "nodes/Animation 5/position" = Vector2(880, 580)
 nodes/MountedBlend/node = SubResource("AnimationNodeBlend2_v0y8g")
-nodes/MountedBlend/position = Vector2(-220, 200)
+nodes/MountedBlend/position = Vector2(-980, -80)
 nodes/RideHorse/node = SubResource("AnimationNodeAnimation_w3i0w")
-nodes/RideHorse/position = Vector2(-600, 300)
+nodes/RideHorse/position = Vector2(-1360, 20)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_6vqc3")
-"nodes/Animation 2/position" = Vector2(-180, 600)
+"nodes/Animation 2/position" = Vector2(-60, 660)
 nodes/Attack1/node = SubResource("AnimationNodeOneShot_v0y8g")
 nodes/Attack1/position = Vector2(80, 180)
 "nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_v0y8g")
@@ -803,7 +921,17 @@ nodes/Attack3/node = SubResource("AnimationNodeOneShot_vdjnp")
 nodes/Attack3/position = Vector2(888.72974, 231.25859)
 "nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_w4k7a")
 "nodes/Animation 4/position" = Vector2(540, 640)
-node_connections = [&"output", 0, &"Attack4", &"Attack4", 0, &"Attack3", &"Attack4", 1, &"Animation 5", &"MountedBlend", 0, &"IdleWalkSpace", &"MountedBlend", 1, &"RideHorse", &"Attack1", 0, &"MountedBlend", &"Attack1", 1, &"Animation 2", &"Attack2", 0, &"Attack1", &"Attack2", 1, &"Animation 3", &"Attack3", 0, &"Attack2", &"Attack3", 1, &"Animation 4"]
+"nodes/RideHorse 2/node" = SubResource("AnimationNodeAnimation_hao30")
+"nodes/RideHorse 2/position" = Vector2(-960, 460)
+nodes/Transition/node = SubResource("AnimationNodeTransition_udwd7")
+nodes/Transition/position = Vector2(-240, 180)
+nodes/Run/node = SubResource("AnimationNodeAnimation_pt446")
+nodes/Run/position = Vector2(-700, 280)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_vdjnp")
+nodes/Idle/position = Vector2(-734.1134, 93.56302)
+nodes/HorseAttack/node = SubResource("AnimationNodeAnimation_mb3w6")
+nodes/HorseAttack/position = Vector2(-800, 640)
+node_connections = [&"output", 0, &"Attack4", &"Attack4", 0, &"Attack3", &"Attack4", 1, &"Animation 5", &"MountedBlend", 0, &"IdleWalkSpace", &"MountedBlend", 1, &"RideHorse", &"Attack1", 0, &"Transition", &"Attack1", 1, &"Animation 2", &"Attack2", 0, &"Attack1", &"Attack2", 1, &"Animation 3", &"Attack3", 0, &"Attack2", &"Attack3", 1, &"Animation 4", &"Transition", 0, &"Idle", &"Transition", 1, &"Run", &"Transition", 2, &"RideHorse 2", &"Transition", 3, &"HorseAttack"]
 
 [node name="Character2" type="Node3D"]
 script = ExtResource("2_v0y8g")
@@ -824,7 +952,7 @@ bones/1/parent = 0
 bones/1/rest = Transform3D(1, 0, 2.3841858e-07, 0, 1, 0, -2.3841858e-07, 0, 1, 0, 0.0075983633, 0)
 bones/1/enabled = true
 bones/1/position = Vector3(0, 0.0075983633, 0)
-bones/1/rotation = Quaternion(0.34110865, 0.32214952, 0.15703394, 0.8690253)
+bones/1/rotation = Quaternion(0, 1.1920929e-07, 0, 1)
 bones/1/scale = Vector3(1, 1, 1)
 bones/2/name = "LeftArm"
 bones/2/parent = 1
@@ -845,7 +973,7 @@ bones/4/parent = 1
 bones/4/rest = Transform3D(2.9802322e-07, 0, -0.99999994, 0, -0.99999994, 0, -0.99999994, 0, -2.3841858e-07, -0.0025661439, 0.0060441354, -6.118164e-10)
 bones/4/enabled = true
 bones/4/position = Vector3(-0.002566144, 0.006044137, 8.8475643e-11)
-bones/4/rotation = Quaternion(0.5239974, -0.36486453, -0.6264247, 0.44709384)
+bones/4/rotation = Quaternion(0.7071069, 4.3296364e-17, -0.70710665, 4.329638e-17)
 bones/4/scale = Vector3(0.9999999, 0.99999994, 1)
 bones/5/name = "WeaponBone"
 bones/5/parent = 4
@@ -909,7 +1037,7 @@ mesh = SubResource("ArrayMesh_ihxuw")
 skin = SubResource("Skin_jpkle")
 
 [node name="WeaponBoneAttachment" type="BoneAttachment3D" parent="Character2/Skeleton3D"]
-transform = Transform3D(0.6065543, 0.20812769, 0.7673167, 0.54036176, -0.8158635, -0.20585361, 0.58318186, 0.53949, -0.6073298, 0.0019411673, -0.006475337, 0.007373433)
+transform = Transform3D(0.99999994, 1.1920929e-07, 1.2246062e-16, 1.1920923e-07, -0.9999997, 1.19209275e-07, 1.4333309e-14, -1.1920926e-07, -0.9999998, -0.0025661439, -1.4995716e-09, 0.008208748)
 bone_name = "WeaponBone"
 bone_idx = 5
 
@@ -924,11 +1052,11 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_ibm68")
 anim_player = NodePath("../AnimationPlayer")
-parameters/IdleWalkSpace/blend_position = 0.6333333
+parameters/IdleWalkSpace/blend_position = -0.40384614
 parameters/Attack4/active = false
 parameters/Attack4/internal_active = false
 parameters/Attack4/request = 0
-parameters/MountedBlend/blend_amount = 0.0
+parameters/MountedBlend/blend_amount = 1.0
 parameters/Attack1/active = false
 parameters/Attack1/internal_active = false
 parameters/Attack1/request = 0
@@ -938,3 +1066,6 @@ parameters/Attack2/request = 0
 parameters/Attack3/active = false
 parameters/Attack3/internal_active = false
 parameters/Attack3/request = 0
+parameters/Transition/current_state = "Idle"
+parameters/Transition/transition_request = ""
+parameters/Transition/current_index = 0

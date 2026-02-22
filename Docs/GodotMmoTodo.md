@@ -3,6 +3,7 @@
 # Current Macrotask
 
 # Later
+- Attack and Horse Attack is only applied to the right direction (Attack in front of player with distance)
 - Log every drop, trade, upgrade, etc. to be able to reverse engineer problems, analyze statistics
 
 # DONE
@@ -370,3 +371,5 @@ Mount
 - Fix: Attack animation timed hardcoded, fix with Animation track, etc.
 - Build Blend tree with all atk anims
 - Attack combo animations (4x combo)
+- Horse Attack Animation
+- Cant move while attacking
