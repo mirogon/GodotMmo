@@ -81,6 +81,12 @@ public class NetworkClient
     public static Action ItemUpgradeResultUpdate;
     public static ConcurrentBag<SC_ItemUpgradeResultPacket> ItemUpgradeResultUpdates = new();
 
+    public static Action StonesOnMapUpdate;
+    public static ConcurrentBag<StoneData> StonesOnMapUpdates = new();
+
+    public static Action StonesHealthUpdate;
+    public static ConcurrentBag<SC_StonesHealthUpdatePacket> StonesHealthUpdates = new();
+
     public static ConcurrentQueue<(Packet packet, Type type)> ReliableUnorderedPacketsToSend = new();
     static NetManager _client;
     static NetPeer _serverPeer;
@@ -139,6 +145,8 @@ public class NetworkClient
                 case EPacketType.SC_NpcUpdate: Handle_SC_NpcUpdate(dataReader); break;
                 case EPacketType.SC_Mount: Handle_SC_Mount(dataReader); break;
                 case EPacketType.SC_ItemUpgradeResult: Handle_SC_ItemUpgradeResult(dataReader); break;
+                case EPacketType.SC_StonesOnMap: Handle_SC_StonesOnMap(dataReader); break;
+                case EPacketType.SC_StonesHealthUpdate: Handle_SC_StonesHealthUpdate(dataReader); break;
             }
 
             dataReader.Recycle();
@@ -409,6 +417,12 @@ public class NetworkClient
         MonstersHealthUpdateQueue.Add(packet);
         MonstersHealthUpdate?.Invoke();
     }
+    static void Handle_SC_StonesHealthUpdate(NetPacketReader dataReader)
+    {
+        SC_StonesHealthUpdatePacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_StonesHealthUpdatePacket>(dataReader);
+        StonesHealthUpdates.Add(packet);
+        StonesHealthUpdate?.Invoke();
+    }
 
     static void Handle_SC_EquippedItemsUpdate(NetPacketReader dataReader)
     {
@@ -485,6 +499,17 @@ public class NetworkClient
         SC_ItemUpgradeResultPacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_ItemUpgradeResultPacket>(dataReader);
         ItemUpgradeResultUpdates.Add(packet);
         ItemUpgradeResultUpdate?.Invoke();
+    }
+
+    static void Handle_SC_StonesOnMap(NetPacketReader dataReader)
+    {
+        SC_StonesOnMapPacket packet = NetworkPacketUtil.PacketBytesToPacketObject<SC_StonesOnMapPacket>(dataReader);
+        foreach(var sd in packet.Stones)
+        {
+            if(sd.Id == Guid.Empty) { continue; }
+            StonesOnMapUpdates.Add(sd);
+        }
+        StonesOnMapUpdate?.Invoke();
     }
 
 }

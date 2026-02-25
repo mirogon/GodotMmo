@@ -1,0 +1,43 @@
+[gd_scene load_steps=8 format=3 uid="uid://bxw5n8nnsehct"]
+
+[ext_resource type="Script" uid="uid://lybusrj4ilx" path="res://Gameplay/Stones/Stone.cs" id="1_job5o"]
+[ext_resource type="Script" uid="uid://5puh3pl51fne" path="res://Gameplay/Scripts/HealthSystem.cs" id="3_r1biy"]
+[ext_resource type="PackedScene" uid="uid://nx30ltybjbg6" path="res://Gameplay/Enemies/3DHealthBar.tscn" id="4_pwda0"]
+[ext_resource type="Script" uid="uid://crdtoxfgq5nfi" path="res://Gameplay/Enemies/HealthBar3D.cs" id="5_nh8gl"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_5wgo3"]
+size = Vector3(0.84, 1, 0.66)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wy1nn"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rih0i"]
+size = Vector3(0.6542969, 0.64160156, 1.28125)
+
+[node name="Stone" type="Node3D"]
+script = ExtResource("1_job5o")
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("PrismMesh_5wgo3")
+
+[node name="HealthSystem" type="Node" parent="."]
+script = ExtResource("3_r1biy")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+
+[node name="HealthBar3D" parent="SubViewport" instance=ExtResource("4_pwda0")]
+script = ExtResource("5_nh8gl")
+
+[node name="HealthbarSprite" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1264486, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_wy1nn")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 32
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28638232, 0)
+shape = SubResource("BoxShape3D_rih0i")

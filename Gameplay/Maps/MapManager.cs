@@ -22,10 +22,20 @@ public partial class MapManager : Node
     public List<MongoMapItem> KnownItemsOnMap = new();
 
     public Dictionary<Guid, Enemy> EnemyInstances = new();
+    public Dictionary<Guid, Stone> StoneInstances = new();
+
+    Node3D _stonesParent;
 
     public override void _Ready()
     {
         Player = GetNode<Player>("Player");
+
+        Node3D n3d = new();
+        n3d.Name = "Stones";
+        AddChild(n3d);
+        n3d.Position = Vector3.Zero;
+        _stonesParent = n3d;
+
         NetworkClient.PeerPlayerPositionUpdate += OnPeerPlayerPositionUpdate;
         NetworkClient.NewItemsOnMapUpdate += OnItemsUpdate;
         NetworkClient.RemovedItemsOnMap += OnItemsRemovedUpdate;
@@ -38,6 +48,8 @@ public partial class MapManager : Node
         NetworkClient.MonsterAnimationUpdate += OnMonsterAnimationUpdate;
         NetworkClient.NpcUpdate += OnNpcUpdate;
         NetworkClient.MountUpdate += OnMountUpdate;
+        NetworkClient.StonesOnMapUpdate += OnStonesUpdate;
+        NetworkClient.StonesHealthUpdate += OnStonesHealthUpdate;
     }
 
 
@@ -311,6 +323,53 @@ public partial class MapManager : Node
             peerInstance.MountDown();
         }
     }
+    void OnStonesUpdate()
+    {
+        CallDeferred("OnStonesUpdateDeferred");
+    }
+    void OnStonesUpdateDeferred()
+    {
+        for(int i = 0; i < 99; ++i)
+        {
+            StoneData data;
+            if(!NetworkClient.StonesOnMapUpdates.TryTake(out data)) { return; }
+            StoneInfo si = StoneInfo.StoneInfoDict[data.StoneType];
+            var stoneScene = ResourceLoader.Load<PackedScene>(si.GodotScenePath);
+            var stoneInstance = stoneScene.Instantiate() as Stone;
+            stoneInstance.Init(data.Id, data.CurrentHealth, data.MaxHealth);
+            _stonesParent.AddChild(stoneInstance);
+            stoneInstance.Position = data.PositionOnMap.ToVector3();
+            StoneInstances.Add(data.Id, stoneInstance);
+        }
 
+    }
+    void OnStonesHealthUpdate()
+    {
+        CallDeferred("OnStonesHealthUpdateDeferred");
+    }
+    void OnStonesHealthUpdateDeferred()
+    {
+        for(int i = 0; i < 99; ++i)
+        {
+            SC_StonesHealthUpdatePacket update;
+            if(!NetworkClient.StonesHealthUpdates.TryTake(out update)) { return; }
+            int numHealthUpdates = update.HealthUpdates.Count(hu => hu.Id != Guid.Empty);
+            GD.Print("STONE HEALTH UDPATES: " + numHealthUpdates);
+
+            for(int j = 0; j < update.HealthUpdates.Length; ++j)
+            {
+                var c = update.HealthUpdates[j];
+                if (!StoneInstances.ContainsKey(c.Id)) { continue; }
+
+                var stone = StoneInstances[c.Id];
+                stone.HealthSystem.CurrentHealth = c.CurrentHealth;
+                if(stone.HealthSystem.IsDead)
+                {
+                    StoneInstances.Remove(c.Id);
+                }
+            }
+
+        }
+    }
 }
 

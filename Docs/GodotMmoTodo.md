@@ -373,3 +373,14 @@ Mount
 - Attack combo animations (4x combo)
 - Horse Attack Animation
 - Cant move while attacking
+- MStone Godot Scene
+    - MStone Model (Some kind of default godot mesh)
+- ServerMStone server class
+- Server spawns Stones
+- Server sends stones to client on select char
+    - SC_StonesOnMapPacket
+- Client handles SC_StonesOnMap packets
+- Player can attack and damage stones
+- Stones spawn enemies each 20% of their health or so
+- Mobs that spawn from stones automatically have aggro on the player attacking the stone
+- Monster that spawn at the stone spawn around the stone, not at the stone pos
