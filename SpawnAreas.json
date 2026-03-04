@@ -1,0 +1,29 @@
+[
+  {
+    "Id": "d444fb3b-0e86-4865-9733-d1bd5b245422",
+    "EnemyType": 1,
+    "MaxEnemiesAtOnce": 15,
+    "XPos": -32.916187,
+    "ZPos": -29.303766,
+    "XSize": 42.466248,
+    "ZSize": 51.541714
+  },
+  {
+    "Id": "e1f3cef7-5f19-4534-9a00-d6379bf8d93d",
+    "EnemyType": 1,
+    "MaxEnemiesAtOnce": 15,
+    "XPos": -39.211826,
+    "ZPos": 37.219692,
+    "XSize": 47.021362,
+    "ZSize": 39.311543
+  },
+  {
+    "Id": "3d1d4d42-f382-4ad5-826b-6422b601ea6c",
+    "EnemyType": 2,
+    "MaxEnemiesAtOnce": 30,
+    "XPos": 31.009983,
+    "ZPos": -3.0928984,
+    "XSize": 47.021362,
+    "ZSize": 123.08116
+  }
+]

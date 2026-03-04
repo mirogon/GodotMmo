@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cuvoubgjni5ai"]
+
+[ext_resource type="Script" uid="uid://dyxc0bux11hru" path="res://Gameplay/Maps/SpawnArea/SpawnArea.cs" id="1_kuer1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_745bu"]
+size = Vector3(2, 1, 2)
+
+[node name="SpawnArea" type="Node3D" unique_id=160072218]
+script = ExtResource("1_kuer1")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=115993235]
+collision_layer = 32768
+collision_mask = 32768
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=625555492]
+shape = SubResource("BoxShape3D_745bu")
+debug_color = Color(0.87, 0, 0.87, 1)

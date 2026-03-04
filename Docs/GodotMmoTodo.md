@@ -1,6 +1,7 @@
 # Current Task
 
 # Current Macrotask
+- Server loads spawn area from files per mapType
 
 # Later
 - Attack and Horse Attack is only applied to the right direction (Attack in front of player with distance)
@@ -384,3 +385,14 @@ Mount
 - Stones spawn enemies each 20% of their health or so
 - Mobs that spawn from stones automatically have aggro on the player attacking the stone
 - Monster that spawn at the stone spawn around the stone, not at the stone pos
+- Armor items have a defense stat
+- Fix: Item name not updated after upgrade in DB
+- Current Defense is calculated on eq change
+- Fix: Upgraded item only gives non upgraded def
+- Damage taken considers current Defense
+- Build a bigger test map
+- Make a system that gets info about spawn areas from the godot scene, puts it into a json file for the server to load
+    - SpawnAreaInfo struct
+- SpawnAreaData also includes enemy type
+- Add MaxEnemiesAtOnce to SpawnArea
+- Server can Load SpawnAreas.json file into List<SpawnAreaData>

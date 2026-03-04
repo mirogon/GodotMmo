@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 public partial class MapManager : Node
 {
@@ -50,6 +51,12 @@ public partial class MapManager : Node
         NetworkClient.MountUpdate += OnMountUpdate;
         NetworkClient.StonesOnMapUpdate += OnStonesUpdate;
         NetworkClient.StonesHealthUpdate += OnStonesHealthUpdate;
+
+
+        var spawnAreas = MapAnalyzer.GetSpawnAreasOnMap(this);
+        var str = MapAnalyzer.CreateSpawnAreasJson(spawnAreas);
+        File.WriteAllText("SpawnAreas.json", str);
+
     }
 
 
